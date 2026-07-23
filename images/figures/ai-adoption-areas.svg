@@ -1,0 +1,18 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" fill="#f4eee4"/>
+  <g font-family="Inter, sans-serif" font-size="20" fill="#1c1810" fill-opacity="0.7">
+    <text x="80" y="120">Imaging &amp; diagnostics</text>
+    <text x="80" y="240">Administrative automation</text>
+    <text x="80" y="360">Clinical decision support</text>
+    <text x="80" y="480">Remote monitoring</text>
+    <text x="80" y="600">Drug discovery</text>
+  </g>
+  <g fill="#ae4b25" fill-opacity="0.85">
+    <rect x="480" y="90" width="620" height="34" rx="4"/>
+    <rect x="480" y="210" width="520" height="34" rx="4"/>
+    <rect x="480" y="330" width="380" height="34" rx="4"/>
+    <rect x="480" y="450" width="300" height="34" rx="4"/>
+    <rect x="480" y="570" width="200" height="34" rx="4"/>
+  </g>
+  <line x1="480" y1="60" x2="480" y2="630" stroke="#1c1810" stroke-opacity="0.25" stroke-width="1.5"/>
+</svg>

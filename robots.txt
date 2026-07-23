@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /privacy-policy
+Disallow: /cookie-policy
+Disallow: /terms
+Disallow: /disclaimer
+
+Sitemap: https://constantinosnea.github.io/sitemap.xml
