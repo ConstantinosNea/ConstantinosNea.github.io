@@ -1,0 +1,102 @@
+---
+slug: "artificial-intelligence-healthcare-systems"
+title: "How Artificial Intelligence May Change Healthcare Systems"
+subtitle: "Beyond the hype cycle: where AI is already changing clinical and operational practice, and where the evidence is still thin."
+excerpt: "From diagnostic imaging to administrative automation, AI is moving from pilot projects to deployed systems. What does the evidence actually support, and what questions remain open?"
+category: "Digital Health & AI"
+tags: ["artificial-intelligence", "digital-health", "healthcare-operations", "research"]
+articleType: "research-explainer"
+author: "Elena Michaelides"
+publishDate: "2026-04-18"
+featuredImage: "/images/covers/digital-health-ai.svg"
+imageAlt: "Abstract network diagram with connected nodes in terracotta and ink tones"
+featured: false
+popular: true
+relatedSlugs: ["climate-change-public-health-crisis", "new-health-policy-announcement-what-it-means"]
+seoTitle: "How Artificial Intelligence May Change Healthcare Systems"
+seoDescription: "An evidence-based look at where AI is already changing healthcare delivery and operations, and where the claims still outrun the data."
+references:
+  - label: "FDA — Artificial Intelligence-Enabled Medical Devices List"
+    url: "https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-enabled-medical-devices"
+  - label: "Nature Medicine — Clinical validation of AI diagnostic tools (review)"
+    url: "https://www.nature.com/nm/"
+  - label: "WHO — Ethics and governance of artificial intelligence for health"
+    url: "https://www.who.int/publications/i/item/9789240029200"
+  - label: "European Commission — Regulation on Artificial Intelligence (AI Act)"
+    url: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai"
+---
+
+Artificial intelligence in healthcare has been "about to change everything" for long enough that the phrase itself has become a reason for skepticism. Some of that skepticism is warranted — a lot of early enthusiasm outran the evidence. But treating the entire field as hype misses what has actually shifted in the last few years: a meaningful number of AI tools have moved from research pilots into regulated, deployed use.
+
+This piece is a guide to that distinction: what's evidenced, what's promising but early, and what's still mostly marketing.
+
+## Where the evidence is strongest: imaging and diagnostics
+
+Diagnostic imaging is the area with the deepest evidence base, largely because it's a well-defined, data-rich problem that suits current machine learning approaches well.
+
+<DataHighlight source="FDA AI-Enabled Medical Devices List, 2024">
+  <Stat value="1,000+" label="AI-enabled medical devices authorised by the FDA as of 2024" />
+  <Stat value="~75%" label="of those devices are in radiology" />
+  <Stat value="10–15%" label="typical reduction in radiologist read time in validated screening workflows" />
+</DataHighlight>
+
+<Figure
+  src="/images/figures/ai-adoption-areas.svg"
+  alt="Horizontal bar chart showing relative maturity of AI adoption across five healthcare areas, from imaging and diagnostics at the top to drug discovery at the bottom"
+  caption="Relative maturity of clinical AI adoption by application area, ranked by breadth of regulatory approval and real-world deployment as of 2025."
+/>
+
+Tools that flag likely fractures on X-rays, prioritise urgent cases in radiology worklists, or detect diabetic retinopathy from retinal scans now have multi-year deployment histories and peer-reviewed validation studies behind them. This is the part of "AI in healthcare" with the least room for reasonable doubt.
+
+## Where it's promising but early: clinical decision support and monitoring
+
+Tools that suggest diagnoses, flag drug interactions, or predict patient deterioration from continuous monitoring data are earlier in their evidence lifecycle. Some perform well in the specific hospital system where they were trained and validated, and considerably worse when deployed elsewhere — a well-documented problem known as distribution shift.
+
+<Callout type="caution" title="Important Caveat">
+A model validated on one hospital's patient population, equipment, and clinical workflows does not automatically generalise to another. Several high-profile sepsis-prediction tools have shown this gap directly, performing well in published trials but underperforming after wider rollout. This is an implementation problem as much as an algorithmic one.
+</Callout>
+
+## Where the claims outrun the data: administrative automation
+
+Administrative and operational AI — appointment scheduling, documentation assistance, claims processing — is where deployment is broadest and evidence of *quality* impact is thinnest, mostly because the claims being made (time saved, burnout reduced) are harder to measure rigorously than a diagnostic accuracy score.
+
+| Application area | Regulatory maturity | Evidence strength | Primary risk |
+|---|---|---|---|
+| Diagnostic imaging | High — many FDA/CE-marked tools | Strong, multi-year data | Generalisation across populations |
+| Clinical decision support | Moderate | Mixed, context-dependent | Distribution shift, alert fatigue |
+| Remote patient monitoring | Moderate | Growing, early-stage | Data quality, false alerts |
+| Administrative automation | Low (mostly unregulated) | Weak, self-reported | Overstated efficiency claims |
+| Drug discovery | Low (research stage) | Early, promising signals | Long validation timelines |
+
+<PullQuote cite="WHO, Ethics and governance of artificial intelligence for health">
+AI systems must be designed to reflect the diversity of socio-economic and healthcare settings in which they will be used.
+</PullQuote>
+
+## The governance question this raises
+
+<Callout type="analysis" title="Analysis">
+The regulatory framing of "medical device" software was built for tools that behave the same way every time they're used. Many AI systems are designed to keep learning after deployment, which strains that framework and is a central reason the EU AI Act and the FDA's evolving guidance both treat continuously-updating models as a distinct, higher-scrutiny category.
+</Callout>
+
+This isn't a merely technical problem. It determines who is accountable when a continuously-updating model's behaviour drifts after deployment — the developer, the hospital that deployed it, or the clinician who used its output. Most current regulatory frameworks don't yet have a fully settled answer.
+
+<KeyTakeaways>
+- Diagnostic imaging AI has the strongest and longest evidence base, with over a thousand FDA-authorised tools as of 2024.
+- Clinical decision support and monitoring tools show promise but often struggle to generalise beyond the setting where they were validated.
+- Administrative AI is the most widely deployed category and the least rigorously evaluated for real-world impact.
+- Regulatory frameworks are still adapting to AI systems that continue learning after deployment.
+</KeyTakeaways>
+
+## What remains uncertain
+
+<Callout type="uncertainty" title="What Remains Uncertain">
+Long-term impact on health workforce structure — whether AI tools primarily augment clinical staff or substantially reduce demand for certain roles — remains genuinely unresolved and is likely to vary significantly by specialty and health system.
+</Callout>
+
+## My view
+
+<Callout type="opinion" title="Author's Opinion">
+The most useful lens I've found is to ask, for any specific AI tool: what decision is this actually changing, and who is accountable if it's wrong? Tools that answer that question clearly — a fracture-detection model with a defined clinical review step, for instance — tend to be the ones with genuine evidence behind them. Tools that answer vaguely tend to be the ones generating the most marketing copy relative to peer-reviewed data. That's not a claim that non-clinical AI applications are worthless; it's a filter for where to look first when the evidence base is still catching up to the pace of deployment.
+</Callout>
+
+This article summarises published evidence and regulatory data as of its publication date; the AI-in-healthcare evidence base is moving quickly, and readers evaluating a specific tool should check current, tool-specific validation data rather than relying on category-level generalisations.
