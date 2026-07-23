@@ -24,12 +24,14 @@ npm run lint
 
 ## How the site is deployed
 
-This repo is a GitHub Pages **user site** (`<username>.github.io`), so it's served at the domain root. Every push
-to `main` triggers `.github/workflows/deploy.yml`, which runs `npm run build` and publishes the `out/` folder via
-GitHub Pages. There is nothing to configure per-article — adding a new `.mdx` file and pushing is enough.
+This repo is a GitHub Pages **user site** (`<username>.github.io`), so it's served at the domain root. Source code
+lives on `main`. Every push to `main` triggers `.github/workflows/deploy.yml`, which runs `npm run build` and
+publishes the built `out/` folder — a plain static site, with a real `index.html` per page, including one per
+article — to the `gh-pages` branch. GitHub Pages serves directly from that branch. There is nothing to configure
+per-article — adding a new `.mdx` file to `main` and pushing is the entire publishing step.
 
 One manual one-time step: in the repo's **Settings → Pages**, set **Build and deployment → Source** to
-**GitHub Actions**.
+**Deploy from a branch**, and pick **`gh-pages` / `(root)`**.
 
 If this project is ever moved to a *project* page instead (`<username>.github.io/repo-name`), uncomment the
 `NEXT_PUBLIC_BASE_PATH` line in `.github/workflows/deploy.yml` and update `lib/site-config.ts`'s `url`.
