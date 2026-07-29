@@ -1,0 +1,33 @@
+{
+  "name": "the-public-health-insight",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Public Health Insight — evidence-informed public health writing",
+  "scripts": {
+    "dev": "npx --yes http-server site -p 3000 -c-1",
+    "start": "npx --yes http-server site -p 3000 -c-1",
+    "dev:next": "next dev --turbopack",
+    "build": "next build",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "next": "^15.3.5",
+    "next-mdx-remote": "^5.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "reading-time": "^1.5.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^22.16.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "eslint": "^9.30.1",
+    "eslint-config-next": "^15.3.5",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.8.3"
+  }
+}
