@@ -3,16 +3,16 @@
  * Update these values before deploying.
  */
 export const siteConfig = {
-  name: "The Public Health Insight",
+  name: "Public Health Matters",
   shortName: "PHI",
   initials: "PH",
-  title: "The Public Health Insight",
+  title: "Public Health Matters",
   description:
     "Clear, evidence-based writing on public health — what matters, what’s changing, and what it means for you.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thepublichealthinsight.com",
   locale: "en_US",
   author: {
-    name: "The Public Health Insight",
+    name: "Public Health Matters",
     url: "https://thepublichealthinsight.com",
     twitter: "@pubhealthinsight",
     linkedin: "https://www.linkedin.com/in/constantinos-nearchou/",

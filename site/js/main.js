@@ -224,7 +224,7 @@ function initShareLinks() {
   if (!shareLinks.length) return;
 
   const pageUrl = window.location.href.split("#")[0];
-  const pageTitle = document.title.replace(/ — The Public Health Insight$/, "");
+  const pageTitle = document.title.replace(/ — Public Health Matters$/, "");
   const encodedUrl = encodeURIComponent(pageUrl);
   const encodedTitle = encodeURIComponent(pageTitle);
 

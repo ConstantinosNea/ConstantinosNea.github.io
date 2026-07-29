@@ -1,4 +1,4 @@
-# The Public Health Insight
+# Public Health Matters
 
 This project now serves the **exact** static site from your Claude build (`localhost:8080`).
 

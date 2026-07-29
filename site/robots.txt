@@ -1,4 +1,4 @@
-# The Public Health Insight — robots.txt
+# Public Health Matters — robots.txt
 # All content on this site is public. No paths are disallowed.
 #
 # Replace the domain below with your real domain before launch

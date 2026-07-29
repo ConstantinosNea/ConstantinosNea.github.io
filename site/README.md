@@ -1,4 +1,4 @@
-# The Public Health Insight
+# Public Health Matters
 
 A static, dependency-free personal blog focused on public health, environmental health, healthcare policy, prevention, mental health, and digital health.
 
