@@ -9,11 +9,11 @@ export const siteConfig = {
   title: "Public Health Matters",
   description:
     "Clear, evidence-based writing on public health — what matters, what’s changing, and what it means for you.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thepublichealthinsight.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://constantinosnea.github.io",
   locale: "en_US",
   author: {
     name: "Public Health Matters",
-    url: "https://thepublichealthinsight.com",
+    url: "https://constantinosnea.github.io",
     twitter: "@pubhealthinsight",
     linkedin: "https://www.linkedin.com/in/constantinos-nearchou/",
   },

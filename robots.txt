@@ -7,4 +7,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.thepublichealthinsight.example/sitemap.xml
+Sitemap: https://constantinosnea.github.io/sitemap.xml

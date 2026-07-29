@@ -3,7 +3,7 @@
   Sitemap for Public Health Matters.
 
   SITE_URL placeholder: replace every occurrence of
-  https://www.thepublichealthinsight.example with your real domain before launch
+  https://constantinosnea.github.io with your real domain before launch
   (see README.md "Site configuration" section for the full list of files
   that reference this placeholder).
 
@@ -16,84 +16,84 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/</loc>
+    <loc>https://constantinosnea.github.io/</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/</loc>
+    <loc>https://constantinosnea.github.io/articles/</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/topics.html</loc>
+    <loc>https://constantinosnea.github.io/topics.html</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/about.html</loc>
+    <loc>https://constantinosnea.github.io/about.html</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/contact.html</loc>
+    <loc>https://constantinosnea.github.io/contact.html</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/air-quality-respiratory-health.html</loc>
+    <loc>https://constantinosnea.github.io/articles/air-quality-respiratory-health.html</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/loneliness-public-health-issue.html</loc>
+    <loc>https://constantinosnea.github.io/articles/loneliness-public-health-issue.html</loc>
     <lastmod>2026-07-19</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/telehealth-access-equity.html</loc>
+    <loc>https://constantinosnea.github.io/articles/telehealth-access-equity.html</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/walkable-cities-prevention.html</loc>
+    <loc>https://constantinosnea.github.io/articles/walkable-cities-prevention.html</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/vaccine-hesitancy-communication.html</loc>
+    <loc>https://constantinosnea.github.io/articles/vaccine-hesitancy-communication.html</loc>
     <lastmod>2026-06-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/healthcare-policy-debates.html</loc>
+    <loc>https://constantinosnea.github.io/articles/healthcare-policy-debates.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.thepublichealthinsight.example/articles/heatwaves-climate-mortality.html</loc>
+    <loc>https://constantinosnea.github.io/articles/heatwaves-climate-mortality.html</loc>
     <lastmod>2026-05-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>

@@ -1,11 +1,11 @@
-{
+﻿{
   "name": "the-public-health-insight",
   "version": "1.0.0",
   "private": true,
   "description": "Public Health Matters — evidence-informed public health writing",
   "scripts": {
-    "dev": "npx --yes http-server site -p 3000 -c-1",
-    "start": "npx --yes http-server site -p 3000 -c-1",
+    "dev": "npx --yes http-server . -p 3000 -c-1",
+    "start": "npx --yes http-server . -p 3000 -c-1",
     "dev:next": "next dev --turbopack",
     "build": "next build",
     "lint": "next lint"
