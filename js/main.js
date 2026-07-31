@@ -241,11 +241,12 @@ function initShareLinks() {
   });
 }
 
-/* Live reader counts via CounterAPI (no backend required for GitHub Pages).
-   Article pages increment once per browser session; cards only display. */
+/* Live reader counts via Abacus (free counting API for static sites).
+   Article pages increment once per browser session; cards only display.
+   CounterAPI.dev was previously used but became unreliable (server errors). */
 function initReaderCounts() {
-  const NAMESPACE = "phm-constantinosnea";
-  const API = "https://api.counterapi.dev/v1";
+  const NAMESPACE = "constantinosnea.github.io";
+  const API = "https://abacus.jasoncameron.dev";
 
   function slugFromHref(href) {
     if (!href) return "";
@@ -276,13 +277,14 @@ function initReaderCounts() {
   }
 
   async function fetchCount(slug, hit) {
-    const url = hit
-      ? `${API}/${NAMESPACE}/${encodeURIComponent(slug)}/up`
-      : `${API}/${NAMESPACE}/${encodeURIComponent(slug)}`;
-    const res = await fetch(url);
+    const path = hit
+      ? `${API}/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(slug)}`
+      : `${API}/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(slug)}`;
+    const res = await fetch(path);
     if (!res.ok) throw new Error("counter failed");
     const data = await res.json();
-    return data.count || 0;
+    // Abacus returns { value }; keep fallbacks for other counter shapes.
+    return Number(data.value ?? data.count ?? 0);
   }
 
   function setValue(el, count) {
@@ -326,7 +328,15 @@ function initReaderCounts() {
       if (doHit) sessionStorage.setItem(sessionKey, "1");
       setValue(el, count);
     } catch (_) {
-      // Keep em dash placeholder if the counter API is unreachable.
+      // If increment fails, still try to show the last known total.
+      if (doHit) {
+        try {
+          const count = await fetchCount(slug, false);
+          setValue(el, count);
+        } catch (_) {
+          /* keep placeholder */
+        }
+      }
     }
   });
 }
