@@ -1,0 +1,262 @@
+<!--
+  ARTICLE TEMPLATE — not a real page.
+  Copy this file, rename it to a URL-friendly slug (e.g. my-new-article.html),
+  replace every {{TOKEN}} below, delete this comment block, and remove the
+  <meta name="robots" content="noindex, nofollow"> line (real articles should
+  be indexable). See README.md "How to add a new article" for the full
+  checklist, including updating articles/, sitemap.xml, and index.html.
+
+  BILINGUAL (EN/EL) CONVENTION — this site has a client-side EN/ΕΛ language
+  toggle (see js/main.js `initLanguageToggle`). Every visible string on the
+  page must be provided in both languages as a pair of sibling spans:
+    <span data-lang="en">English text</span><span data-lang="el" hidden>Greek text</span>
+  The toggle just flips the `hidden` attribute — no page reload, no separate
+  URL. This template already has the shared site chrome (nav, footer, common
+  labels) filled in with their standing Greek translations; you only need to
+  fill in the {{EN: ...}} / {{EL: ...}} pairs for this article's own content.
+  For attributes that can't hold child markup (alt/aria-label/placeholder/
+  title), keep the English value as the real attribute and add a matching
+  data-el-alt / data-el-aria-label / data-el-placeholder / data-el-title
+  attribute with the Greek translation — see the `img alt` line below.
+  Never translate: the author's name, "Public Health Matters", "LinkedIn",
+  dates, email addresses. See README.md for the full convention writeup.
+-->
+<!DOCTYPE html>
+<html lang="en" data-title-en="{{ARTICLE TITLE (EN)}} — Public Health Matters" data-title-el="{{ARTICLE TITLE (EL)}} — Public Health Matters">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ARTICLE TITLE}} — Public Health Matters</title>
+<meta name="description" content="{{META DESCRIPTION — 1-2 sentences, under 160 characters, summarising the article for search results and social shares}}">
+<meta name="robots" content="noindex, nofollow"> <!-- REMOVE this line for a real published article -->
+<link rel="canonical" href="https://constantinosnea.github.io/articles/{{SLUG}}.html">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="{{YYYY-MM-DD}}T00:00:00+00:00">
+<meta property="article:modified_time" content="{{YYYY-MM-DD}}T00:00:00+00:00">
+<meta property="article:author" content="Constantinos Nearchou">
+<meta property="article:section" content="{{TOPIC LABEL, e.g. Environment & Health}}">
+<meta property="og:title" content="{{ARTICLE TITLE}}">
+<meta property="og:description" content="{{SOCIAL-SHARING DESCRIPTION — can match meta description or be tuned for sharing}}">
+<meta property="og:image" content="https://constantinosnea.github.io/images/{{COVER-IMAGE-FILENAME}}.svg">
+<meta property="og:image:alt" content="Editorial cover illustration for this page">
+<meta property="og:url" content="https://constantinosnea.github.io/articles/{{SLUG}}.html">
+<meta property="og:site_name" content="Public Health Matters">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ARTICLE TITLE}}">
+<meta name="twitter:description" content="{{SOCIAL-SHARING DESCRIPTION}}">
+<meta name="twitter:image" content="https://constantinosnea.github.io/images/{{COVER-IMAGE-FILENAME}}.svg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><circle cx=%2216%22 cy=%2216%22 r=%2216%22 fill=%22%231b4332%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ARTICLE TITLE}}",
+  "description": "{{META DESCRIPTION}}",
+  "image": ["https://constantinosnea.github.io/images/{{COVER-IMAGE-FILENAME}}.svg"],
+  "datePublished": "{{YYYY-MM-DD}}",
+  "dateModified": "{{YYYY-MM-DD}}",
+  "author": { "@type": "Person", "name": "Constantinos Nearchou", "url": "https://constantinosnea.github.io/about.html" },
+  "publisher": { "@type": "Person", "name": "Constantinos Nearchou", "url": "https://constantinosnea.github.io/about.html" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://constantinosnea.github.io/articles/{{SLUG}}.html" },
+  "url": "https://constantinosnea.github.io/articles/{{SLUG}}.html",
+  "articleSection": "{{TOPIC LABEL}}",
+  "inLanguage": "en",
+  "isAccessibleForFree": true
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://constantinosnea.github.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Articles", "item": "https://constantinosnea.github.io/articles/" },
+    { "@type": "ListItem", "position": 3, "name": "{{ARTICLE TITLE}}", "item": "https://constantinosnea.github.io/articles/{{SLUG}}.html" }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main"><span data-lang="en">Skip to content</span><span data-lang="el" hidden>Μετάβαση στο περιεχόμενο</span></a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="38" height="38" focusable="false"><circle cx="20" cy="20" r="20" fill="#1b4332"/><circle cx="20" cy="20" r="11.5" fill="none" stroke="#faf8f3" stroke-width="1.75" opacity="0.9"/><circle cx="20" cy="20" r="6.25" fill="none" stroke="#faf8f3" stroke-width="1.5" opacity="0.55"/><circle cx="20" cy="20" r="2.4" fill="#faf8f3"/></svg></span>
+      <span class="brand-text">
+        <span class="brand-name">Public Health Matters</span>
+        <span class="brand-tagline">Evidence-informed commentary</span>
+      </span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" data-el-aria-label="Εναλλαγή μενού πλοήγησης" aria-expanded="false" aria-controls="main-nav">
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav class="main-nav" id="main-nav" aria-label="Primary">
+      <ul class="nav-links">
+        <li><a href="../index.html"><span data-lang="en">Home</span><span data-lang="el" hidden>Αρχική</span></a></li>
+        <li><a href="../articles/" aria-current="page"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
+        <li><a href="../topics.html"><span data-lang="en">Topics</span><span data-lang="el" hidden>Θέματα</span></a></li>
+        <li><a href="../about.html"><span data-lang="en">About</span><span data-lang="el" hidden>Σχετικά</span></a></li>
+        <li><a href="mailto:con1999nea@gmail.com"><span data-lang="en">Contact</span><span data-lang="el" hidden>Επικοινωνία</span></a></li>
+      </ul>
+            <button type="button" class="lang-toggle" aria-label="Switch language / Αλλαγή γλώσσας" aria-pressed="false">
+        <span class="lang-option is-active" data-lang-option="en">EN</span><span class="lang-option" data-lang-option="el">ΕΛ</span>
+      </button>
+      <a class="btn btn-primary nav-cta" href="mailto:con1999nea@gmail.com"><span data-lang="en">Get in touch</span><span data-lang="el" hidden>Επικοινωνήστε</span></a>
+    </nav>
+  </div>
+  <div class="nav-backdrop"></div>
+</header>
+
+<main id="main">
+
+  <article>
+    <header class="article-header">
+      <div class="container article-header-inner">
+        <p class="breadcrumbs"><a href="../index.html"><span data-lang="en">Home</span><span data-lang="el" hidden>Αρχική</span></a><span class="sep">/</span><a href="../articles/"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a><span class="sep">/</span><span data-lang="en">{{SHORT BREADCRUMB LABEL (EN)}}</span><span data-lang="el" hidden>{{SHORT BREADCRUMB LABEL (EL)}}</span></p>
+        <div class="card-tags">
+          <span class="tag" data-topic="{{TOPIC SLUG: public-health | environment | policy | prevention | digital | mental | commentary}}"><span data-lang="en">{{TOPIC LABEL (EN)}}</span><span data-lang="el" hidden>{{TOPIC LABEL (EL) — see README lookup table}}</span></span>
+          <span class="content-type" data-type="{{CONTENT TYPE: evidence | analysis | commentary | explainer}}"><span data-lang="en">{{CONTENT TYPE LABEL (EN): Evidence Overview | Analysis | Commentary | Explainer}}</span><span data-lang="el" hidden>{{CONTENT TYPE LABEL (EL) — see README lookup table}}</span></span>
+        </div>
+        <h1><span data-lang="en">{{ARTICLE TITLE (EN)}}</span><span data-lang="el" hidden>{{ARTICLE TITLE (EL)}}</span></h1>
+        <p class="article-subtitle"><span data-lang="en">{{SUBTITLE (EN) — one sentence expanding on the title}}</span><span data-lang="el" hidden>{{SUBTITLE (EL)}}</span></p>
+        <div class="article-byline">
+          <span class="byline-avatar" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </span>
+          <span><span class="byline-name">Constantinos Nearchou</span> · {{DD Mon YYYY}} · <span data-lang="en">{{N}} min read</span><span data-lang="el" hidden>{{N}} λεπτά ανάγνωσης</span> · <span class="reader-count" data-reader-count data-article-slug="{{slug}}" data-reader-hit><span data-reader-value>—</span> <span data-lang="en">readers</span><span data-lang="el" hidden>αναγνώστες</span></span></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="article-hero-media">
+      <img src="../images/{{COVER-IMAGE-FILENAME}}.svg" alt="{{DESCRIPTIVE ALT TEXT (EN) for the cover image}}" data-el-alt="{{DESCRIPTIVE ALT TEXT (EL)}}" width="800" height="500">
+      <p class="image-caption"><span data-lang="en">Illustrative cover image.</span><span data-lang="el" hidden>Ενδεικτική εικόνα εξωφύλλου.</span></p>
+    </div>
+
+    <div class="article-layout">
+      <div class="article-body">
+
+        <p><span data-lang="en">{{Opening paragraph (EN). State what this article is (Evidence Overview / Analysis / Commentary / Explainer) explicitly in the first paragraph, as every article on this blog does.}}</span><span data-lang="el" hidden>{{Opening paragraph (EL).}}</span></p>
+
+        <h2 id="{{section-1-id}}"><span data-lang="en">{{Section 1 heading (EN)}}</span><span data-lang="el" hidden>{{Section 1 heading (EL)}}</span></h2>
+        <p><span data-lang="en">{{Body copy (EN).}}</span><span data-lang="el" hidden>{{Body copy (EL).}}</span></p>
+
+        <h2 id="{{section-2-id}}"><span data-lang="en">{{Section 2 heading (EN)}}</span><span data-lang="el" hidden>{{Section 2 heading (EL)}}</span></h2>
+        <p><span data-lang="en">{{Body copy (EN).}}</span><span data-lang="el" hidden>{{Body copy (EL).}}</span></p>
+
+        <div class="takeaways-box">
+          <h3><span data-lang="en">Key takeaways</span><span data-lang="el" hidden>Βασικά συμπεράσματα</span></h3>
+          <ul>
+            <li><span data-lang="en">{{Takeaway 1 (EN)}}</span><span data-lang="el" hidden>{{Takeaway 1 (EL)}}</span></li>
+            <li><span data-lang="en">{{Takeaway 2 (EN)}}</span><span data-lang="el" hidden>{{Takeaway 2 (EL)}}</span></li>
+            <li><span data-lang="en">{{Takeaway 3 (EN)}}</span><span data-lang="el" hidden>{{Takeaway 3 (EL)}}</span></li>
+          </ul>
+        </div>
+
+        <section class="references-section">
+          <h2><span data-lang="en">Sources &amp; further reading</span><span data-lang="el" hidden>Πηγές &amp; περαιτέρω ανάγνωση</span></h2>
+          <ol>
+            <li><span data-lang="en">{{Source description (EN)}}.</span><span data-lang="el" hidden>{{Source description (EL)}}.</span> <span class="ref-placeholder"><span data-lang="en">Placeholder — replace with a specific verified citation before publishing</span><span data-lang="el" hidden>Προσωρινό — αντικαταστήστε με συγκεκριμένη επαληθευμένη παραπομπή πριν τη δημοσίευση</span></span></li>
+          </ol>
+        </section>
+
+        <div class="author-note">
+          <div>
+            <h3><span data-lang="en">A note from the author</span><span data-lang="el" hidden>Σημείωμα του συγγραφέα</span></h3>
+            <p><span data-lang="en">{{Short personal note (EN).}}</span><span data-lang="el" hidden>{{Short personal note (EL).}}</span></p>
+          </div>
+        </div>
+
+        <div class="share-section">
+          <span class="share-label"><span data-lang="en">Share this article</span><span data-lang="el" hidden>Κοινοποιήστε αυτό το άρθρο</span></span>
+          <div class="share-links">
+            <a class="share-btn" href="#" data-share="linkedin" aria-label="Share on LinkedIn" data-el-aria-label="Κοινοποίηση στο LinkedIn" title="Share on LinkedIn" data-el-title="Κοινοποίηση στο LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.75h4V23h-4V8.75zM8.5 8.75h3.83v1.95h.05c.53-1 1.84-2.06 3.79-2.06 4.06 0 4.81 2.67 4.81 6.14V23h-4v-6.53c0-1.56-.03-3.56-2.17-3.56-2.17 0-2.5 1.7-2.5 3.45V23h-4V8.75z"/></svg></a>
+            <a class="share-btn" href="#" data-share="email" aria-label="Share via email" data-el-aria-label="Κοινοποίηση με email" title="Share via email" data-el-title="Κοινοποίηση με email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg></a>
+          </div>
+        </div>
+
+        <div class="medical-disclaimer">
+          <p><span data-lang="en"><strong>Disclaimer:</strong> This article is provided for general educational and informational purposes only and does not constitute medical advice. Consult a qualified healthcare professional for guidance specific to your situation.</span><span data-lang="el" hidden><strong>Αποποίηση ευθύνης:</strong> Αυτό το άρθρο παρέχεται αποκλειστικά για γενικούς εκπαιδευτικούς και ενημερωτικούς σκοπούς και δεν αποτελεί ιατρική συμβουλή. Συμβουλευτείτε έναν εξειδικευμένο επαγγελματία υγείας για καθοδήγηση σχετική με τη δική σας κατάσταση.</span></p>
+        </div>
+
+      </div>
+
+      <aside class="article-sidebar">
+        <div class="sidebar-card">
+          <h3><span data-lang="en">On this page</span><span data-lang="el" hidden>Σε αυτή τη σελίδα</span></h3>
+          <ul class="toc-list">
+            <li><a href="#{{section-1-id}}"><span data-lang="en">{{Section 1 heading (EN)}}</span><span data-lang="el" hidden>{{Section 1 heading (EL)}}</span></a></li>
+            <li><a href="#{{section-2-id}}"><span data-lang="en">{{Section 2 heading (EN)}}</span><span data-lang="el" hidden>{{Section 2 heading (EL)}}</span></a></li>
+          </ul>
+        </div>
+        <div class="sidebar-card">
+          <h3><span data-lang="en">Topic</span><span data-lang="el" hidden>Θέμα</span></h3>
+          <p style="margin:0;"><a class="tag" data-topic="{{TOPIC SLUG}}" href="../articles/?topic={{TOPIC SLUG}}"><span data-lang="en">{{TOPIC LABEL (EN)}}</span><span data-lang="el" hidden>{{TOPIC LABEL (EL)}}</span></a></p>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <section class="related-section">
+    <div class="container">
+      <div class="section-heading"><h2><span data-lang="en">Related articles</span><span data-lang="el" hidden>Σχετικά άρθρα</span></h2></div>
+      <div class="card-grid">
+        <!-- Copy 2-3 <article class="article-card"> blocks from an existing (already bilingual) article page
+             here, linking to genuinely related pieces. Keep the data-lang spans and data-el-alt attributes
+             intact, and reuse each target article's exact locked EL title/tag/alt text from README.md so
+             the same article always reads identically wherever it's linked. -->
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="brand-name">Public Health Matters</span>
+        <p><span data-lang="en">Evidence-informed articles, analysis, and commentary on public health, environment, policy, and prevention.</span><span data-lang="el" hidden>Τεκμηριωμένα άρθρα, ανάλυση και σχόλια για τη δημόσια υγεία, το περιβάλλον, την πολιτική και την πρόληψη.</span></p>
+      </div>
+      <div class="footer-col">
+        <h3><span data-lang="en">Explore</span><span data-lang="el" hidden>Περιήγηση</span></h3>
+        <ul>
+          <li><a href="../articles/"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
+          <li><a href="../topics.html"><span data-lang="en">Topics</span><span data-lang="el" hidden>Θέματα</span></a></li>
+          <li><a href="../about.html"><span data-lang="en">About</span><span data-lang="el" hidden>Σχετικά</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3><span data-lang="en">Topics</span><span data-lang="el" hidden>Θέματα</span></h3>
+        <ul>
+          <li><a href="../articles/?topic=public-health"><span data-lang="en">Public Health</span><span data-lang="el" hidden>Δημόσια Υγεία</span></a></li>
+          <li><a href="../articles/?topic=environment"><span data-lang="en">Environment &amp; Health</span><span data-lang="el" hidden>Περιβάλλον &amp; Υγεία</span></a></li>
+          <li><a href="../articles/?topic=policy"><span data-lang="en">Health Policy</span><span data-lang="el" hidden>Πολιτική Υγείας</span></a></li>
+          <li><a href="../articles/?topic=mental"><span data-lang="en">Mental Health</span><span data-lang="el" hidden>Ψυχική Υγεία</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3><span data-lang="en">Connect</span><span data-lang="el" hidden>Επικοινωνία</span></h3>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/constantinos-nearchou/" target="_blank" rel="noopener noreferrer">LinkedIn <span class="visually-hidden"><span data-lang="en">(opens in new tab)</span><span data-lang="el" hidden>(ανοίγει σε νέα καρτέλα)</span></span></a></li>
+          <li><a href="mailto:con1999nea@gmail.com">con1999nea@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-current-year></span> <span data-lang="en">Public Health Matters. All rights reserved.</span><span data-lang="el" hidden>Public Health Matters. Με επιφύλαξη παντός δικαιώματος.</span></span>
+      <span><span data-lang="en">An independent editorial project.</span><span data-lang="el" hidden>Ανεξάρτητο εκδοτικό εγχείρημα.</span></span>
+    </div>
+    <p class="footer-disclaimer"><span data-lang="en">This website provides general information and personal commentary for educational purposes only. It is not medical advice and does not replace consultation with a qualified healthcare professional.</span><span data-lang="el" hidden>Αυτός ο ιστότοπος παρέχει γενικές πληροφορίες και προσωπικά σχόλια αποκλειστικά για εκπαιδευτικούς σκοπούς. Δεν αποτελεί ιατρική συμβουλή και δεν υποκαθιστά τη διαβούλευση με εξειδικευμένο επαγγελματία υγείας.</span></p>
+  </div>
+</footer>
+
+<script src="../js/main.js" defer></script>
+</body>
+</html>
