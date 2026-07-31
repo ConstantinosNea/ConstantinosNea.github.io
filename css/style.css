@@ -365,14 +365,16 @@ html[lang="el"] .nav-cta {
 .brand:hover { color: var(--color-charcoal-900); }
 
 .brand-mark {
-  width: 38px; height: 38px;
-  border-radius: 50%;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
-  background: url("../images/logo-mark.svg") center / contain no-repeat;
-  /* Letter-free mark; keep empty in HTML */
-  font-size: 0;
-  color: transparent;
-  overflow: hidden;
+  display: block;
+  line-height: 0;
+}
+.brand-mark svg {
+  width: 38px;
+  height: 38px;
+  display: block;
 }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
