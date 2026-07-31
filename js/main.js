@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initForms();
   initCurrentYear();
   initShareLinks();
+  initReaderCounts();
 });
 
 /* EN / EL language toggle: swaps [data-lang] content via the `hidden` attribute
@@ -236,6 +237,96 @@ function initShareLinks() {
       link.rel = "noopener noreferrer";
     } else if (kind === "email") {
       link.href = `mailto:?subject=${encodedTitle}&body=${encodedUrl}`;
+    }
+  });
+}
+
+/* Live reader counts via CounterAPI (no backend required for GitHub Pages).
+   Article pages increment once per browser session; cards only display. */
+function initReaderCounts() {
+  const NAMESPACE = "phm-constantinosnea";
+  const API = "https://api.counterapi.dev/v1";
+
+  function slugFromHref(href) {
+    if (!href) return "";
+    const clean = href.split("?")[0].split("#")[0];
+    const file = clean.split("/").pop() || "";
+    if (!file.endsWith(".html") || file === "index.html") return "";
+    return file.replace(/\.html$/, "");
+  }
+
+  function formatCount(n) {
+    return Number(n || 0).toLocaleString("en-US");
+  }
+
+  function readerLabelHtml() {
+    return (
+      '<span data-reader-value>—</span> ' +
+      '<span data-lang="en">readers</span>' +
+      '<span data-lang="el" hidden>αναγνώστες</span>'
+    );
+  }
+
+  function applyLangVisibility(root) {
+    const lang = localStorage.getItem("site-lang") === "el" ? "el" : "en";
+    root.querySelectorAll("[data-lang]").forEach((el) => {
+      if (el.closest("a.brand")) return;
+      el.hidden = el.getAttribute("data-lang") !== lang;
+    });
+  }
+
+  async function fetchCount(slug, hit) {
+    const url = hit
+      ? `${API}/${NAMESPACE}/${encodeURIComponent(slug)}/up`
+      : `${API}/${NAMESPACE}/${encodeURIComponent(slug)}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("counter failed");
+    const data = await res.json();
+    return data.count || 0;
+  }
+
+  function setValue(el, count) {
+    const valueEl = el.querySelector("[data-reader-value]");
+    if (valueEl) valueEl.textContent = formatCount(count);
+    el.hidden = false;
+  }
+
+  // Ensure listing cards have a reader-count target derived from their article link.
+  document
+    .querySelectorAll(".article-card, .featured-article")
+    .forEach((card) => {
+      const link = card.querySelector("h2 a, h3 a");
+      const meta = card.querySelector(".card-meta");
+      if (!link || !meta) return;
+      const slug = slugFromHref(link.getAttribute("href"));
+      if (!slug) return;
+      if (meta.querySelector(`[data-article-slug="${slug}"]`)) return;
+      const span = document.createElement("span");
+      span.className = "dot reader-count";
+      span.dataset.readerCount = "";
+      span.dataset.articleSlug = slug;
+      span.innerHTML = readerLabelHtml();
+      applyLangVisibility(span);
+      meta.appendChild(span);
+    });
+
+  const targets = Array.from(document.querySelectorAll("[data-reader-count][data-article-slug]"));
+  if (!targets.length) return;
+
+  targets.forEach(async (el) => {
+    const slug = el.getAttribute("data-article-slug");
+    if (!slug) return;
+    const shouldHit = el.hasAttribute("data-reader-hit");
+    const sessionKey = `phm-read-${slug}`;
+    const alreadyHit = sessionStorage.getItem(sessionKey) === "1";
+    const doHit = shouldHit && !alreadyHit;
+
+    try {
+      const count = await fetchCount(slug, doHit);
+      if (doHit) sessionStorage.setItem(sessionKey, "1");
+      setValue(el, count);
+    } catch (_) {
+      // Keep em dash placeholder if the counter API is unreachable.
     }
   });
 }

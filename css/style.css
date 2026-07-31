@@ -897,6 +897,8 @@ html[lang="el"] .nav-cta {
   font-family: var(--font-serif); font-weight: 700; flex-shrink: 0;
 }
 .byline-name { color: var(--text-primary); font-weight: 600; }
+.reader-count { white-space: nowrap; }
+.article-byline .reader-count { color: var(--text-secondary); }
 
 .article-hero-media {
   max-width: var(--content-width);
