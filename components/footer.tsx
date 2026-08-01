@@ -1,7 +1,13 @@
+import { getDictionary, type Locale } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
 
-export function Footer() {
+type FooterProps = {
+  locale: Locale;
+};
+
+export function Footer({ locale }: FooterProps) {
   const year = new Date().getFullYear();
+  const dict = getDictionary(locale);
 
   return (
     <footer className="mt-16 border-t border-zinc-200 pt-8 dark:border-zinc-800">
@@ -16,7 +22,7 @@ export function Footer() {
           rel="noopener noreferrer"
           className="underline decoration-zinc-300 underline-offset-2 transition-colors hover:text-zinc-800 dark:hover:text-zinc-200"
         >
-          LinkedIn
+          {dict.linkedIn}
         </a>
       </p>
     </footer>

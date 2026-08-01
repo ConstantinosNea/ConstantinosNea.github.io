@@ -2,47 +2,43 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
+import { defaultLocale, type Locale } from "@/lib/i18n";
+import {
+  getAllCategories,
+  type Post,
+  type PostFrontmatter,
+  type PostMeta,
+  type CategoryCount,
+} from "@/lib/post-meta";
+
+export type {
+  Post,
+  PostFrontmatter,
+  PostMeta,
+  CategoryCount,
+} from "@/lib/post-meta";
+
+export {
+  getAllCategories,
+  filterPostsByCategory,
+  getPostUrl,
+  slugifyCategory,
+} from "@/lib/post-meta";
 
 const postsDirectory = path.join(process.cwd(), "content/posts");
-
-export type PostFrontmatter = {
-  title: string;
-  description: string;
-  date: string;
-  updated?: string;
-  /** Primary category shown in homepage filters. */
-  category?: string;
-  tags?: string[];
-  draft?: boolean;
-  /** Absolute or site-relative image URL for LinkedIn / OG previews (1200×627 recommended). */
-  ogImage?: string;
-  /** Optional archive thumbnail (Substack-style right-rail image). */
-  coverImage?: string;
-};
-
-export type PostMeta = PostFrontmatter & {
-  slug: string;
-  readingTime: string;
-};
-
-export type Post = PostMeta & {
-  content: string;
-};
 
 function isPublished(data: PostFrontmatter): boolean {
   return !data.draft;
 }
 
-export function getPostSlugs(): string[] {
-  if (!fs.existsSync(postsDirectory)) return [];
-  return fs
-    .readdirSync(postsDirectory)
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => file.replace(/\.mdx$/, ""));
+function localePostsDir(locale: Locale): string {
+  return path.join(postsDirectory, locale);
 }
 
-export function getPostBySlug(slug: string): Post {
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
+function readPostFile(slug: string, locale: Locale): Post | null {
+  const fullPath = path.join(localePostsDir(locale), `${slug}.mdx`);
+  if (!fs.existsSync(fullPath)) return null;
+
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
   const frontmatter = data as PostFrontmatter;
@@ -64,6 +60,43 @@ export function getPostBySlug(slug: string): Post {
   };
 }
 
+function listSlugsInLocale(locale: Locale): string[] {
+  const dir = localePostsDir(locale);
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => file.replace(/\.mdx$/, ""));
+}
+
+/**
+ * Slugs for a locale. Non-default locales include English slugs too so
+ * mid-migration posts still appear (content falls back to EN when EL is missing).
+ */
+export function getPostSlugs(locale: Locale = defaultLocale): string[] {
+  const localized = listSlugsInLocale(locale);
+  if (locale === defaultLocale) return localized;
+
+  const fallback = listSlugsInLocale(defaultLocale);
+  return Array.from(new Set([...localized, ...fallback]));
+}
+
+/**
+ * Load a post for the given locale.
+ * If the locale file is missing (e.g. mid-migration Greek), fall back to English.
+ */
+export function getPostBySlug(slug: string, locale: Locale = defaultLocale): Post {
+  const localized = readPostFile(slug, locale);
+  if (localized) return localized;
+
+  if (locale !== defaultLocale) {
+    const fallback = readPostFile(slug, defaultLocale);
+    if (fallback) return fallback;
+  }
+
+  throw new Error(`Post not found: ${slug} (${locale})`);
+}
+
 function toMeta(post: Post): PostMeta {
   return {
     slug: post.slug,
@@ -80,56 +113,15 @@ function toMeta(post: Post): PostMeta {
   };
 }
 
-export function getAllPosts(): PostMeta[] {
-  return getPostSlugs()
-    .map((slug) => toMeta(getPostBySlug(slug)))
+export function getAllPosts(locale: Locale = defaultLocale): PostMeta[] {
+  return getPostSlugs(locale)
+    .map((slug) => toMeta(getPostBySlug(slug, locale)))
     .filter(isPublished)
     .sort((a, b) => (a.date > b.date ? -1 : 1));
 }
 
-export function getPostUrl(slug: string): string {
-  return `/blog/${slug}`;
+export function getAllCategoriesFromLocale(
+  locale: Locale = defaultLocale,
+): CategoryCount[] {
+  return getAllCategories(getAllPosts(locale));
 }
-
-export type CategoryCount = {
-  name: string;
-  count: number;
-  slug: string;
-};
-
-export function slugifyCategory(name: string): string {
-  return name
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-/** Unique categories from published posts, sorted by frequency then name. */
-export function getAllCategories(posts: PostMeta[] = getAllPosts()): CategoryCount[] {
-  const counts = new Map<string, number>();
-
-  for (const post of posts) {
-    if (!post.category) continue;
-    counts.set(post.category, (counts.get(post.category) ?? 0) + 1);
-  }
-
-  return Array.from(counts.entries())
-    .map(([name, count]) => ({
-      name,
-      count,
-      slug: slugifyCategory(name),
-    }))
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-}
-
-export function filterPostsByCategory(
-  posts: PostMeta[],
-  categorySlug?: string,
-): PostMeta[] {
-  if (!categorySlug || categorySlug === "all") return posts;
-  return posts.filter(
-    (post) => post.category && slugifyCategory(post.category) === categorySlug,
-  );
-}
-

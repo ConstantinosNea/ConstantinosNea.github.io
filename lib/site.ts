@@ -20,8 +20,8 @@ export const siteConfig = {
   /** Shown as primary CTA in the header (Substack-style Subscribe). */
   subscribeUrl: "https://www.linkedin.com/in/constantinos-nearchou/",
   subscribeLabel: "Subscribe",
-  /** Default LinkedIn/OG image (1200×627 via /og route). */
-  ogImage: "/og",
+  /** Default LinkedIn/OG image (build-time opengraph-image.png). */
+  ogImage: "/opengraph-image.png",
 } as const;
 
 export type SiteConfig = typeof siteConfig;

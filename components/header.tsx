@@ -2,21 +2,31 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
+import { LanguageToggle } from "@/components/language-toggle";
+import { getDictionary, type Locale } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
 
-const navItems = [
-  { href: "/", label: "Archive" },
-  { href: "/about", label: "About" },
-] as const;
+type HeaderProps = {
+  locale: Locale;
+};
 
-export function Header() {
-  const pathname = usePathname();
+export function Header({ locale }: HeaderProps) {
+  const pathname = usePathname() ?? "/";
+  const dict = getDictionary(locale);
+  const homeHref = `/${locale}/`;
+  const aboutHref = `/${locale}/about/`;
+
+  const navItems = [
+    { href: homeHref, label: dict.archive, match: "home" as const },
+    { href: aboutHref, label: dict.about, match: "about" as const },
+  ];
 
   return (
     <header className="sticky top-0 z-40 -mx-5 mb-8 border-b border-zinc-200/80 bg-white/95 px-5 backdrop-blur-md sm:-mx-6 sm:px-6">
       <div className="flex h-14 items-center justify-between gap-4">
         <Link
-          href="/"
+          href={homeHref}
           className="flex min-w-0 items-center gap-2.5 text-zinc-900 transition-opacity hover:opacity-80"
         >
           <span
@@ -31,13 +41,13 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-2">
-          <nav aria-label="Primary" className="hidden sm:block">
+          <nav aria-label={dict.primaryNav} className="hidden sm:block">
             <ul className="flex items-center gap-1 text-[0.8125rem] text-zinc-600 dark:text-zinc-400">
               {navItems.map((item) => {
                 const active =
-                  item.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(item.href);
+                  item.match === "home"
+                    ? pathname === homeHref || pathname === `/${locale}/`
+                    : pathname.startsWith(aboutHref);
 
                 return (
                   <li key={item.href}>
@@ -58,13 +68,17 @@ export function Header() {
             </ul>
           </nav>
 
+          <Suspense fallback={null}>
+            <LanguageToggle locale={locale} />
+          </Suspense>
+
           <a
             href={siteConfig.subscribeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full bg-[#3859e4] px-3.5 py-1.5 text-[0.8125rem] font-medium text-white transition-colors hover:bg-[#2c46c0]"
           >
-            {siteConfig.subscribeLabel}
+            {dict.subscribe}
           </a>
         </div>
       </div>

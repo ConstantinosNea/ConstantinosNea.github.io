@@ -1,16 +1,13 @@
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/lib/site";
 
-export const runtime = "edge";
+export const dynamic = "force-static";
+export const alt = siteConfig.title;
+export const size = { width: 1200, height: 627 };
+export const contentType = "image/png";
 
-/**
- * Dynamic Open Graph image sized for LinkedIn link previews (1200×627).
- * Example: /og?title=Writing%20Less%2C%20Shipping%20More
- */
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const title = searchParams.get("title")?.trim() || siteConfig.title;
-
+/** Default Open Graph image (generated at build time — works with static export). */
+export default function OpenGraphImage() {
   return new ImageResponse(
     (
       <div
@@ -40,28 +37,19 @@ export async function GET(request: Request) {
         <div
           style={{
             display: "flex",
-            fontSize: title.length > 60 ? 52 : 64,
+            fontSize: 64,
+            fontWeight: 600,
             lineHeight: 1.15,
             maxWidth: "90%",
-            fontWeight: 500,
           }}
         >
-          {title}
+          {siteConfig.title}
         </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 24,
-            color: "#737373",
-          }}
-        >
-          {siteConfig.url.replace(/^https?:\/\//, "")}
+        <div style={{ display: "flex", fontSize: 24, color: "#a3a3a3" }}>
+          {siteConfig.description.slice(0, 120)}
         </div>
       </div>
     ),
-    {
-      width: 1200,
-      height: 627,
-    },
+    { ...size },
   );
 }
