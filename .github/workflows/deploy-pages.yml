@@ -1,4 +1,4 @@
-name: Deploy Next.js to GitHub Pages
+name: Deploy static site to GitHub Pages
 
 on:
   push:
@@ -21,24 +21,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install
-        run: npm ci
-
-      - name: Build static export
-        run: npm run build
-        env:
-          NEXT_PUBLIC_SITE_URL: https://constantinosnea.github.io
+      - name: Prepare static site bundle
+        run: |
+          mkdir -p _site
+          cp index.html about.html topics.html 404.html robots.txt sitemap.xml _site/
+          cp -r css js articles images _site/
+          touch _site/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: out
+          path: _site
 
   deploy:
     needs: build
