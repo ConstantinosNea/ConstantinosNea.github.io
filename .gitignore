@@ -19,3 +19,4 @@ yarn-error.log*
 
 # editor / agent
 _agent-status.txt
+_run-agent-status.ps1
