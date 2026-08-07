@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileNav();
   initArticleFilters();
   initSearch();
-  initForms();
   initCurrentYear();
   initShareLinks();
   initReaderCounts();
@@ -273,34 +272,6 @@ function applyFilters() {
   if (noResults) {
     noResults.classList.toggle("is-visible", visibleCount === 0);
   }
-}
-
-/* Front-end-only form handling (newsletter + contact) */
-function initForms() {
-  const FORM_STATUS_MESSAGES = {
-    newsletter: {
-      en: "Thank you — this is a front-end placeholder. Connect an email provider to activate sign-ups.",
-      el: "Ευχαριστούμε — πρόκειται για προσωρινή λειτουργία. Συνδέστε έναν πάροχο email για να ενεργοποιηθούν οι εγγραφές.",
-    },
-    contact: {
-      en: "Thank you — this is a front-end placeholder. Connect a backend or form service to receive messages.",
-      el: "Ευχαριστούμε — πρόκειται για προσωρινή λειτουργία. Συνδέστε ένα backend ή υπηρεσία φορμών για να λαμβάνετε μηνύματα.",
-    },
-  };
-
-  document.querySelectorAll("[data-form]").forEach((form) => {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const status = form.querySelector(".form-status");
-      if (status) {
-        const lang = localStorage.getItem("site-lang") === "el" ? "el" : "en";
-        const messages = FORM_STATUS_MESSAGES[form.dataset.form] || FORM_STATUS_MESSAGES.contact;
-        status.textContent = messages[lang];
-        status.classList.add("is-visible");
-      }
-      form.reset();
-    });
-  });
 }
 
 function initCurrentYear() {

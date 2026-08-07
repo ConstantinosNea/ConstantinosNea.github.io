@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Sitemap for Public Health Matters.
-
-  SITE_URL placeholder: replace every occurrence of
-  https://constantinosnea.github.io with your real domain before launch
-  (see README.md "Site configuration" section for the full list of files
-  that reference this placeholder).
-
   Maintenance: add a new <url> block whenever you publish a new article,
-  using the article's own publication date as <lastmod>. Update <lastmod>
-  on this file's other entries only when that page's content meaningfully
-  changes. Do not list draft, template, or utility pages (e.g. 404.html,
-  articles/_TEMPLATE.html) here.
+  using the article's publication date as <lastmod>. Update listing-page
+  <lastmod> when featured/archive content changes. Do not list draft,
+  template, or utility pages (e.g. 404.html, articles/_TEMPLATE.html).
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
     <loc>https://constantinosnea.github.io/</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://constantinosnea.github.io/articles/</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://constantinosnea.github.io/topics.html</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://constantinosnea.github.io/about.html</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://constantinosnea.github.io/articles/heatwaves-climate-mortality.html</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
@@ -81,13 +81,6 @@
   <url>
     <loc>https://constantinosnea.github.io/articles/healthcare-policy-debates.html</loc>
     <lastmod>2026-05-28</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://constantinosnea.github.io/articles/heatwaves-climate-mortality.html</loc>
-    <lastmod>2026-05-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
