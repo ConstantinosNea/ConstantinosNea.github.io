@@ -139,32 +139,122 @@ function initArticleFilters() {
   applyFilters();
 }
 
-/* Article archive: live search */
+/* Normalize for search: lowercase, strip diacritics, collapse punctuation/space. */
+function normalizeSearchText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\p{L}\p{N}\s]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function queryTokens(query) {
+  return normalizeSearchText(query).split(" ").filter(Boolean);
+}
+
+function matchesSearchQuery(haystack, query) {
+  const tokens = queryTokens(query);
+  if (!tokens.length) return true;
+  const normalized = normalizeSearchText(haystack);
+  return tokens.every((token) => normalized.includes(token));
+}
+
+function cardSearchHaystack(card) {
+  if (card.dataset.searchFull) return card.dataset.searchFull;
+  const title = card.querySelector("h3, h2")?.textContent || "";
+  const excerpt = card.querySelector(".card-excerpt")?.textContent || "";
+  const tags = card.querySelector(".card-tags")?.textContent || "";
+  const seed = card.dataset.searchIndex || "";
+  return [seed, title, excerpt, tags].join(" ");
+}
+
+/* Fetch each linked article and index title + body (EN + EL) for full-text search.
+   Related-article blocks are excluded so other posts' titles don't pollute matches. */
+async function enrichArticleSearchIndexes() {
+  const cards = Array.from(document.querySelectorAll("[data-card-topic]"));
+  if (!cards.length) return;
+
+  await Promise.all(
+    cards.map(async (card) => {
+      if (card.dataset.searchFull) return;
+
+      const link = card.querySelector("h3 a, h2 a");
+      const href = link && link.getAttribute("href");
+      const localBits = [
+        card.dataset.searchIndex || "",
+        card.querySelector("h3, h2")?.textContent || "",
+        card.querySelector(".card-excerpt")?.textContent || "",
+        card.querySelector(".card-tags")?.textContent || "",
+      ];
+
+      let articleBits = "";
+      if (href) {
+        try {
+          const res = await fetch(href);
+          if (res.ok) {
+            const html = await res.text();
+            const doc = new DOMParser().parseFromString(html, "text/html");
+            doc.querySelectorAll(".related-section").forEach((el) => el.remove());
+
+            const title = doc.querySelector(".article-header h1")?.textContent || "";
+            const subtitle = doc.querySelector(".article-subtitle")?.textContent || "";
+            const bodyEl = doc.querySelector(".article-body");
+            if (bodyEl) {
+              bodyEl
+                .querySelectorAll(".related-section, .share-section")
+                .forEach((el) => el.remove());
+            }
+            const body = bodyEl?.textContent || "";
+            articleBits = [title, subtitle, body].join(" ");
+          }
+        } catch (_) {
+          /* Keep title/excerpt search if fetch fails (e.g. file://). */
+        }
+      }
+
+      card.dataset.searchFull = normalizeSearchText(
+        [...localBits, articleBits].join(" "),
+      );
+    }),
+  );
+}
+
+/* Article archive: live search across titles, excerpts, and article body */
 function initSearch() {
   const searchInput = document.querySelector("#article-search");
   if (!searchInput) return;
-  searchInput.addEventListener("input", () => applyFilters());
+
+  let debounceTimer = 0;
+  searchInput.addEventListener("input", () => {
+    window.clearTimeout(debounceTimer);
+    debounceTimer = window.setTimeout(() => applyFilters(), 120);
+  });
 
   const requestedQuery = new URLSearchParams(window.location.search).get("q");
   if (requestedQuery) {
     searchInput.value = requestedQuery;
     applyFilters();
   }
+
+  enrichArticleSearchIndexes().then(() => {
+    if (searchInput.value.trim()) applyFilters();
+  });
 }
 
 function applyFilters() {
   const activeChip = document.querySelector(".filter-chip.is-active");
   const activeTopic = activeChip ? activeChip.dataset.filter : "all";
   const searchInput = document.querySelector("#article-search");
-  const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+  const query = searchInput ? searchInput.value.trim() : "";
 
   const cards = document.querySelectorAll("[data-card-topic]");
   let visibleCount = 0;
 
   cards.forEach((card) => {
     const matchesTopic = activeTopic === "all" || card.dataset.cardTopic === activeTopic;
-    const haystack = (card.dataset.searchIndex || card.textContent || "").toLowerCase();
-    const matchesQuery = query === "" || haystack.includes(query);
+    const matchesQuery = matchesSearchQuery(cardSearchHaystack(card), query);
     const visible = matchesTopic && matchesQuery;
     card.style.display = visible ? "" : "none";
     if (visible) visibleCount += 1;

@@ -1,7 +1,8 @@
 /* ==========================================================================
    Public Health Blog — Design System
    Palette: deep forest green, muted teal, warm off-white, charcoal, restrained
-   clay accent. Editorial serif for headings, humanist sans for UI/body.
+   clay accent. Literata (serif) for headings/reading, IBM Plex Sans for UI —
+   both with first-class Greek + Latin support.
    ========================================================================== */
 
 :root {
@@ -36,9 +37,9 @@
   --link-color: var(--color-forest-700);
   --focus-ring: var(--color-clay-600);
 
-  /* Typography */
-  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Typography — Literata + IBM Plex Sans: first-class Greek & Latin */
+  --font-serif: "Literata", "Source Serif 4", Georgia, serif;
+  --font-sans: "IBM Plex Sans", "Segoe UI", sans-serif;
 
   /* Spacing scale */
   --space-1: 0.25rem;
@@ -147,47 +148,18 @@ button { font-family: inherit; }
 
 /* ---------------------------------------------------------------------- */
 /* Greek optical balance                                                  */
-/* Greek glyphs read larger/denser than Latin. Scale type down and keep   */
-/* hero/nav line lengths close to the English structure.                  */
+/* Keep the same root/body size as English so language toggle doesn't     */
+/* rescale rem spacing and make the page jump. Only nudge glyph metrics.  */
 /* ---------------------------------------------------------------------- */
-
-html[lang="el"] {
-  font-size: 15px; /* default ~16px; scales rem / clamp */
-}
-
-html[lang="el"] body {
-  font-size: 15.5px; /* was 17px */
-  line-height: 1.65;
-}
 
 html[lang="el"] h1,
 html[lang="el"] h2,
 html[lang="el"] h3,
 html[lang="el"] h4 {
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
-/* Hero: match English wrap / visual weight */
 html[lang="el"] .hero h1 {
-  font-size: clamp(1.85rem, 1.35rem + 1.9vw, 2.95rem); /* EN uses up to ~3.4rem */
-  line-height: 1.18;
-  letter-spacing: -0.025em;
-  max-width: 20ch; /* wider than EN 16ch — Greek glyphs are optically wider */
-}
-
-html[lang="el"] .hero-lede {
-  font-size: 1.05rem;
-  max-width: 38ch;
-}
-
-html[lang="el"] .hero-panel li {
-  font-size: 0.88rem;
-}
-
-html[lang="el"] .article-header h1,
-html[lang="el"] .page-header h1 {
   letter-spacing: -0.02em;
 }
 
@@ -200,16 +172,6 @@ html[lang="el"] .hero-eyebrow,
 html[lang="el"] .tag,
 html[lang="el"] .content-type {
   letter-spacing: 0.04em;
-}
-
-html[lang="el"] .nav-cta {
-  font-size: 0.88rem;
-  padding-inline: 1.15rem;
-}
-
-@media (max-width: 640px) {
-  html[lang="el"] body { font-size: 15px; }
-  html[lang="el"] .hero h1 { max-width: none; }
 }
 
 /* ---------------------------------------------------------------------- */
