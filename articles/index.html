@@ -27,6 +27,24 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
+<script>
+/* Canonical archive URL is …/articles/ (trailing slash). Preserve ? and #.
+   Bare …/articles breaks relative nav; …/index.html may lose query on redirect. */
+(function () {
+  var path = location.pathname;
+  var nextPath = path;
+  if (/\/articles\/index\.html$/i.test(path) || /\/articles$/i.test(path)) {
+    nextPath = path.replace(/\/index\.html$/i, "/");
+    if (/\/articles$/i.test(nextPath)) nextPath += "/";
+  } else if (/\/index\.html$/i.test(path)) {
+    nextPath = path.replace(/\/index\.html$/i, "/");
+  }
+  var next = nextPath + location.search + location.hash;
+  if (next !== path + location.search + location.hash) {
+    history.replaceState(null, "", next);
+  }
+})();
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -84,7 +102,7 @@
     <nav class="main-nav" id="main-nav" aria-label="Primary navigation" data-el-aria-label="Κύρια πλοήγηση">
       <ul class="nav-links">
         <li><a class="header-lang-stack" href="../index.html"><span data-lang="en">Home</span><span data-lang="el" hidden>Αρχική</span></a></li>
-        <li><a class="header-lang-stack" href="index.html" aria-current="page"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
+        <li><a class="header-lang-stack" href="./" aria-current="page"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
         <li><a class="header-lang-stack" href="../topics.html"><span data-lang="en">Topics</span><span data-lang="el" hidden>Θέματα</span></a></li>
         <li><a class="header-lang-stack" href="../about.html"><span data-lang="en">About</span><span data-lang="el" hidden>Σχετικά</span></a></li>
         <li><a class="header-lang-stack" href="mailto:con1999nea@gmail.com"><span data-lang="en">Contact</span><span data-lang="el" hidden>Επικοινωνία</span></a></li>
@@ -113,14 +131,14 @@
 
       <div class="archive-controls">
         <div class="filter-bar" role="group" aria-label="Filter articles by topic" data-el-aria-label="Φιλτράρισμα άρθρων ανά θέμα">
-          <button class="filter-chip is-active" data-filter="all" type="button"><span data-lang="en">All</span><span data-lang="el" hidden>Όλα</span></button>
-          <button class="filter-chip" data-filter="public-health" type="button"><span data-lang="en">Public Health</span><span data-lang="el" hidden>Δημόσια Υγεία</span></button>
-          <button class="filter-chip" data-filter="environment" type="button"><span data-lang="en">Environment &amp; Health</span><span data-lang="el" hidden>Περιβάλλον &amp; Υγεία</span></button>
-          <button class="filter-chip" data-filter="policy" type="button"><span data-lang="en">Health Policy</span><span data-lang="el" hidden>Πολιτική Υγείας</span></button>
-          <button class="filter-chip" data-filter="prevention" type="button"><span data-lang="en">Prevention &amp; Health Promotion</span><span data-lang="el" hidden>Πρόληψη &amp; Προαγωγή Υγείας</span></button>
-          <button class="filter-chip" data-filter="digital" type="button"><span data-lang="en">Digital Health</span><span data-lang="el" hidden>Ψηφιακή Υγεία</span></button>
-          <button class="filter-chip" data-filter="mental" type="button"><span data-lang="en">Mental Health</span><span data-lang="el" hidden>Ψυχική Υγεία</span></button>
-          <button class="filter-chip" data-filter="commentary" type="button"><span data-lang="en">Commentary</span><span data-lang="el" hidden>Σχολιασμός</span></button>
+          <button class="filter-chip is-active" data-filter="all" type="button" aria-pressed="true"><span data-lang="en">All</span><span data-lang="el" hidden>Όλα</span></button>
+          <button class="filter-chip" data-filter="public-health" type="button" aria-pressed="false"><span data-lang="en">Public Health</span><span data-lang="el" hidden>Δημόσια Υγεία</span></button>
+          <button class="filter-chip" data-filter="environment" type="button" aria-pressed="false"><span data-lang="en">Environment &amp; Health</span><span data-lang="el" hidden>Περιβάλλον &amp; Υγεία</span></button>
+          <button class="filter-chip" data-filter="policy" type="button" aria-pressed="false"><span data-lang="en">Health Policy</span><span data-lang="el" hidden>Πολιτική Υγείας</span></button>
+          <button class="filter-chip" data-filter="prevention" type="button" aria-pressed="false"><span data-lang="en">Prevention &amp; Health Promotion</span><span data-lang="el" hidden>Πρόληψη &amp; Προαγωγή Υγείας</span></button>
+          <button class="filter-chip" data-filter="digital" type="button" aria-pressed="false"><span data-lang="en">Digital Health</span><span data-lang="el" hidden>Ψηφιακή Υγεία</span></button>
+          <button class="filter-chip" data-filter="mental" type="button" aria-pressed="false"><span data-lang="en">Mental Health</span><span data-lang="el" hidden>Ψυχική Υγεία</span></button>
+          <button class="filter-chip" data-filter="commentary" type="button" aria-pressed="false"><span data-lang="en">Commentary</span><span data-lang="el" hidden>Σχολιασμός</span></button>
         </div>
         <div class="search-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -139,7 +157,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="environment"><span data-lang="en">Environment &amp; Health</span><span data-lang="el" hidden>Περιβάλλον &amp; Υγεία</span></span>
-              <span class="content-type" data-type="explainer"><span data-lang="en">Explainer</span><span data-lang="el" hidden>Επεξήγηση</span></span>
             </div>
             <h3><a href="air-pollution-childrens-health.html"><span data-lang="en">Air Pollution and Children’s Health: Why Early Exposure Matters</span><span data-lang="el" hidden>Ατμοσφαιρική ρύπανση και υγεία των παιδιών: Γιατί έχει σημασία η πρώιμη έκθεση</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">Children breathe faster, grow lungs still under construction, and cannot choose the air around them. What early exposure means for child health — and for prevention.</span><span data-lang="el" hidden>Τα παιδιά αναπνέουν ταχύτερα, αναπτύσσουν πνεύμονες που ακόμη διαμορφώνονται και δεν επιλέγουν τον αέρα γύρω τους. Τι σημαίνει η πρώιμη έκθεση για την υγεία των παιδιών — και για την πρόληψη.</span></p>
@@ -152,7 +169,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="prevention"><span data-lang="en">Prevention &amp; Health Promotion</span><span data-lang="el" hidden>Πρόληψη &amp; Προαγωγή Υγείας</span></span>
-              <span class="content-type" data-type="explainer"><span data-lang="en">Explainer</span><span data-lang="el" hidden>Επεξήγηση</span></span>
             </div>
             <h3><a href="heatstroke-summer-prevention.html"><span data-lang="en">Heatstroke in Summer: Warning Signs, Risk, and Prevention</span><span data-lang="el" hidden>Θερμοπληξία το καλοκαίρι: Προειδοποιητικά σημάδια, κίνδυνος και πρόληψη</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">Heatstroke is a medical emergency — and most heat-related harm is preventable. What it is, who is most at risk in summer, and what public health guidance recommends.</span><span data-lang="el" hidden>Η θερμοπληξία είναι ιατρικό επείγον — και το μεγαλύτερο μέρος της βλάβης από τη ζέστη είναι προλήψιμο. Τι είναι, ποιοι κινδυνεύουν περισσότερο το καλοκαίρι και τι συνιστά η δημόσια υγεία.</span></p>
@@ -165,7 +181,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="commentary"><span data-lang="en">Commentary &amp; Current Affairs</span><span data-lang="el" hidden>Σχολιασμός &amp; Επικαιρότητα</span></span>
-              <span class="content-type" data-type="commentary"><span data-lang="en">Commentary</span><span data-lang="el" hidden>Σχολιασμός</span></span>
             </div>
             <h3><a href="heatwaves-climate-mortality.html"><span data-lang="en">Heatwaves and Public Health: How Ready Are We?</span><span data-lang="el" hidden>Καύσωνες και δημόσια υγεία: Πόσο έτοιμοι είμαστε;</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">If heat kills and most of those deaths are preventable, why do we still treat heatwaves like bad weather? Evidence from WHO, EEA and Nature Medicine — plus a clear opinion.</span><span data-lang="el" hidden>Αν η ζέστη σκοτώνει και οι περισσότεροι θάνατοι είναι προλήψιμοι, γιατί την αντιμετωπίζουμε ακόμη σαν κακό καιρό; Στοιχεία από WHO, EEA και Nature Medicine — και μια σαφής άποψη.</span></p>
@@ -178,7 +193,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="environment"><span data-lang="en">Environment &amp; Health</span><span data-lang="el" hidden>Περιβάλλον &amp; Υγεία</span></span>
-              <span class="content-type" data-type="evidence"><span data-lang="en">Evidence Overview</span><span data-lang="el" hidden>Επισκόπηση Τεκμηρίωσης</span></span>
             </div>
             <h3><a href="air-quality-respiratory-health.html"><span data-lang="en">Why Air Quality Is a Public Health Emergency Hiding in Plain Sight</span><span data-lang="el" hidden>Γιατί η ποιότητα του αέρα είναι μια κρίση δημόσιας υγείας που περνά απαρατήρητη</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">Air pollution rarely makes headlines the way outbreaks do, yet it remains one of the largest environmental contributors to preventable disease worldwide.</span><span data-lang="el" hidden>Η ατμοσφαιρική ρύπανση σπάνια πρωτοσέλιδεύει όπως οι επιδημίες, κι όμως παραμένει ένας από τους μεγαλύτερους περιβαλλοντικούς παράγοντες προλαμβανόμενης νόσου παγκοσμίως.</span></p>
@@ -191,7 +205,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="mental"><span data-lang="en">Mental Health</span><span data-lang="el" hidden>Ψυχική Υγεία</span></span>
-              <span class="content-type" data-type="explainer"><span data-lang="en">Explainer</span><span data-lang="el" hidden>Επεξήγηση</span></span>
             </div>
             <h3><a href="loneliness-public-health-issue.html"><span data-lang="en">Loneliness Is a Public Health Issue, Not Just a Personal One</span><span data-lang="el" hidden>Η μοναξιά είναι ζήτημα δημόσιας υγείας, όχι μόνο προσωπικό</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">Social disconnection is increasingly discussed as a population-level health risk. What does that framing mean in practice?</span><span data-lang="el" hidden>Η κοινωνική απομόνωση συζητείται όλο και περισσότερο ως κίνδυνος υγείας σε επίπεδο πληθυσμού. Τι σημαίνει αυτό στην πράξη;</span></p>
@@ -204,7 +217,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="digital"><span data-lang="en">Digital Health</span><span data-lang="el" hidden>Ψηφιακή Υγεία</span></span>
-              <span class="content-type" data-type="analysis"><span data-lang="en">Analysis</span><span data-lang="el" hidden>Ανάλυση</span></span>
             </div>
             <h3><a href="telehealth-access-equity.html"><span data-lang="en">Telehealth Promised Equity. Did It Deliver?</span><span data-lang="el" hidden>Η τηλεϊατρική υποσχέθηκε ισοτιμία στην υγεία. Το πέτυχε;</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">Remote care expanded access for many, but the evidence on who actually benefited is more mixed than the early enthusiasm suggested.</span><span data-lang="el" hidden>Η απομακρυσμένη φροντίδα διεύρυνε την πρόσβαση για πολλούς, όμως τα τεκμήρια για το ποιος πραγματικά ωφελήθηκε είναι πιο ανάμεικτα απ' όσο έδειχνε ο αρχικός ενθουσιασμός.</span></p>
@@ -217,7 +229,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="prevention"><span data-lang="en">Prevention &amp; Health Promotion</span><span data-lang="el" hidden>Πρόληψη &amp; Προαγωγή Υγείας</span></span>
-              <span class="content-type" data-type="analysis"><span data-lang="en">Analysis</span><span data-lang="el" hidden>Ανάλυση</span></span>
             </div>
             <h3><a href="walkable-cities-prevention.html"><span data-lang="en">The Hidden Health Costs of Car-Dependent Cities</span><span data-lang="el" hidden>Το κρυφό κόστος υγείας των πόλεων που εξαρτώνται από το αυτοκίνητο</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">Urban design is preventive medicine that rarely gets treated as such. A look at how the built environment shapes chronic disease risk.</span><span data-lang="el" hidden>Ο αστικός σχεδιασμός είναι μια μορφή προληπτικής ιατρικής που σπάνια αναγνωρίζεται ως τέτοια. Μια ματιά στο πώς το δομημένο περιβάλλον διαμορφώνει τον κίνδυνο χρόνιων νοσημάτων.</span></p>
@@ -230,7 +241,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="public-health"><span data-lang="en">Public Health</span><span data-lang="el" hidden>Δημόσια Υγεία</span></span>
-              <span class="content-type" data-type="evidence"><span data-lang="en">Evidence Overview</span><span data-lang="el" hidden>Επισκόπηση Τεκμηρίωσης</span></span>
             </div>
             <h3><a href="vaccine-hesitancy-communication.html"><span data-lang="en">Rethinking Vaccine Hesitancy: What the Communication Research Actually Shows</span><span data-lang="el" hidden>Επανεξετάζοντας τη διστακτικότητα απέναντι στα εμβόλια: Τι δείχνει πραγματικά η έρευνα για την επικοινωνία</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">"Hesitancy" is often treated as a single problem with a single fix. The research paints a more complicated — and more useful — picture.</span><span data-lang="el" hidden>Η «διστακτικότητα» συχνά αντιμετωπίζεται ως ένα ενιαίο πρόβλημα με μία λύση. Η έρευνα δείχνει μια πιο περίπλοκη — και πιο χρήσιμη — εικόνα.</span></p>
@@ -243,7 +253,6 @@
           <div class="card-body">
             <div class="card-tags">
               <span class="tag" data-topic="policy"><span data-lang="en">Health Policy</span><span data-lang="el" hidden>Πολιτική Υγείας</span></span>
-              <span class="content-type" data-type="commentary"><span data-lang="en">Commentary</span><span data-lang="el" hidden>Σχολιασμός</span></span>
             </div>
             <h3><a href="healthcare-policy-debates.html"><span data-lang="en">Universal Health Coverage Debates Need Fewer Slogans and More Evidence</span><span data-lang="el" hidden>Οι συζητήσεις για την καθολική υγειονομική κάλυψη χρειάζονται λιγότερα συνθήματα και περισσότερα τεκμήρια</span></a></h3>
             <p class="card-excerpt"><span data-lang="en">A personal take on why health-system debates so often generate more heat than light — and what a more useful conversation would look like.</span><span data-lang="el" hidden>Μια προσωπική άποψη για το γιατί οι συζητήσεις γύρω από τα συστήματα υγείας παράγουν συχνά περισσότερη ένταση παρά διαφώτιση — και πώς θα ήταν μια πιο χρήσιμη συζήτηση.</span></p>
@@ -272,7 +281,7 @@
       <div class="footer-col">
         <h3><span data-lang="en">Explore</span><span data-lang="el" hidden>Περιήγηση</span></h3>
         <ul>
-          <li><a href="index.html"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
+          <li><a href="./"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
           <li><a href="../topics.html"><span data-lang="en">Topics</span><span data-lang="el" hidden>Θέματα</span></a></li>
           <li><a href="../about.html"><span data-lang="en">About</span><span data-lang="el" hidden>Σχετικά</span></a></li>
           <li><a href="../editorial-policy.html"><span data-lang="en">Editorial Policy</span><span data-lang="el" hidden>Συντακτική Πολιτική</span></a></li>

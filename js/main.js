@@ -1,10 +1,15 @@
 /* Public Health Blog — shared front-end behaviour (no dependencies) */
 
 document.addEventListener("DOMContentLoaded", () => {
+  canonicalizeArchiveLocation();
+  initStickyScrollOffset();
   initLanguageToggle();
   initMobileNav();
-  initArticleFilters();
+  initNavCurrent();
+  initArticleToc();
+  // Hydrate ?q= into the search box before archive URL sync runs.
   initSearch();
+  initArticleFilters();
   initCurrentYear();
   initShareLinks();
   initReaderCounts();
@@ -267,34 +272,219 @@ function initMobileNav() {
   });
 }
 
+function normalizePathname(pathname) {
+  let path = String(pathname || "/");
+  try {
+    path = decodeURIComponent(path);
+  } catch (_) {
+    /* keep raw */
+  }
+  path = path.replace(/\\/g, "/").replace(/\/index\.html$/i, "/");
+  if (path.length > 1) path = path.replace(/\/+$/, "");
+  if (!path || /^\/?index\.html$/i.test(path)) path = "/";
+  return path.toLowerCase();
+}
+
+/* Exact page match only — article detail URLs must not claim "Articles" is the page. */
+function initNavCurrent() {
+  const links = document.querySelectorAll(".main-nav .nav-links a[href]");
+  if (!links.length) return;
+
+  links.forEach((link) => link.removeAttribute("aria-current"));
+
+  const here = normalizePathname(window.location.pathname);
+  let current = null;
+
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href || /^(mailto:|tel:|https?:|\/\/|#)/i.test(href)) return;
+    let target;
+    try {
+      target = normalizePathname(new URL(href, window.location.href).pathname);
+    } catch (_) {
+      return;
+    }
+    if (target === here) current = link;
+  });
+
+  if (current) current.setAttribute("aria-current", "page");
+}
+
+/* Keep TOC labels in lockstep with article H2s (EN/EL) — headings are the source of truth. */
+function initArticleToc() {
+  const toc = document.querySelector(".toc-list");
+  const body = document.querySelector(".article-body");
+  if (!toc || !body) return;
+
+  const headings = Array.from(body.querySelectorAll("h2[id]"));
+  if (!headings.length) return;
+
+  const lang = getStoredLang();
+  const frag = document.createDocumentFragment();
+
+  headings.forEach((heading) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = `#${heading.id}`;
+
+    const en = heading.querySelector('[data-lang="en"]');
+    const el = heading.querySelector('[data-lang="el"]');
+
+    if (en || el) {
+      if (en) {
+        const span = document.createElement("span");
+        span.setAttribute("data-lang", "en");
+        span.textContent = en.textContent.trim();
+        span.hidden = lang !== "en";
+        a.appendChild(span);
+      }
+      if (el) {
+        const span = document.createElement("span");
+        span.setAttribute("data-lang", "el");
+        span.textContent = el.textContent.trim();
+        span.hidden = lang !== "el";
+        a.appendChild(span);
+      }
+    } else {
+      a.textContent = heading.textContent.replace(/\s+/g, " ").trim();
+    }
+
+    li.appendChild(a);
+    frag.appendChild(li);
+  });
+
+  toc.replaceChildren(frag);
+}
+
+/* Canonical archive listing path is always …/articles/ (trailing slash).
+   Bare …/articles and …/articles/index.html break relative nav (index.html
+   resolves to the site root) and can drop query strings on some hosts. */
+function isArchiveListingPath(pathname) {
+  const path = String(pathname || "").replace(/\\/g, "/");
+  return /\/articles\/?$/i.test(path) || /\/articles\/index\.html$/i.test(path);
+}
+
+function canonicalizeArchivePathname(pathname) {
+  let path = String(pathname || "").replace(/\\/g, "/");
+  if (!isArchiveListingPath(path)) return path;
+  path = path.replace(/\/index\.html$/i, "/");
+  if (/\/articles$/i.test(path)) path += "/";
+  return path;
+}
+
+function canonicalizeArchiveLocation() {
+  if (!isArchiveListingPath(window.location.pathname)) return false;
+  const url = new URL(window.location.href);
+  const nextPath = canonicalizeArchivePathname(url.pathname);
+  if (nextPath === url.pathname) return false;
+  url.pathname = nextPath;
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+  return true;
+}
+
+/* Canonical archive topic URLs: /articles/?topic=slug
+   Hash fallback (#topic=slug) survives hosts that strip ?topic= on
+   …/index.html → …/ redirects (e.g. some local static servers). */
+function normalizeArchivePathname(pathname) {
+  return canonicalizeArchivePathname(pathname);
+}
+
+function parseArchiveTopicFromHash(hash) {
+  const raw = String(hash || "").replace(/^#/, "").trim();
+  if (!raw) return null;
+  const params = new URLSearchParams(raw);
+  const topic = params.get("topic");
+  if (!topic || topic === "all") return null;
+  return topic;
+}
+
+function getRequestedArchiveTopic() {
+  const fromQuery = new URLSearchParams(window.location.search).get("topic");
+  if (fromQuery) return fromQuery;
+  return parseArchiveTopicFromHash(window.location.hash);
+}
+
+function syncFilterChipPressed(filterBar) {
+  filterBar.querySelectorAll(".filter-chip").forEach((chip) => {
+    chip.setAttribute("aria-pressed", String(chip.classList.contains("is-active")));
+  });
+}
+
+function setActiveFilterChip(filterBar, chip) {
+  filterBar.querySelectorAll(".filter-chip").forEach((c) => c.classList.remove("is-active"));
+  chip.classList.add("is-active");
+  syncFilterChipPressed(filterBar);
+}
+
+function syncArchiveQueryParams({ topic, q, replace = true }) {
+  const url = new URL(window.location.href);
+  url.pathname = canonicalizeArchivePathname(url.pathname);
+
+  if (topic && topic !== "all") {
+    url.searchParams.set("topic", topic);
+    url.hash = `topic=${encodeURIComponent(topic)}`;
+  } else {
+    url.searchParams.delete("topic");
+    if (parseArchiveTopicFromHash(url.hash)) url.hash = "";
+  }
+
+  if (typeof q === "string" && q.trim()) url.searchParams.set("q", q.trim());
+  else if (q === "") url.searchParams.delete("q");
+
+  const next = `${url.pathname}${url.search}${url.hash}`;
+  const current = `${canonicalizeArchivePathname(window.location.pathname)}${window.location.search}${window.location.hash}`;
+  if (next === current) return;
+
+  const method = replace ? "replaceState" : "pushState";
+  window.history[method]({}, "", next);
+}
+
 /* Article archive: category filter chips */
 function initArticleFilters() {
   const filterBar = document.querySelector(".filter-bar");
   const cards = document.querySelectorAll("[data-card-topic]");
   if (!filterBar || !cards.length) return;
 
+  const applyTopicFromLocation = () => {
+    const requestedTopic = getRequestedArchiveTopic();
+    let chip = null;
+    if (requestedTopic) {
+      chip = filterBar.querySelector(
+        `.filter-chip[data-filter="${CSS.escape(requestedTopic)}"]`,
+      );
+    }
+    if (!chip) chip = filterBar.querySelector('.filter-chip[data-filter="all"]');
+    if (chip) setActiveFilterChip(filterBar, chip);
+
+    syncArchiveQueryParams({
+      topic: filterBar.querySelector(".filter-chip.is-active")?.dataset.filter,
+      q:
+        document.querySelector("#article-search")?.value ||
+        new URLSearchParams(window.location.search).get("q") ||
+        "",
+    });
+    applyFilters();
+  };
+
   filterBar.addEventListener("click", (e) => {
     const chip = e.target.closest(".filter-chip");
     if (!chip) return;
 
-    filterBar.querySelectorAll(".filter-chip").forEach((c) => c.classList.remove("is-active"));
-    chip.classList.add("is-active");
-
+    setActiveFilterChip(filterBar, chip);
+    const searchInput = document.querySelector("#article-search");
+    syncArchiveQueryParams({
+      topic: chip.dataset.filter,
+      q: searchInput ? searchInput.value : undefined,
+    });
     applyFilters();
   });
 
-  const requestedTopic = new URLSearchParams(window.location.search).get("topic");
-  if (requestedTopic) {
-    const matchingChip = filterBar.querySelector(
-      `.filter-chip[data-filter="${CSS.escape(requestedTopic)}"]`,
-    );
-    if (matchingChip) {
-      filterBar.querySelectorAll(".filter-chip").forEach((c) => c.classList.remove("is-active"));
-      matchingChip.classList.add("is-active");
-    }
-  }
+  window.addEventListener("hashchange", () => {
+    if (!document.querySelector(".filter-bar")) return;
+    applyTopicFromLocation();
+  });
 
-  applyFilters();
+  applyTopicFromLocation();
 }
 
 /* Normalize for search: lowercase, strip diacritics, collapse punctuation/space. */
@@ -387,7 +577,14 @@ function initSearch() {
   let debounceTimer = 0;
   searchInput.addEventListener("input", () => {
     window.clearTimeout(debounceTimer);
-    debounceTimer = window.setTimeout(() => applyFilters(), 120);
+    debounceTimer = window.setTimeout(() => {
+      const activeChip = document.querySelector(".filter-chip.is-active");
+      syncArchiveQueryParams({
+        topic: activeChip?.dataset.filter,
+        q: searchInput.value,
+      });
+      applyFilters();
+    }, 120);
   });
 
   const requestedQuery = new URLSearchParams(window.location.search).get("q");
@@ -439,6 +636,26 @@ function initCurrentYear() {
   });
 }
 
+/* Keep in-page anchors clear of the sticky header on every viewport size. */
+function initStickyScrollOffset() {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+
+  const apply = () => {
+    const height = Math.ceil(header.getBoundingClientRect().height);
+    document.documentElement.style.setProperty(
+      "--sticky-header-offset",
+      `${Math.max(height, 64)}px`,
+    );
+  };
+
+  apply();
+  window.addEventListener("resize", apply, { passive: true });
+  if (typeof ResizeObserver !== "undefined") {
+    new ResizeObserver(apply).observe(header);
+  }
+}
+
 function setCopyFeedback(btn, lang, ok) {
   const feedback =
     lang === "el"
@@ -450,7 +667,8 @@ function setCopyFeedback(btn, lang, ok) {
         : "Copy failed";
   const original = btn.getAttribute("data-en-cache-aria-label") || btn.getAttribute("aria-label") || "";
   btn.setAttribute("aria-label", feedback);
-  btn.classList.add("is-copied");
+  btn.classList.toggle("is-copied", ok);
+  btn.classList.toggle("is-copy-failed", !ok);
   const labelEl = btn.querySelector(".share-btn-label");
   if (labelEl && !labelEl.querySelector("[data-lang]")) {
     if (!labelEl.hasAttribute("data-en-cache-label")) {
@@ -463,7 +681,7 @@ function setCopyFeedback(btn, lang, ok) {
     const elLabel = btn.getAttribute("data-el-aria-label");
     const enLabel = btn.getAttribute("data-en-cache-aria-label") || original;
     btn.setAttribute("aria-label", restoreLang === "el" && elLabel ? elLabel : enLabel);
-    btn.classList.remove("is-copied");
+    btn.classList.remove("is-copied", "is-copy-failed");
     if (labelEl && !labelEl.querySelector("[data-lang]")) {
       const en = labelEl.getAttribute("data-en-cache-label") || "Copy link";
       const el = labelEl.getAttribute("data-el-label") || "Αντιγραφή συνδέσμου";
@@ -472,14 +690,96 @@ function setCopyFeedback(btn, lang, ok) {
   }, 1800);
 }
 
+function closeShareFallback() {
+  document.querySelectorAll(".share-fallback").forEach((el) => el.remove());
+}
+
+/* Last-resort copy UX when Clipboard API / execCommand are unavailable. */
+function offerManualLinkCopy(anchorBtn, url, lang) {
+  closeShareFallback();
+
+  const host = anchorBtn.closest(".share-links") || anchorBtn.parentElement || document.body;
+  const panel = document.createElement("div");
+  panel.className = "share-fallback";
+  panel.setAttribute("role", "dialog");
+  panel.setAttribute(
+    "aria-label",
+    lang === "el" ? "Αντιγραφή συνδέσμου" : "Copy link",
+  );
+
+  const label = document.createElement("p");
+  label.className = "share-fallback-label";
+  label.textContent =
+    lang === "el"
+      ? "Αντιγράψτε τον σύνδεσμο χειροκίνητα:"
+      : "Copy the link manually:";
+
+  const row = document.createElement("div");
+  row.className = "share-fallback-row";
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "share-fallback-input";
+  input.value = url;
+  input.setAttribute("readonly", "");
+  input.setAttribute("aria-label", lang === "el" ? "Σύνδεσμος άρθρου" : "Article link");
+
+  const done = document.createElement("button");
+  done.type = "button";
+  done.className = "share-fallback-close";
+  done.textContent = lang === "el" ? "Κλείσιμο" : "Close";
+
+  row.append(input, done);
+  panel.append(label, row);
+  host.appendChild(panel);
+
+  input.focus();
+  input.select();
+
+  const dismiss = () => {
+    closeShareFallback();
+    document.removeEventListener("keydown", onKey);
+  };
+  const onKey = (e) => {
+    if (e.key === "Escape") dismiss();
+  };
+  done.addEventListener("click", dismiss);
+  document.addEventListener("keydown", onKey);
+
+  const soft =
+    lang === "el" ? "Αντιγράψτε από το πεδίο" : "Copy from the field";
+  const original =
+    anchorBtn.getAttribute("data-en-cache-aria-label") ||
+    anchorBtn.getAttribute("aria-label") ||
+    "";
+  if (!anchorBtn.hasAttribute("data-en-cache-aria-label") && original) {
+    anchorBtn.setAttribute("data-en-cache-aria-label", original);
+  }
+  anchorBtn.setAttribute("aria-label", soft);
+  anchorBtn.classList.add("is-copy-failed");
+  window.setTimeout(() => {
+    if (!document.body.contains(panel)) return;
+    const restoreLang = getStoredLang();
+    const elLabel = anchorBtn.getAttribute("data-el-aria-label");
+    const enLabel = anchorBtn.getAttribute("data-en-cache-aria-label") || original;
+    anchorBtn.setAttribute(
+      "aria-label",
+      restoreLang === "el" && elLabel ? elLabel : enLabel,
+    );
+    anchorBtn.classList.remove("is-copy-failed");
+  }, 2400);
+}
+
 async function copyPageLink(btn) {
   const lang = getStoredLang();
   const url = window.location.href.split("#")[0];
+
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(url);
       setCopyFeedback(btn, lang, true);
-      return;
+      closeShareFallback();
+      return true;
     }
   } catch (_) {
     /* fall through */
@@ -493,12 +793,20 @@ async function copyPageLink(btn) {
     input.style.opacity = "0";
     document.body.appendChild(input);
     input.select();
+    input.setSelectionRange(0, input.value.length);
     const ok = document.execCommand("copy");
     document.body.removeChild(input);
-    setCopyFeedback(btn, lang, ok);
+    if (ok) {
+      setCopyFeedback(btn, lang, true);
+      closeShareFallback();
+      return true;
+    }
   } catch (_) {
-    setCopyFeedback(btn, lang, false);
+    /* fall through */
   }
+
+  offerManualLinkCopy(btn, url, lang);
+  return false;
 }
 
 /* Wire share-intent URLs onto [data-share] controls using this page's own URL/title. */

@@ -6,6 +6,12 @@
 <title>Page Not Found — Health in Blog</title>
 <meta name="description" content="The page you're looking for doesn't exist or may have moved. Find articles, topics, and more from Health in Blog.">
 <meta name="robots" content="noindex, nofollow">
+<!--
+  GitHub Pages (and most static hosts) serve this file for missing URLs at any depth.
+  Without a site-root base, relative css/js/img/nav URLs resolve against the broken
+  request path (e.g. /articles/missing → /articles/css/…). Keep this base first.
+-->
+<base href="/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><circle cx=%2216%22 cy=%2216%22 r=%2216%22 fill=%22%231b4332%22/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +23,7 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="index.html">
+    <a class="brand" href="./">
       <span class="brand-mark" aria-hidden="true"><img src="images/brand-icon.png" alt="" width="56" height="56"></span>
       <span class="brand-text">
         <span class="brand-name">Health in Blog</span>
@@ -29,13 +35,13 @@
     </button>
     <nav class="main-nav" id="main-nav" aria-label="Primary navigation" data-el-aria-label="Κύρια πλοήγηση">
       <ul class="nav-links">
-        <li><a class="header-lang-stack" href="index.html"><span data-lang="en">Home</span><span data-lang="el" hidden>Αρχική</span></a></li>
-        <li><a class="header-lang-stack" href="articles/index.html"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
+        <li><a class="header-lang-stack" href="./"><span data-lang="en">Home</span><span data-lang="el" hidden>Αρχική</span></a></li>
+        <li><a class="header-lang-stack" href="articles/"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
         <li><a class="header-lang-stack" href="topics.html"><span data-lang="en">Topics</span><span data-lang="el" hidden>Θέματα</span></a></li>
         <li><a class="header-lang-stack" href="about.html"><span data-lang="en">About</span><span data-lang="el" hidden>Σχετικά</span></a></li>
         <li><a class="header-lang-stack" href="mailto:con1999nea@gmail.com"><span data-lang="en">Contact</span><span data-lang="el" hidden>Επικοινωνία</span></a></li>
       </ul>
-            <button type="button" class="lang-toggle" aria-label="Switch language / Αλλαγή γλώσσας" aria-pressed="false">
+      <button type="button" class="lang-toggle" aria-label="Switch language / Αλλαγή γλώσσας" aria-pressed="false">
         <span class="lang-option is-active" data-lang-option="en">EN</span><span class="lang-option" data-lang-option="el">ΕΛ</span>
       </button>
       <a class="btn btn-primary nav-cta header-lang-stack" href="mailto:con1999nea@gmail.com"><span data-lang="en">Get in touch</span><span data-lang="el" hidden>Επικοινωνήστε μαζί μου</span></a>
@@ -68,7 +74,7 @@
     <div class="container">
       <div class="section-heading"><h2><span data-lang="en">Where you might want to go</span><span data-lang="el" hidden>Πού μπορεί να θέλετε να πάτε</span></h2></div>
       <div class="topics-grid">
-        <a class="topic-card" data-topic="public-health" href="articles/index.html">
+        <a class="topic-card" data-topic="public-health" href="articles/">
           <h3><span data-lang="en">Browse all articles</span><span data-lang="el" hidden>Περιήγηση σε όλα τα άρθρα</span></h3>
           <p><span data-lang="en">The full archive of evidence overviews, analysis, explainers, and commentary.</span><span data-lang="el" hidden>Το πλήρες αρχείο επισκοπήσεων τεκμηρίωσης, αναλύσεων, επεξηγήσεων και σχολιασμού.</span></p>
         </a>
@@ -92,7 +98,7 @@
 
 <footer class="site-footer">
   <div class="container">
-        <div class="footer-grid footer-grid-compact">
+    <div class="footer-grid footer-grid-compact">
       <div class="footer-brand">
         <span class="brand-name">Health in Blog</span>
         <p><span data-lang="en">Evidence-informed perspectives on public health, health policy, and the systems shaping our health.</span><span data-lang="el" hidden>Οπτικές με γνώμονα τα επιστημονικά τεκμήρια για τη δημόσια υγεία, την πολιτική υγείας και τα συστήματα που διαμορφώνουν την υγεία μας.</span></p>
@@ -100,7 +106,7 @@
       <div class="footer-col">
         <h3><span data-lang="en">Explore</span><span data-lang="el" hidden>Περιήγηση</span></h3>
         <ul>
-          <li><a href="articles/index.html"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
+          <li><a href="articles/"><span data-lang="en">Articles</span><span data-lang="el" hidden>Άρθρα</span></a></li>
           <li><a href="topics.html"><span data-lang="en">Topics</span><span data-lang="el" hidden>Θέματα</span></a></li>
           <li><a href="about.html"><span data-lang="en">About</span><span data-lang="el" hidden>Σχετικά</span></a></li>
           <li><a href="editorial-policy.html"><span data-lang="en">Editorial Policy</span><span data-lang="el" hidden>Συντακτική Πολιτική</span></a></li>

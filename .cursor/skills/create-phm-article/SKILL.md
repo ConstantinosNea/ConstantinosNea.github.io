@@ -70,7 +70,7 @@ Also set `data-title-en` / `data-title-el` on `<html>`, image `alt` + `data-el-a
 
 ### Category + content type
 
-Keep consistent across: header tags, sidebar `?topic=`, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
+Keep consistent across: header tags, sidebar `../articles/?topic={{slug}}#topic={{slug}}` (directory URL + hash fallback; never `index.html?topic=`), `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
 
 ### HTML structure (required order)
 
@@ -78,7 +78,7 @@ Keep consistent across: header tags, sidebar `?topic=`, `article:section` / JSON
 2. Skip link + site header
 3. `<article>`: header (breadcrumbs, tags, H1, subtitle, byline with `data-article-slug`), hero media, body + sidebar
 4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with charts when the theme fits — see below), references, author note, author card, share, medical disclaimer
-5. Sidebar TOC + topic link
+5. Sidebar TOC + topic link — TOC list is rebuilt at runtime from `.article-body h2[id]` (labels stay in sync); keep a static fallback list in HTML for no-JS.
 6. Related section (3 cards)
 7. Footer + `../js/main.js`
 

@@ -48,6 +48,7 @@
   --space-4: 1rem;
   --space-5: 1.5rem;
   --space-6: 2rem;
+  --sticky-header-offset: 5.5rem;
   --space-7: 3rem;
   --space-8: 4rem;
   --space-9: 6rem;
@@ -72,6 +73,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--sticky-header-offset, 5.5rem) + 0.75rem);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -169,8 +171,7 @@ html[lang="el"] .article-body {
 
 html[lang="el"] .eyebrow,
 html[lang="el"] .hero-eyebrow,
-html[lang="el"] .tag,
-html[lang="el"] .content-type {
+html[lang="el"] .tag {
   letter-spacing: 0.04em;
 }
 
@@ -275,28 +276,6 @@ html[lang="el"] .content-type {
 .tag[data-topic="mental"]      { background: #efe3ee; color: #7a4a72; }
 .tag[data-topic="commentary"]  { background: #f0e6d6; color: #8a5a2c; }
 .tag[data-topic="public-health"] { background: var(--color-forest-700); color: #fff; }
-
-/* Content-type label (distinguishes evidence/analysis/commentary) */
-.content-type {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--color-charcoal-500);
-}
-.content-type::before {
-  content: "";
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--color-clay-600);
-}
-.content-type[data-type="evidence"]::before { background: var(--color-teal-600); }
-.content-type[data-type="analysis"]::before { background: #3a5273; }
-.content-type[data-type="commentary"]::before { background: var(--color-clay-600); }
-.content-type[data-type="explainer"]::before { background: var(--color-forest-600); }
 
 /* ---------------------------------------------------------------------- */
 /* Header / Nav                                                          */
@@ -1201,12 +1180,25 @@ html[lang="el"] .content-type {
   padding-top: var(--space-6);
   border-top: 1px solid var(--border-subtle);
   display: flex;
-  align-items: center;
-  gap: var(--space-4);
   flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
 }
-.share-label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
-.share-links { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+.share-label {
+  flex: 1 1 100%;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.share-links {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
 .share-btn {
   display: flex; align-items: center; justify-content: center;
   width: 44px; height: 44px;
@@ -1246,6 +1238,61 @@ html[lang="el"] .content-type {
 .share-primary.is-copied {
   background: var(--color-teal-600);
   border-color: var(--color-teal-600);
+}
+.share-primary.is-copy-failed,
+.share-btn.is-copy-failed {
+  border-color: var(--color-clay-600);
+}
+.share-fallback {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 0.75rem);
+  z-index: 20;
+  padding: var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+.share-fallback-label {
+  margin: 0 0 var(--space-3);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.share-fallback-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+.share-fallback-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  background: var(--bg-sunken);
+  color: var(--text-primary);
+}
+.share-fallback-close {
+  flex-shrink: 0;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--color-forest-700);
+  border-radius: var(--radius-sm);
+  background: var(--color-forest-700);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Hash / TOC targets clear the sticky header */
+#main,
+.article-body [id],
+.article-header [id],
+:target {
+  scroll-margin-top: calc(var(--sticky-header-offset, 5.5rem) + 0.75rem);
 }
 
 .medical-disclaimer {
