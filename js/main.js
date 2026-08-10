@@ -10,10 +10,65 @@ document.addEventListener("DOMContentLoaded", () => {
   initReaderCounts();
 });
 
+const LANG_STORAGE_KEY = "site-lang";
+
+function getStoredLang() {
+  return localStorage.getItem(LANG_STORAGE_KEY) === "el" ? "el" : "en";
+}
+
+function formatSiteDate(iso, lang) {
+  if (!iso) return "";
+  const date = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+  const locale = lang === "el" ? "el-GR" : "en-GB";
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+}
+
+function formatReaderLabel(count, lang) {
+  const n = Number(count);
+  if (!Number.isFinite(n) || n < 0) return null;
+  const formatted = n.toLocaleString(lang === "el" ? "el-GR" : "en-US");
+  if (lang === "el") {
+    return `${formatted} ${n === 1 ? "αναγνώστης" : "αναγνώστες"}`;
+  }
+  return `${formatted} ${n === 1 ? "reader" : "readers"}`;
+}
+
+function applyLocalizedDates(lang) {
+  document.querySelectorAll("time[datetime]").forEach((el) => {
+    const iso = (el.getAttribute("datetime") || "").slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+    const formatted = formatSiteDate(iso, lang);
+    if (formatted) el.textContent = formatted;
+  });
+}
+
+function refreshReaderLabels(lang) {
+  document.querySelectorAll("[data-reader-count]").forEach((el) => {
+    const raw = el.getAttribute("data-reader-value-num");
+    if (raw === null || raw === "") {
+      el.hidden = true;
+      el.textContent = "";
+      return;
+    }
+    const label = formatReaderLabel(raw, lang);
+    if (!label) {
+      el.hidden = true;
+      el.textContent = "";
+      return;
+    }
+    el.hidden = false;
+    el.textContent = label;
+  });
+}
+
 /* EN / EL language toggle: swaps [data-lang] content via the `hidden` attribute
    and persists the choice in localStorage. */
 function initLanguageToggle() {
-  const STORAGE_KEY = "site-lang";
   const TRANSLATED_ATTRS = {
     alt: "data-el-alt",
     "aria-label": "data-el-aria-label",
@@ -21,17 +76,102 @@ function initLanguageToggle() {
     title: "data-el-title",
   };
 
-  function getStoredLang() {
-    return localStorage.getItem(STORAGE_KEY) === "el" ? "el" : "en";
+  function findViewportAnchor() {
+    const header = document.querySelector("header");
+    const headerBottom = header
+      ? header.getBoundingClientRect().bottom
+      : 0;
+    const minTop = headerBottom + 2;
+    const maxTop = window.innerHeight * 0.6;
+    const selectors = [
+      ".featured-article",
+      ".article-card",
+      ".section-heading",
+      ".topic-card",
+      "main h1",
+      "main h2",
+      "main h3",
+      "article",
+      ".about-hero",
+      ".editorial-section",
+      "main section",
+    ];
+    let best = null;
+    let bestScore = Infinity;
+    document.querySelectorAll(selectors.join(",")).forEach((el) => {
+      if (!el.getClientRects().length) return;
+      if (el.closest("header, a.brand, .lang-toggle")) return;
+      const top = el.getBoundingClientRect().top;
+      if (top < minTop - 40 || top > maxTop) return;
+      const score = Math.abs(top - minTop);
+      if (score < bestScore) {
+        bestScore = score;
+        best = el;
+      }
+    });
+    if (best) return best;
+    const x = Math.min(Math.max(window.innerWidth / 2, 24), window.innerWidth - 24);
+    const y = Math.min(minTop + 28, window.innerHeight - 8);
+    const hit = document.elementsFromPoint(x, y);
+    return (
+      hit.find(
+        (el) =>
+          el &&
+          el !== document.documentElement &&
+          el !== document.body &&
+          !el.closest("header, .lang-toggle"),
+      ) || null
+    );
+  }
+
+  function preserveViewportAnchor(anchor, anchorTopBefore) {
+    if (!anchor || !document.contains(anchor)) return;
+    const delta = anchor.getBoundingClientRect().top - anchorTopBefore;
+    if (Math.abs(delta) <= 0.5) return;
+    const root = document.documentElement;
+    const prevBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollBy(0, delta);
+    root.style.scrollBehavior = prevBehavior;
   }
 
   function applyLanguage(lang) {
-    document.documentElement.setAttribute("lang", lang);
+    const atTop = window.scrollY < 1;
+    const root = document.documentElement;
+    let anchor = null;
+    let anchorTop = 0;
+    if (!atTop) {
+      anchor = findViewportAnchor();
+      if (anchor) anchorTop = anchor.getBoundingClientRect().top;
+      // Prevent browser scroll anchoring from fighting our compensation.
+      root.style.overflowAnchor = "none";
+    }
+
+    root.setAttribute("lang", lang);
 
     document.querySelectorAll("[data-lang]").forEach((el) => {
       // Brand lockup (logo + name + tagline) stays English in both languages.
       if (el.closest("a.brand")) return;
-      el.hidden = el.getAttribute("data-lang") !== lang;
+      const match = el.getAttribute("data-lang") === lang;
+      // Stacked bilingual slots: both languages stay in layout (taller/wider wins).
+      const parent = el.parentElement;
+      if (
+        parent?.classList.contains("lang-stack") ||
+        parent?.classList.contains("header-lang-stack")
+      ) {
+        el.hidden = false;
+        el.classList.toggle("is-lang-active", match);
+        el.classList.toggle("is-lang-inactive", !match);
+        el.setAttribute("aria-hidden", match ? "false" : "true");
+        el.querySelectorAll("a, button, input, select, textarea").forEach((ctrl) => {
+          if (match) ctrl.removeAttribute("tabindex");
+          else ctrl.setAttribute("tabindex", "-1");
+        });
+        return;
+      }
+      el.hidden = !match;
+      el.classList.remove("is-lang-active", "is-lang-inactive");
+      el.removeAttribute("aria-hidden");
     });
 
     Object.entries(TRANSLATED_ATTRS).forEach(([attr, elAttr]) => {
@@ -56,8 +196,8 @@ function initLanguageToggle() {
           : el.getAttribute("data-en-cache-text");
     });
 
-    const titleEn = document.documentElement.getAttribute("data-title-en");
-    const titleEl = document.documentElement.getAttribute("data-title-el");
+    const titleEn = root.getAttribute("data-title-en");
+    const titleEl = root.getAttribute("data-title-el");
     if (titleEn && titleEl) document.title = lang === "el" ? titleEl : titleEn;
 
     document.querySelectorAll(".lang-toggle").forEach((btn) => {
@@ -69,6 +209,25 @@ function initLanguageToggle() {
         );
       });
     });
+
+    applyLocalizedDates(lang);
+    refreshReaderLabels(lang);
+
+    // Keep archive results-count in sync with the active language.
+    if (document.querySelector("#results-count")) {
+      applyFilters();
+    }
+
+    if (atTop) {
+      if (window.scrollY !== 0) {
+        root.style.scrollBehavior = "auto";
+        window.scrollTo(0, 0);
+        root.style.scrollBehavior = "";
+      }
+    } else {
+      preserveViewportAnchor(anchor, anchorTop);
+      root.style.overflowAnchor = "";
+    }
   }
 
   applyLanguage(getStoredLang());
@@ -76,7 +235,7 @@ function initLanguageToggle() {
   document.querySelectorAll(".lang-toggle").forEach((btn) => {
     btn.addEventListener("click", () => {
       const next = getStoredLang() === "en" ? "el" : "en";
-      localStorage.setItem(STORAGE_KEY, next);
+      localStorage.setItem(LANG_STORAGE_KEY, next);
       applyLanguage(next);
     });
   });
@@ -261,7 +420,7 @@ function applyFilters() {
 
   const resultsMeta = document.querySelector("#results-count");
   if (resultsMeta) {
-    const lang = localStorage.getItem("site-lang") === "el" ? "el" : "en";
+    const lang = getStoredLang();
     resultsMeta.textContent =
       lang === "el"
         ? `Εμφάνιση ${visibleCount} άρθρ${visibleCount === 1 ? "ου" : "ων"}`
@@ -280,7 +439,69 @@ function initCurrentYear() {
   });
 }
 
-/* Wire real share-intent URLs onto [data-share] links using this page's own URL/title. */
+function setCopyFeedback(btn, lang, ok) {
+  const feedback =
+    lang === "el"
+      ? ok
+        ? "Ο σύνδεσμος αντιγράφηκε"
+        : "Αποτυχία αντιγραφής"
+      : ok
+        ? "Link copied"
+        : "Copy failed";
+  const original = btn.getAttribute("data-en-cache-aria-label") || btn.getAttribute("aria-label") || "";
+  btn.setAttribute("aria-label", feedback);
+  btn.classList.add("is-copied");
+  const labelEl = btn.querySelector(".share-btn-label");
+  if (labelEl) {
+    if (!labelEl.hasAttribute("data-en-cache-label")) {
+      labelEl.setAttribute("data-en-cache-label", labelEl.textContent);
+    }
+    labelEl.textContent = feedback;
+  }
+  window.setTimeout(() => {
+    const restoreLang = getStoredLang();
+    const elLabel = btn.getAttribute("data-el-aria-label");
+    const enLabel = btn.getAttribute("data-en-cache-aria-label") || original;
+    btn.setAttribute("aria-label", restoreLang === "el" && elLabel ? elLabel : enLabel);
+    btn.classList.remove("is-copied");
+    if (labelEl) {
+      const en = labelEl.getAttribute("data-en-cache-label") || "Copy link";
+      const el = labelEl.getAttribute("data-el-label") || "Αντιγραφή συνδέσμου";
+      labelEl.textContent = restoreLang === "el" ? el : en;
+    }
+  }, 1800);
+}
+
+async function copyPageLink(btn) {
+  const lang = getStoredLang();
+  const url = window.location.href.split("#")[0];
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(url);
+      setCopyFeedback(btn, lang, true);
+      return;
+    }
+  } catch (_) {
+    /* fall through */
+  }
+
+  try {
+    const input = document.createElement("input");
+    input.value = url;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+    input.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(input);
+    setCopyFeedback(btn, lang, ok);
+  } catch (_) {
+    setCopyFeedback(btn, lang, false);
+  }
+}
+
+/* Wire share-intent URLs onto [data-share] controls using this page's own URL/title. */
 function initShareLinks() {
   const shareLinks = document.querySelectorAll("[data-share]");
   if (!shareLinks.length) return;
@@ -298,13 +519,23 @@ function initShareLinks() {
       link.rel = "noopener noreferrer";
     } else if (kind === "email") {
       link.href = `mailto:?subject=${encodedTitle}&body=${encodedUrl}`;
+    } else if (kind === "copy") {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        copyPageLink(link);
+      });
+      link.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          copyPageLink(link);
+        }
+      });
     }
   });
 }
 
 /* Live reader counts via Abacus (free counting API for static sites).
-   Article pages increment once per browser session; cards only display.
-   CounterAPI.dev was previously used but became unreliable (server errors). */
+   Article pages increment once per browser session; cards only display. */
 function initReaderCounts() {
   const NAMESPACE = "constantinosnea.github.io";
   const API = "https://abacus.jasoncameron.dev";
@@ -317,26 +548,6 @@ function initReaderCounts() {
     return file.replace(/\.html$/, "");
   }
 
-  function formatCount(n) {
-    return Number(n || 0).toLocaleString("en-US");
-  }
-
-  function readerLabelHtml() {
-    return (
-      '<span data-reader-value>—</span> ' +
-      '<span data-lang="en">readers</span>' +
-      '<span data-lang="el" hidden>αναγνώστες</span>'
-    );
-  }
-
-  function applyLangVisibility(root) {
-    const lang = localStorage.getItem("site-lang") === "el" ? "el" : "en";
-    root.querySelectorAll("[data-lang]").forEach((el) => {
-      if (el.closest("a.brand")) return;
-      el.hidden = el.getAttribute("data-lang") !== lang;
-    });
-  }
-
   async function fetchCount(slug, hit) {
     const path = hit
       ? `${API}/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(slug)}`
@@ -344,36 +555,54 @@ function initReaderCounts() {
     const res = await fetch(path);
     if (!res.ok) throw new Error("counter failed");
     const data = await res.json();
-    // Abacus returns { value }; keep fallbacks for other counter shapes.
     return Number(data.value ?? data.count ?? 0);
   }
 
-  function setValue(el, count) {
-    const valueEl = el.querySelector("[data-reader-value]");
-    if (valueEl) valueEl.textContent = formatCount(count);
+  function setCount(el, count) {
+    if (!Number.isFinite(count) || count < 0) {
+      el.removeAttribute("data-reader-value-num");
+      el.hidden = true;
+      el.textContent = "";
+      return;
+    }
+    el.setAttribute("data-reader-value-num", String(count));
+    const label = formatReaderLabel(count, getStoredLang());
+    if (!label) {
+      el.hidden = true;
+      el.textContent = "";
+      return;
+    }
     el.hidden = false;
+    el.textContent = label;
   }
 
   // Ensure listing cards have a reader-count target derived from their article link.
-  document
-    .querySelectorAll(".article-card, .featured-article")
-    .forEach((card) => {
-      const link = card.querySelector("h2 a, h3 a");
-      const meta = card.querySelector(".card-meta");
-      if (!link || !meta) return;
-      const slug = slugFromHref(link.getAttribute("href"));
-      if (!slug) return;
-      if (meta.querySelector(`[data-article-slug="${slug}"]`)) return;
-      const span = document.createElement("span");
-      span.className = "dot reader-count";
-      span.dataset.readerCount = "";
-      span.dataset.articleSlug = slug;
-      span.innerHTML = readerLabelHtml();
-      applyLangVisibility(span);
-      meta.appendChild(span);
-    });
+  document.querySelectorAll(".article-card, .featured-article").forEach((card) => {
+    const link = card.querySelector("h2 a, h3 a");
+    const meta = card.querySelector(".card-meta");
+    if (!link || !meta) return;
+    const slug = slugFromHref(link.getAttribute("href"));
+    if (!slug) return;
+    if (meta.querySelector(`[data-article-slug="${slug}"]`)) return;
+    const span = document.createElement("span");
+    span.className = "dot reader-count";
+    span.dataset.readerCount = "";
+    span.dataset.articleSlug = slug;
+    span.hidden = true;
+    meta.appendChild(span);
+  });
 
-  const targets = Array.from(document.querySelectorAll("[data-reader-count][data-article-slug]"));
+  // Normalize any legacy markup that still nests value/label spans.
+  document.querySelectorAll("[data-reader-count]").forEach((el) => {
+    if (el.querySelector("[data-reader-value], [data-lang]")) {
+      el.textContent = "";
+      el.hidden = true;
+    }
+  });
+
+  const targets = Array.from(
+    document.querySelectorAll("[data-reader-count][data-article-slug]"),
+  );
   if (!targets.length) return;
 
   targets.forEach(async (el) => {
@@ -387,16 +616,19 @@ function initReaderCounts() {
     try {
       const count = await fetchCount(slug, doHit);
       if (doHit) sessionStorage.setItem(sessionKey, "1");
-      setValue(el, count);
+      setCount(el, count);
     } catch (_) {
-      // If increment fails, still try to show the last known total.
       if (doHit) {
         try {
           const count = await fetchCount(slug, false);
-          setValue(el, count);
+          setCount(el, count);
         } catch (_) {
-          /* keep placeholder */
+          el.hidden = true;
+          el.textContent = "";
         }
+      } else {
+        el.hidden = true;
+        el.textContent = "";
       }
     }
   });

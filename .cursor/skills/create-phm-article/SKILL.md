@@ -1,0 +1,193 @@
+---
+name: create-phm-article
+description: >-
+  Create or publish bilingual (EN/EL) Public Health Matters articles: single HTML,
+  thumb/OG images, charts from statistics when the theme fits, topic category,
+  archive card, counts, JSON-LD, homepage, and sitemap. Use when writing a new
+  article, translating PHM content, or when the user says they drag-and-dropped
+  an article and need listings updated.
+---
+
+# Create / publish Public Health Matters article
+
+This skill covers the full lifecycle in this website repo:
+
+1. **Create** a new bilingual article (HTML + images) directly in `articles/` and `images/`
+2. **Publish / wire listings** so it appears in the archive, homepage, and sitemap
+
+## Which path?
+
+| User intent | Path |
+|-------------|------|
+| "Create an article about …" / draft / translate | **Path A — Create**, then always finish with **Path B** |
+| "I drag-and-dropped …" / update listings / references | **Path B — Publish only** (do not rewrite the article body) |
+
+---
+
+# Path A — Create article
+
+Write files **in place** on this site (no separate package folder unless the user asks for one).
+
+### Output files
+
+```
+articles/{slug}.html
+images/thumb-{image-key}.webp
+images/cover-{image-key}-og.png
+```
+
+HTML paths must assume the file lives in `articles/` (`../css/`, `../js/`, `../images/`, etc.).
+
+### Before writing
+
+Collect (ask if missing):
+
+| Field | Notes |
+|-------|--------|
+| `slug` | kebab-case filename, no `.html` |
+| `image-key` | short kebab key for assets (may differ from slug) |
+| Topic | one `data-topic` from [reference.md](reference.md) |
+| Content type | one `data-type` from [reference.md](reference.md) |
+| Titles / subtitle / excerpt | EN + EL |
+| Date | ISO `YYYY-MM-DD` |
+| Read time | integer minutes |
+| Body outline | H2 sections with `id`s for TOC |
+| Sources | verified URLs only; else sources-pending copy |
+| Related articles | up to 3 existing site articles |
+| Charts? | If theme fits statistics — plan 1–2 sourced charts (see below) |
+
+Copy header/footer/share/author chrome from the newest live article (prefer `articles/heatwaves-climate-mortality.html`) or [template.html](template.html).
+
+### Bilingual rules (critical)
+
+Every user-facing string:
+
+```html
+<span data-lang="en">English</span><span data-lang="el" hidden>Ελληνικά</span>
+```
+
+Also set `data-title-en` / `data-title-el` on `<html>`, image `alt` + `data-el-alt`, and `data-el-*` aria/placeholder attributes where the site already uses them. Greek must be natural editorial Greek.
+
+### Category + content type
+
+Keep consistent across: header tags, sidebar `?topic=`, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
+
+### HTML structure (required order)
+
+1. Head: meta, canonical, OG/Twitter, fonts, `../css/style.css`, BlogPosting + BreadcrumbList JSON-LD
+2. Skip link + site header
+3. `<article>`: header (breadcrumbs, tags, H1, subtitle, byline with `data-article-slug`), hero media, body + sidebar
+4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with charts when the theme fits — see below), references, author note, author card, share, medical disclaimer
+5. Sidebar TOC + topic link
+6. Related section (3 cards)
+7. Footer + `../js/main.js`
+
+URLs:
+
+- Canonical/OG: `https://constantinosnea.github.io/articles/{slug}.html`
+- OG image: `https://constantinosnea.github.io/images/cover-{image-key}-og.png`
+- Hero: `../images/thumb-{image-key}.webp` (800×500)
+
+### Images
+
+| File | Spec |
+|------|------|
+| `thumb-{image-key}.webp` | 800×500, calm documentary tone, no text/logos |
+| `cover-{image-key}-og.png` | ~1200×630 for OG/Twitter/JSON-LD |
+
+### Writing voice
+
+Evidence-informed, non-sensational. Mark evidence vs opinion for commentary. No unfinished citations as sources. Topic-appropriate medical disclaimer.
+
+### Charts from statistics (when the theme fits)
+
+**When the theme for article FITS add charts based on statistics.**
+
+Decide during outline (before writing HTML):
+
+| Fits — add 1–2 charts | Skip charts |
+|-----------------------|-------------|
+| Evidence/explainer with clear population rates, deaths, exposure, comparisons, or trends | Pure process / how-to with little quantitative claim |
+| Numbers the reader should compare (A vs B, before/after, age groups) | Commentary that is mainly opinion without cited figures |
+| Verified source figures available (WHO, EEA, UNICEF, peer-reviewed, official stats) | Only vague or unverified estimates |
+
+Rules:
+
+- Use **verified** statistics only; cite the same source in References; never invent numbers for a chart
+- Prefer **static** markup (HTML/CSS bar chart or inline SVG) — no Chart.js / CDN chart libraries
+- Bilingual caption + source line (`data-lang` EN/EL); keep labels short so Greek fits
+- Place the chart **inside** the section that discusses those numbers (not in the hero)
+- Max **1–2** charts per article; one clear comparison beats a dashboard
+- Include an accessible text alternative (table with `visually-hidden` or `aria-labelledby` + readable bar values)
+- Markup and CSS classes: [reference.md](reference.md#charts-from-statistics)
+
+### After creating
+
+Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
+
+---
+
+# Path B — Publish / wire listings
+
+When files are already in `articles/` (created here or drag-and-dropped), update site references. Do **not** rewrite the article body unless asked.
+
+### Trigger phrases
+
+- "I just drag and dropped an article"
+- "Update the listings / references / archive / sitemap"
+- New `{slug}.html` exists under `articles/` but is missing from `articles/index.html`
+
+### B0 — Identify the article
+
+1. List `articles/*.html` (exclude `index.html`)
+2. Find files missing from `articles/index.html` (or use the named slug)
+3. Confirm thumb + OG images exist under `images/`; warn if missing
+
+### B1 — Extract metadata from `articles/{slug}.html`
+
+Title EN/EL, excerpt, topic, type, labels, date, read time, thumb `src`/`alt`/`data-el-alt`, published ISO. Build `data-search-index` with EN+EL keywords.
+
+### B2 — `articles/index.html` (required)
+
+1. Insert archive `<article class="article-card">` as the **first** card in `.card-grid`
+2. Update `#results-count` `data-count` + EN/EL "Showing N …" (see [reference.md](reference.md) for Greek forms)
+3. Rebuild JSON-LD `numberOfItems` + `itemListElement` newest-first to match card order
+
+Archive card pattern: see existing cards; href is `{slug}.html`; image src is `../images/…`.
+
+### B3 — `sitemap.xml` (required)
+
+Add article `<url>` (`changefreq` yearly, `priority` 0.8). Bump `<lastmod>` on `/` and `/articles/` to today. Do not list templates/404/`articles.html`.
+
+### B4 — Homepage `index.html` (default: yes)
+
+Unless user opts out:
+
+1. Replace `.featured-article` with the new article (root paths: `images/…`, `articles/{slug}.html`)
+2. Keep **3** recent cards; move previous featured into recent first; drop oldest; no duplicate of featured in recent
+
+`topics.html` needs no per-article change.
+
+### B5 — Sanity checks
+
+- [ ] CSS/JS paths on article OK
+- [ ] Images exist
+- [ ] Not `noindex` if public
+- [ ] `data-card-topic` matches a filter chip
+- [ ] JSON-LD count = archive cards = `data-count`
+- [ ] Sitemap has the URL
+- [ ] Homepage featured/recent consistent
+
+### B6 — Report
+
+List files updated and whether featured changed; note missing images.
+
+### Out of scope unless asked
+
+Rewriting related sidebars on older posts; git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>"/push.
+
+## References
+
+- Topics, types, counts, charts, path table: [reference.md](reference.md)
+- Skeleton: [template.html](template.html)
+- Live examples: `articles/*.html` (prefer `heatwaves-climate-mortality.html`)

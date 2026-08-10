@@ -1,8 +1,5 @@
 # Public Health Matters — robots.txt
 # All content on this site is public. No paths are disallowed.
-#
-# Replace the domain below with your real domain before launch
-# (see README.md "Site configuration").
 
 User-agent: *
 Allow: /

@@ -1,3 +1,7 @@
 ﻿.DS_Store
 Thumbs.db
-
+node_modules/
+_apply-refinements.js
+_transform-articles.js
+_patch-restored.js
+_move-takeaways.js
