@@ -452,7 +452,7 @@ function setCopyFeedback(btn, lang, ok) {
   btn.setAttribute("aria-label", feedback);
   btn.classList.add("is-copied");
   const labelEl = btn.querySelector(".share-btn-label");
-  if (labelEl) {
+  if (labelEl && !labelEl.querySelector("[data-lang]")) {
     if (!labelEl.hasAttribute("data-en-cache-label")) {
       labelEl.setAttribute("data-en-cache-label", labelEl.textContent);
     }
@@ -464,7 +464,7 @@ function setCopyFeedback(btn, lang, ok) {
     const enLabel = btn.getAttribute("data-en-cache-aria-label") || original;
     btn.setAttribute("aria-label", restoreLang === "el" && elLabel ? elLabel : enLabel);
     btn.classList.remove("is-copied");
-    if (labelEl) {
+    if (labelEl && !labelEl.querySelector("[data-lang]")) {
       const en = labelEl.getAttribute("data-en-cache-label") || "Copy link";
       const el = labelEl.getAttribute("data-el-label") || "Αντιγραφή συνδέσμου";
       labelEl.textContent = restoreLang === "el" ? el : en;
@@ -510,6 +510,11 @@ function initShareLinks() {
   const pageTitle = document.title.replace(/ — Health in Blog$/, "");
   const encodedUrl = encodeURIComponent(pageUrl);
   const encodedTitle = encodeURIComponent(pageTitle);
+  const shareData = {
+    title: pageTitle,
+    text: pageTitle,
+    url: pageUrl,
+  };
 
   shareLinks.forEach((link) => {
     const kind = link.dataset.share;
@@ -519,6 +524,19 @@ function initShareLinks() {
       link.rel = "noopener noreferrer";
     } else if (kind === "email") {
       link.href = `mailto:?subject=${encodedTitle}&body=${encodedUrl}`;
+    } else if (kind === "native") {
+      link.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (typeof navigator.share === "function") {
+          try {
+            await navigator.share(shareData);
+            return;
+          } catch (err) {
+            if (err && err.name === "AbortError") return;
+          }
+        }
+        await copyPageLink(link);
+      });
     } else if (kind === "copy") {
       link.addEventListener("click", (e) => {
         e.preventDefault();
