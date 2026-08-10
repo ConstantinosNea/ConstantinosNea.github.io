@@ -330,16 +330,18 @@ html[lang="el"] .content-type {
 .brand:hover { color: var(--color-charcoal-900); }
 
 .brand-mark {
-  width: 38px;
-  height: 38px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
   display: block;
   line-height: 0;
 }
-.brand-mark svg {
-  width: 38px;
-  height: 38px;
+.brand-mark svg,
+.brand-mark img {
+  width: 56px;
+  height: 56px;
   display: block;
+  object-fit: contain;
 }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
