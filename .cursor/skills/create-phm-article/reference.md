@@ -28,7 +28,7 @@ Notes:
 ## Site constants
 
 - Author: `Constantinos Nearchou`
-- Site: `Public Health Matters`
+- Site: `Health in Blog`
 - Contact: `mailto:con1999nea@gmail.com`
 - LinkedIn: `https://www.linkedin.com/in/constantinos-nearchou/`
 - Base URL: `https://constantinosnea.github.io`
@@ -101,9 +101,9 @@ Prefer real `<ol>` source links when available.
 
 ## Author card body (standard)
 
-EN: `Independent author of Public Health Matters — writing on public health evidence, systems, and policy for specialists and the general public.`
+EN: `Independent author of Health in Blog — writing on public health evidence, systems, and policy for specialists and the general public.`
 
-EL: `Ανεξάρτητος συγγραφέας του Public Health Matters — κείμενα για τεκμήρια, συστήματα και πολιτική δημόσιας υγείας, για ειδικούς και για το ευρύ κοινό.`
+EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κείμενα για τεκμήρια, συστήματα και πολιτική δημόσιας υγείας, για ειδικούς και για το ευρύ κοινό.`
 
 ## Publish checklist
 

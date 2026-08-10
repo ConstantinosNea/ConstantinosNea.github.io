@@ -507,7 +507,7 @@ function initShareLinks() {
   if (!shareLinks.length) return;
 
   const pageUrl = window.location.href.split("#")[0];
-  const pageTitle = document.title.replace(/ — Public Health Matters$/, "");
+  const pageTitle = document.title.replace(/ — Health in Blog$/, "");
   const encodedUrl = encodeURIComponent(pageUrl);
   const encodedTitle = encodeURIComponent(pageTitle);
 

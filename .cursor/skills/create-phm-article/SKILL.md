@@ -1,14 +1,14 @@
 ---
 name: create-phm-article
 description: >-
-  Create or publish bilingual (EN/EL) Public Health Matters articles: single HTML,
+  Create or publish bilingual (EN/EL) Health in Blog articles: single HTML,
   thumb/OG images, charts from statistics when the theme fits, topic category,
   archive card, counts, JSON-LD, homepage, and sitemap. Use when writing a new
   article, translating PHM content, or when the user says they drag-and-dropped
   an article and need listings updated.
 ---
 
-# Create / publish Public Health Matters article
+# Create / publish Health in Blog article
 
 This skill covers the full lifecycle in this website repo:
 

@@ -1,4 +1,4 @@
-# Public Health Matters
+# Health in Blog
 
 Evidence-informed public health writing by Constantinos Nearchou.
 
