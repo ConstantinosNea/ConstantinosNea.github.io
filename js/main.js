@@ -861,10 +861,12 @@ function initShareLinks() {
 }
 
 /* Live reader counts via Abacus (free counting API for static sites).
-   Article pages increment once per browser session; cards only display. */
+   Article pages increment once per browser session only after the reader
+   stays on the page for more than 20 seconds of visible time; cards display. */
 function initReaderCounts() {
   const NAMESPACE = "constantinosnea.github.io";
   const API = "https://abacus.jasoncameron.dev";
+  const HIT_DELAY_MS = 20000;
 
   function slugFromHref(href) {
     if (!href) return "";
@@ -902,6 +904,55 @@ function initReaderCounts() {
     el.textContent = label;
   }
 
+  function scheduleEngagedHit(slug, el, sessionKey) {
+    let remainingMs = HIT_DELAY_MS;
+    let deadline = 0;
+    let timeoutId = 0;
+
+    const clearTimer = () => {
+      if (!timeoutId) return;
+      window.clearTimeout(timeoutId);
+      timeoutId = 0;
+    };
+
+    const pause = () => {
+      if (!timeoutId) return;
+      remainingMs = Math.max(0, deadline - Date.now());
+      clearTimer();
+    };
+
+    const registerHit = async () => {
+      if (sessionStorage.getItem(sessionKey) === "1") return;
+      try {
+        const count = await fetchCount(slug, true);
+        sessionStorage.setItem(sessionKey, "1");
+        setCount(el, count);
+      } catch (_) {
+        /* Keep the previously displayed get-count if the hit fails. */
+      }
+    };
+
+    const start = () => {
+      if (timeoutId || remainingMs <= 0) return;
+      deadline = Date.now() + remainingMs;
+      timeoutId = window.setTimeout(() => {
+        timeoutId = 0;
+        remainingMs = 0;
+        document.removeEventListener("visibilitychange", onVisibility);
+        registerHit();
+      }, remainingMs);
+    };
+
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") start();
+      else pause();
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
+    if (document.visibilityState === "visible") start();
+    else pause();
+  }
+
   // Ensure listing cards have a reader-count target derived from their article link.
   document.querySelectorAll(".article-card, .featured-article").forEach((card) => {
     const link = card.querySelector("h2 a, h3 a");
@@ -937,25 +988,18 @@ function initReaderCounts() {
     const shouldHit = el.hasAttribute("data-reader-hit");
     const sessionKey = `phm-read-${slug}`;
     const alreadyHit = sessionStorage.getItem(sessionKey) === "1";
-    const doHit = shouldHit && !alreadyHit;
 
     try {
-      const count = await fetchCount(slug, doHit);
-      if (doHit) sessionStorage.setItem(sessionKey, "1");
+      const count = await fetchCount(slug, false);
       setCount(el, count);
     } catch (_) {
-      if (doHit) {
-        try {
-          const count = await fetchCount(slug, false);
-          setCount(el, count);
-        } catch (_) {
-          el.hidden = true;
-          el.textContent = "";
-        }
-      } else {
-        el.hidden = true;
-        el.textContent = "";
-      }
+      el.hidden = true;
+      el.textContent = "";
+      return;
+    }
+
+    if (shouldHit && !alreadyHit) {
+      scheduleEngagedHit(slug, el, sessionKey);
     }
   });
 }
