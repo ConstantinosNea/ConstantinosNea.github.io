@@ -416,7 +416,31 @@ function setActiveFilterChip(filterBar, chip) {
   syncFilterChipPressed(filterBar);
 }
 
-function syncArchiveQueryParams({ topic, q, replace = true }) {
+function getRequestedLatestLimit() {
+  const raw = new URLSearchParams(window.location.search).get("latest");
+  if (!raw) return null;
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isFinite(n) || n < 1) return null;
+  return n;
+}
+
+function cardDateValue(card) {
+  const dt = card.querySelector("time")?.getAttribute("datetime");
+  if (!dt) return 0;
+  const t = Date.parse(dt);
+  return Number.isFinite(t) ? t : 0;
+}
+
+function getLatestCardSet(limit) {
+  return new Set(
+    Array.from(document.querySelectorAll("[data-card-topic]"))
+      .slice()
+      .sort((a, b) => cardDateValue(b) - cardDateValue(a))
+      .slice(0, limit),
+  );
+}
+
+function syncArchiveQueryParams({ topic, q, latest, replace = true }) {
   const url = new URL(window.location.href);
   url.pathname = canonicalizeArchivePathname(url.pathname);
 
@@ -430,6 +454,12 @@ function syncArchiveQueryParams({ topic, q, replace = true }) {
 
   if (typeof q === "string" && q.trim()) url.searchParams.set("q", q.trim());
   else if (q === "") url.searchParams.delete("q");
+
+  if (typeof latest === "number" && latest > 0) {
+    url.searchParams.set("latest", String(latest));
+  } else if (latest === null || latest === "") {
+    url.searchParams.delete("latest");
+  }
 
   const next = `${url.pathname}${url.search}${url.hash}`;
   const current = `${canonicalizeArchivePathname(window.location.pathname)}${window.location.search}${window.location.hash}`;
@@ -462,6 +492,7 @@ function initArticleFilters() {
         document.querySelector("#article-search")?.value ||
         new URLSearchParams(window.location.search).get("q") ||
         "",
+      latest: getRequestedLatestLimit(),
     });
     applyFilters();
   };
@@ -472,9 +503,11 @@ function initArticleFilters() {
 
     setActiveFilterChip(filterBar, chip);
     const searchInput = document.querySelector("#article-search");
+    /* Topic browsing uses the full archive; keep latest= only for the dedicated CTA. */
     syncArchiveQueryParams({
       topic: chip.dataset.filter,
       q: searchInput ? searchInput.value : undefined,
+      latest: chip.dataset.filter === "all" ? getRequestedLatestLimit() : null,
     });
     applyFilters();
   });
@@ -582,6 +615,7 @@ function initSearch() {
       syncArchiveQueryParams({
         topic: activeChip?.dataset.filter,
         q: searchInput.value,
+        latest: getRequestedLatestLimit(),
       });
       applyFilters();
     }, 120);
@@ -603,6 +637,8 @@ function applyFilters() {
   const activeTopic = activeChip ? activeChip.dataset.filter : "all";
   const searchInput = document.querySelector("#article-search");
   const query = searchInput ? searchInput.value.trim() : "";
+  const latestLimit = getRequestedLatestLimit();
+  const latestSet = latestLimit ? getLatestCardSet(latestLimit) : null;
 
   const cards = document.querySelectorAll("[data-card-topic]");
   let visibleCount = 0;
@@ -610,7 +646,8 @@ function applyFilters() {
   cards.forEach((card) => {
     const matchesTopic = activeTopic === "all" || card.dataset.cardTopic === activeTopic;
     const matchesQuery = matchesSearchQuery(cardSearchHaystack(card), query);
-    const visible = matchesTopic && matchesQuery;
+    const matchesLatest = !latestSet || latestSet.has(card);
+    const visible = matchesTopic && matchesQuery && matchesLatest;
     card.style.display = visible ? "" : "none";
     if (visible) visibleCount += 1;
   });
