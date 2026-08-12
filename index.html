@@ -130,10 +130,23 @@
       <div class="section-heading">
         <h2><span data-lang="en">Featured article</span><span data-lang="el" hidden>Προτεινόμενο άρθρο</span></h2>
       </div>
-      <p class="lede" style="margin:0;max-width:40rem;">
-        <span data-lang="en">No featured article yet. New writing will appear here when it is published.</span>
-        <span data-lang="el" hidden>Δεν υπάρχει ακόμη προτεινόμενο άρθρο. Νέα κείμενα θα εμφανιστούν εδώ όταν δημοσιευθούν.</span>
-      </p>
+      <article class="featured-article">
+        <div class="featured-media">
+          <img src="images/thumb-ncd-burden.webp" alt="Quiet hospital corridor with soft daylight through tall windows" data-el-alt="Ήσυχος διάδρομος νοσοκομείου με απαλό φως από μεγάλα παράθυρα" fetchpriority="high" width="800" height="500">
+        </div>
+        <div class="featured-body">
+          <div class="card-tags">
+            <span class="tag" data-topic="public-health"><span data-lang="en">Public Health</span><span data-lang="el" hidden>Δημόσια Υγεία</span></span>
+          </div>
+          <h3><a href="articles/ncds-premature-deaths.html"><span data-lang="en">Noncommunicable Diseases: Why Most Premature Deaths Are Preventable</span><span data-lang="el" hidden>Μη μεταδιδόμενα νοσήματα: Γιατί οι περισσότεροι πρόωροι θάνατοι είναι προλήψιμοι</span></a></h3>
+          <p class="card-excerpt"><span data-lang="en">WHO data on NCD deaths and premature mortality — and why prevention is a public health priority.</span><span data-lang="el" hidden>Στοιχεία του WHO για τους θανάτους από ΜΜΝ και την πρόωρη θνησιμότητα — και γιατί η πρόληψη είναι προτεραιότητα δημόσιας υγείας.</span></p>
+          <div class="card-meta">
+            <time datetime="2026-08-12">12 Aug 2026</time>
+            <span class="dot"><span data-lang="en">8 min read</span><span data-lang="el" hidden>8 λεπτά ανάγνωσης</span></span>
+          </div>
+          <p style="margin-top: var(--space-5);"><a class="btn btn-outline" href="articles/ncds-premature-deaths.html"><span data-lang="en">Read the full article</span><span data-lang="el" hidden>Διαβάστε ολόκληρο το άρθρο</span></a></p>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -144,11 +157,37 @@
         <h2><span data-lang="en">Recent articles</span><span data-lang="el" hidden>Πρόσφατα άρθρα</span></h2>
         <a class="see-all" href="articles/"><span data-lang="en">Browse all articles</span><span data-lang="el" hidden>Περιήγηση σε όλα τα άρθρα</span></a>
       </div>
-      <div class="card-grid" id="recent-articles-grid" data-recent-count="3"></div>
-      <p class="lede" style="margin:0;max-width:40rem;">
-        <span data-lang="en">No articles published yet.</span>
-        <span data-lang="el" hidden>Δεν έχουν δημοσιευθεί ακόμη άρθρα.</span>
-      </p>
+      <div class="card-grid" id="recent-articles-grid" data-recent-count="3">
+        <article class="article-card" data-card-topic="environment">
+          <div class="card-media"><img src="images/thumb-air-pollution.webp" alt="Hazy city skyline with soft pollution haze at dusk" data-el-alt="Ομιχλώδης αστικός ορίζοντας με ήπια ατμοσφαιρική ρύπανση στο σούρουπο" loading="lazy" width="800" height="500"></div>
+          <div class="card-body">
+            <div class="card-tags"><span class="tag" data-topic="environment"><span data-lang="en">Environment &amp; Health</span><span data-lang="el" hidden>Περιβάλλον &amp; Υγεία</span></span></div>
+            <h3><a href="articles/air-pollution-ncd-deaths.html"><span data-lang="en">Air Pollution and NCDs: The Invisible Driver of Preventable Death</span><span data-lang="el" hidden>Ατμοσφαιρική ρύπανση και ΜΜΝ: Ο αόρατος οδηγός προλαμβανόμενου θανάτου</span></a></h3>
+            <p class="card-excerpt"><span data-lang="en">State of Global Air estimates link air pollution to millions of deaths — mostly through noncommunicable disease.</span><span data-lang="el" hidden>Εκτιμήσεις του State of Global Air συνδέουν την ατμοσφαιρική ρύπανση με εκατομμύρια θανάτους — κυρίως μέσω μη μεταδιδόμενων νοσημάτων.</span></p>
+            <div class="card-meta"><time datetime="2026-08-11">11 Aug 2026</time><span class="dot"><span data-lang="en">8 min read</span><span data-lang="el" hidden>8 λεπτά ανάγνωσης</span></span></div>
+          </div>
+        </article>
+
+        <article class="article-card" data-card-topic="policy">
+          <div class="card-media"><img src="images/thumb-health-spending.webp" alt="Quiet civic plaza and clinic entrance in soft daylight" data-el-alt="Ήσυχη πλατεία και είσοδος ιατρείου σε απαλό φως ημέρας" loading="lazy" width="800" height="500"></div>
+          <div class="card-body">
+            <div class="card-tags"><span class="tag" data-topic="policy"><span data-lang="en">Health Policy</span><span data-lang="el" hidden>Πολιτική Υγείας</span></span></div>
+            <h3><a href="articles/uhc-financial-hardship.html"><span data-lang="en">Universal Health Coverage: Service Gains Without Financial Protection Are Not Enough</span><span data-lang="el" hidden>Καθολική κάλυψη υγείας: Οι βελτιώσεις στις υπηρεσίες χωρίς οικονομική προστασία δεν αρκούν</span></a></h3>
+            <p class="card-excerpt"><span data-lang="en">WHO UHC monitoring shows service coverage rising while financial hardship still affects billions.</span><span data-lang="el" hidden>Η παρακολούθηση του WHO για την καθολική κάλυψη δείχνει άνοδο στις υπηρεσίες, ενώ η οικονομική επιβάρυνση εξακολουθεί να πλήττει δισεκατομμύρια.</span></p>
+            <div class="card-meta"><time datetime="2026-08-10">10 Aug 2026</time><span class="dot"><span data-lang="en">7 min read</span><span data-lang="el" hidden>7 λεπτά ανάγνωσης</span></span></div>
+          </div>
+        </article>
+
+        <article class="article-card" data-card-topic="prevention">
+          <div class="card-media"><img src="images/thumb-inactivity.webp" alt="Tree-lined pedestrian path in soft morning light" data-el-alt="Πεζόδρομος με δέντρα σε απαλό πρωινό φως" loading="lazy" width="800" height="500"></div>
+          <div class="card-body">
+            <div class="card-tags"><span class="tag" data-topic="prevention"><span data-lang="en">Prevention &amp; Health Promotion</span><span data-lang="el" hidden>Πρόληψη &amp; Προαγωγή Υγείας</span></span></div>
+            <h3><a href="articles/physical-inactivity-prevention.html"><span data-lang="en">Physical Inactivity: A Prevention Failure Hiding in Plain Sight</span><span data-lang="el" hidden>Έλλειψη φυσικής δραστηριότητας: Μια αποτυχία πρόληψης που περνά απαρατήρητη</span></a></h3>
+            <p class="card-excerpt"><span data-lang="en">Nearly a third of adults and four in five adolescents miss WHO activity guidelines — a preventable risk at population scale.</span><span data-lang="el" hidden>Σχεδόν το ένα τρίτο των ενηλίκων και τέσσερις στους πέντε εφήβους δεν καλύπτουν τις συστάσεις του WHO — προλήψιμος κίνδυνος σε επίπεδο πληθυσμού.</span></p>
+            <div class="card-meta"><time datetime="2026-08-09">9 Aug 2026</time><span class="dot"><span data-lang="en">7 min read</span><span data-lang="el" hidden>7 λεπτά ανάγνωσης</span></span></div>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
