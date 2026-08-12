@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initArticleToc();
   // Hydrate ?q= into the search box before archive URL sync runs.
   initSearch();
+  initArticleSort();
   initArticleFilters();
   initCurrentYear();
   initShareLinks();
@@ -424,11 +425,72 @@ function getRequestedLatestLimit() {
   return n;
 }
 
+function getRequestedSort() {
+  const sort = new URLSearchParams(window.location.search).get("sort");
+  return ARCHIVE_SORT_VALUES.has(sort) ? sort : "newest";
+}
+
+function getActiveArchiveSort() {
+  const sortSelect = document.querySelector("#article-sort");
+  if (sortSelect && ARCHIVE_SORT_VALUES.has(sortSelect.value)) {
+    return sortSelect.value;
+  }
+  return getRequestedSort();
+}
+
 function cardDateValue(card) {
   const dt = card.querySelector("time")?.getAttribute("datetime");
   if (!dt) return 0;
   const t = Date.parse(dt);
   return Number.isFinite(t) ? t : 0;
+}
+
+function cardViewCount(card) {
+  const raw = card
+    .querySelector("[data-reader-count]")
+    ?.getAttribute("data-reader-value-num");
+  if (raw == null || raw === "") return -1;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : -1;
+}
+
+function cardReadMinutes(card) {
+  const en = card.querySelector(".card-meta [data-lang='en']");
+  const match = (en?.textContent || "").match(/(\d+)\s*min/i);
+  return match ? Number(match[1]) : 0;
+}
+
+const ARCHIVE_SORT_VALUES = new Set([
+  "newest",
+  "views",
+  "read-asc",
+  "read-desc",
+]);
+
+function applyCardSort() {
+  const grid = document.querySelector(".card-grid");
+  if (!grid) return;
+  const sort = getActiveArchiveSort();
+  const cards = Array.from(grid.querySelectorAll("[data-card-topic]"));
+  cards.sort((a, b) => {
+    if (sort === "views") {
+      const va = cardViewCount(a);
+      const vb = cardViewCount(b);
+      if (va < 0 && vb < 0) return cardDateValue(b) - cardDateValue(a);
+      if (va < 0) return 1;
+      if (vb < 0) return -1;
+      if (vb !== va) return vb - va;
+      return cardDateValue(b) - cardDateValue(a);
+    }
+    if (sort === "read-asc" || sort === "read-desc") {
+      const ra = cardReadMinutes(a);
+      const rb = cardReadMinutes(b);
+      if (ra !== rb) return sort === "read-asc" ? ra - rb : rb - ra;
+      return cardDateValue(b) - cardDateValue(a);
+    }
+    return cardDateValue(b) - cardDateValue(a);
+  });
+  cards.forEach((card) => grid.appendChild(card));
 }
 
 function getLatestCardSet(limit) {
@@ -440,7 +502,7 @@ function getLatestCardSet(limit) {
   );
 }
 
-function syncArchiveQueryParams({ topic, q, latest, replace = true }) {
+function syncArchiveQueryParams({ topic, q, latest, sort, replace = true }) {
   const url = new URL(window.location.href);
   url.pathname = canonicalizeArchivePathname(url.pathname);
 
@@ -461,12 +523,35 @@ function syncArchiveQueryParams({ topic, q, latest, replace = true }) {
     url.searchParams.delete("latest");
   }
 
+  if (sort && sort !== "newest" && ARCHIVE_SORT_VALUES.has(sort)) {
+    url.searchParams.set("sort", sort);
+  } else if (sort === "newest" || sort === null || sort === "") {
+    url.searchParams.delete("sort");
+  }
+
   const next = `${url.pathname}${url.search}${url.hash}`;
   const current = `${canonicalizeArchivePathname(window.location.pathname)}${window.location.search}${window.location.hash}`;
   if (next === current) return;
 
   const method = replace ? "replaceState" : "pushState";
   window.history[method]({}, "", next);
+}
+
+function initArticleSort() {
+  const sortSelect = document.querySelector("#article-sort");
+  if (!sortSelect) return;
+
+  sortSelect.value = getRequestedSort();
+  sortSelect.addEventListener("change", () => {
+    const searchInput = document.querySelector("#article-search");
+    syncArchiveQueryParams({
+      topic: document.querySelector(".filter-chip.is-active")?.dataset.filter,
+      q: searchInput ? searchInput.value : undefined,
+      latest: getRequestedLatestLimit(),
+      sort: sortSelect.value,
+    });
+    applyFilters();
+  });
 }
 
 /* Article archive: category filter chips */
@@ -493,6 +578,7 @@ function initArticleFilters() {
         new URLSearchParams(window.location.search).get("q") ||
         "",
       latest: getRequestedLatestLimit(),
+      sort: getActiveArchiveSort(),
     });
     applyFilters();
   };
@@ -508,6 +594,7 @@ function initArticleFilters() {
       topic: chip.dataset.filter,
       q: searchInput ? searchInput.value : undefined,
       latest: chip.dataset.filter === "all" ? getRequestedLatestLimit() : null,
+      sort: getActiveArchiveSort(),
     });
     applyFilters();
   });
@@ -616,6 +703,7 @@ function initSearch() {
         topic: activeChip?.dataset.filter,
         q: searchInput.value,
         latest: getRequestedLatestLimit(),
+        sort: getActiveArchiveSort(),
       });
       applyFilters();
     }, 120);
@@ -665,6 +753,8 @@ function applyFilters() {
   if (noResults) {
     noResults.classList.toggle("is-visible", visibleCount === 0);
   }
+
+  applyCardSort();
 }
 
 function initCurrentYear() {
@@ -939,6 +1029,12 @@ function initReaderCounts() {
     }
     el.hidden = false;
     el.textContent = label;
+    if (
+      document.querySelector("#article-sort") &&
+      getActiveArchiveSort() === "views"
+    ) {
+      applyCardSort();
+    }
   }
 
   function scheduleEngagedHit(slug, el, sessionKey) {

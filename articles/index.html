@@ -140,10 +140,21 @@
           <button class="filter-chip" data-filter="mental" type="button" aria-pressed="false"><span data-lang="en">Mental Health</span><span data-lang="el" hidden>Ψυχική Υγεία</span></button>
           <button class="filter-chip" data-filter="commentary" type="button" aria-pressed="false"><span data-lang="en">Commentary</span><span data-lang="el" hidden>Σχολιασμός</span></button>
         </div>
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <label class="visually-hidden" for="article-search"><span data-lang="en">Search articles</span><span data-lang="el" hidden>Αναζήτηση άρθρων</span></label>
-          <input type="search" id="article-search" placeholder="Search titles &amp; articles…" data-el-placeholder="Αναζήτηση τίτλων και άρθρων…">
+        <div class="archive-tools">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <label class="visually-hidden" for="article-search"><span data-lang="en">Search articles</span><span data-lang="el" hidden>Αναζήτηση άρθρων</span></label>
+            <input type="search" id="article-search" placeholder="Search titles &amp; articles…" data-el-placeholder="Αναζήτηση τίτλων και άρθρων…">
+          </div>
+          <div class="sort-box">
+            <label class="sort-label" for="article-sort"><span data-lang="en">Sort</span><span data-lang="el" hidden>Ταξινόμηση</span></label>
+            <select id="article-sort" aria-label="Sort articles" data-el-aria-label="Ταξινόμηση άρθρων">
+              <option value="newest" data-el-text="Νεότερα πρώτα">Newest first</option>
+              <option value="views" data-el-text="Περισσότερες αναγνώσεις">Most viewed</option>
+              <option value="read-asc" data-el-text="Συντομότερη ανάγνωση">Shortest read</option>
+              <option value="read-desc" data-el-text="Μεγαλύτερη ανάγνωση">Longest read</option>
+            </select>
+          </div>
         </div>
       </div>
 
