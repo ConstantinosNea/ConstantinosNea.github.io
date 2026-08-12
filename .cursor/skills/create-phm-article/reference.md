@@ -51,13 +51,37 @@ Notes:
 | healthcare-policy-debates | healthcare-policy | thumb-healthcare-policy.webp | cover-healthcare-policy-og.png |
 | heatstroke-summer-prevention | heatstroke | thumb-heatstroke.webp | cover-heatstroke-og.png |
 
+## Sources
+
+**Permanent gate** for every real article (see SKILL.md).
+
+- Every article must use **at least 4 credible sources**.
+- Sources should come **only from authoritative and reputable organisations/institutions**, including both **European and American/international sources** where relevant.
+- Prefer official public-health bodies, government health agencies, major scientific/medical institutions, and other high-quality primary sources. Avoid weak, commercial, or questionable sources.
+
+Examples of acceptable families: WHO, ECDC, EEA, Eurostat, OECD, UN agencies, CDC/NIH and other national health institutes, peer-reviewed journals, official statistical offices. Prefer an `<ol>` of verified links in References.
+
 ## Charts from statistics
 
-**When the theme for article FITS add charts based on statistics.**
+**Permanent:** Whenever the available sources provide useful statistics, include **data-based charts or visualisations** where they genuinely improve the article.
 
-Use site classes in `css/style.css` (`.article-chart`, `.chart-bars`, `.chart-row`, `.chart-bar`, `.chart-label`, `.chart-value`, `.chart-source`).
+- Do not rely on the same chart style every time. Use the type of chart or graphical representation that best fits the data and vary the visual approach when appropriate.
+- Charts must always be based on real data from the cited sources and must not invent statistics.
 
-### Bar-chart pattern (preferred)
+Use site classes in `css/style.css` (`.article-chart`, `.chart-bars`, `.chart-row`, `.chart-bar`, `.chart-label`, `.chart-value`, `.chart-source`). Add minimal new classes when a different visual form fits better. Prefer static HTML/CSS or inline SVG — no Chart.js / CDN chart libraries.
+
+### Choosing a visual form
+
+| Data shape | Prefer |
+|------------|--------|
+| Few categories, same unit (rates, %) | Horizontal or vertical bars |
+| Two-way share / gap | Simple comparison or split proportion |
+| Trend over time (few points) | Inline SVG line / area |
+| Single standout magnitude | Annotated callout figure with sourced number (still cite in References) |
+
+Do not default to horizontal bars on every article when another form fits better.
+
+### Bar-chart pattern (one option)
 
 ```html
 <figure class="article-chart" aria-labelledby="chart-{id}-caption">
@@ -86,12 +110,24 @@ Use site classes in `css/style.css` (`.article-chart`, `.chart-bars`, `.chart-ro
 
 Set `--chart-pct` to the bar width (0–100%). Absolute counts: put the number in `.chart-value` and scale bars relative to the largest value.
 
+### Other supported patterns (vary by data)
+
+Site CSS also includes:
+
+- **Callout** (`.chart-callout`, `.chart-callout-value`, `.chart-callout-label`) — single standout magnitude
+- **Vertical columns** (`.chart-columns`, `.chart-col`, `.chart-col-bar`) — few categories for visual comparison
+- **Share / proportion** (`.chart-share`, `.chart-share-track`, `.chart-share-seg`) — two-part composition of a whole
+
+Use the form that fits the statistic; do not default to horizontal bars on every article.
+
 ### Do / don’t
 
 - Do: one comparison the prose already explains; units in the caption or values
 - Do: match References (same agency/year as the chart source line)
-- Don’t: decorative charts with no numbers; pie charts for many tiny slices; stock “infographic” images with embedded text
-- Don’t: JS chart libraries or remote chart APIs
+- Do: vary visual approach across articles when the data warrants it
+- Don’t: invent statistics; decorative charts with no numbers; stock “infographic” images with embedded text
+- Don’t: reuse the identical chart layout on every article by habit
+- Don’t: pie charts for many tiny slices; JS chart libraries or remote chart APIs
 
 ## Sources-pending copy
 
@@ -99,7 +135,7 @@ EN: `This demo article does not yet include verified source links. Citations wil
 
 EL: `Αυτό το δοκιμαστικό άρθρο δεν περιλαμβάνει ακόμη επαληθευμένους συνδέσμους πηγών. Οι παραπομπές θα προστεθούν όταν επιβεβαιωθούν — οι ημιτελείς αναφορές δεν εμφανίζονται ως τεκμήρια.`
 
-Prefer real `<ol>` source links when available.
+Prefer real `<ol>` source links when available. Published articles need ≥4 authoritative sources (see Sources above); sources-pending is for demos/templates only.
 
 ## Author card body (standard)
 

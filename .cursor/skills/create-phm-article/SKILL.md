@@ -2,7 +2,9 @@
 name: create-phm-article
 description: >-
   Create or publish bilingual (EN/EL) Health in Blog articles: single HTML,
-  thumb/OG images, charts from statistics when the theme fits, topic category,
+  thumb/OG images, charts from statistics when sources support them (varied
+  chart types; real cited data only), at least 4 authoritative sources
+  (European and American/international where relevant), topic category,
   archive card, counts, JSON-LD, homepage, and sitemap. Always run bilingual
   language/terminology QA (natural Greek, correct PH terms, EN–EL meaning
   equivalence) before an article is finished. Use when writing a new article,
@@ -54,9 +56,9 @@ Collect (ask if missing):
 | Date | ISO `YYYY-MM-DD` |
 | Read time | integer minutes |
 | Body outline | H2 sections with `id`s for TOC |
-| Sources | verified URLs only; else sources-pending copy |
+| Sources | **≥4** authoritative URLs (see Sources gate); else sources-pending only for demos |
 | Related articles | up to 3 existing site articles |
-| Charts? | If theme fits statistics — plan 1–2 sourced charts (see below) |
+| Charts? | If sources provide useful stats — plan data-based chart(s); vary type to fit the data (see below) |
 
 Copy header/footer/share/author chrome from a **live UTF-8** article under `articles/` (prefer the newest published article whose Greek chrome is intact, e.g. `ncds-premature-deaths.html`) or [template.html](template.html). Do **not** invent chrome from a temp dump.
 
@@ -124,7 +126,7 @@ Keep consistent across: header topic tag (must be an `<a class="tag">` to `../ar
 1. Head: meta, canonical, OG/Twitter, fonts, `../css/style.css`, BlogPosting + BreadcrumbList JSON-LD
 2. Skip link + site header
 3. `<article>`: header (breadcrumbs, tags, H1, subtitle, byline with `data-article-slug` **and engaged reader-count markup**), hero media, body + sidebar
-4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with charts when the theme fits — see below), references, author note, author card, share, medical disclaimer
+4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with data-based charts when sources support them — see below), references (≥4 authoritative sources), author note, author card, share, medical disclaimer
 5. Sidebar TOC + topic link — TOC list is rebuilt at runtime from `.article-body h2[id]` (labels stay in sync); keep a static fallback list in HTML for no-JS.
 6. Related section (3 cards)
 7. Footer + `../js/main.js`
@@ -165,33 +167,60 @@ URLs:
 
 Evidence-informed, non-sensational. Mark evidence vs opinion for commentary. No unfinished citations as sources. Topic-appropriate medical disclaimer.
 
-### Charts from statistics (when the theme fits)
+### Sources (permanent gate — never skip)
 
-**When the theme for article FITS add charts based on statistics.**
+Every article must meet these requirements before it is treated as finished or publishable:
+
+- Every article must use **at least 4 credible sources**.
+- Sources should come **only from authoritative and reputable organisations/institutions**, including both **European and American/international sources** where relevant.
+- Prefer official public-health bodies, government health agencies, major scientific/medical institutions, and other high-quality primary sources. Avoid weak, commercial, or questionable sources.
+
+**Operational rules:**
+
+| Requirement | Detail |
+|-------------|--------|
+| Count | ≥4 distinct cited sources in the article References list (real `<ol>` links) |
+| Authority | WHO, ECDC, EEA, Eurostat, national ministries/institutes (e.g. CDC, NIH, NHS, RKI), OECD, UN agencies, peer-reviewed journals, official statistical offices — not blogs, SEO health sites, press-release-only outlets, or vendor marketing |
+| Geography | Include European **and** American/international authorities when the topic is not strictly one-region; do not rely on a single geography if both are relevant |
+| Verification | Live, citable URLs; unfinished or unverified citations → sources-pending copy, **not** fake evidence |
+| Charts | Every chart figure must be traceable to one of these cited sources |
+
+Demo/template stubs may keep sources-pending; real published articles may **not**. See [reference.md](reference.md#sources).
+
+### Charts and visual data (permanent requirements)
+
+Whenever the available sources provide useful statistics, include **data-based charts or visualisations** where they genuinely improve the article.
+
+- Do not rely on the same chart style every time. Use the type of chart or graphical representation that best fits the data and vary the visual approach when appropriate.
+- Charts must always be based on real data from the cited sources and must not invent statistics.
 
 Decide during outline (before writing HTML):
 
-| Fits — add 1–2 charts | Skip charts |
-|-----------------------|-------------|
-| Evidence/explainer with clear population rates, deaths, exposure, comparisons, or trends | Pure process / how-to with little quantitative claim |
-| Numbers the reader should compare (A vs B, before/after, age groups) | Commentary that is mainly opinion without cited figures |
-| Verified source figures available (WHO, EEA, UNICEF, peer-reviewed, official stats) | Only vague or unverified estimates |
+| Include chart(s) | Skip charts |
+|------------------|-------------|
+| Sources give clear rates, counts, shares, trends, or comparisons the reader should see | No useful quantitative figures in the cited sources |
+| A visualisation clarifies magnitude, gap, or comparison better than prose alone | Pure process / how-to with little quantitative claim |
+| | Commentary that is mainly opinion without cited figures |
 
 Rules:
 
-- Use **verified** statistics only; cite the same source in References; never invent numbers for a chart
-- Prefer **static** markup (HTML/CSS bar chart or inline SVG) — no Chart.js / CDN chart libraries
+- Use **verified** statistics only; cite the same source in References; **never invent** numbers for a chart
+- Prefer **static** markup (HTML/CSS or inline SVG) — no Chart.js / CDN chart libraries
+- **Vary chart type** to fit the data (horizontal/vertical bars, simple comparison blocks, proportion/share visuals, small trend lines via SVG, annotated callout figures, etc.). Do **not** default to the same bar pattern on every article when another form fits better
+- Add CSS for a new pattern in `css/style.css` when needed; keep it minimal and bilingual-friendly
 - Bilingual caption + source line (`data-lang` EN/EL); keep labels short so Greek fits
 - Place the chart **inside** the section that discusses those numbers (not in the hero)
-- Max **1–2** charts per article; one clear comparison beats a dashboard
-- Include an accessible text alternative (table with `visually-hidden` or `aria-labelledby` + readable bar values)
-- Markup and CSS classes: [reference.md](reference.md#charts-from-statistics)
+- Typically **1–2** charts per article when stats support them; one clear comparison beats a dashboard
+- Include an accessible text alternative (`visually-hidden` summary, or `aria-labelledby` + readable values)
+- Markup patterns: [reference.md](reference.md#charts-from-statistics)
 
 ### After creating
 
-1. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
-2. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
-3. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
+1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant).
+2. Complete the **Charts** check (include data-based visuals when sources provide useful stats; varied types; real cited data only).
+3. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
+4. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
+5. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
 
 ---
 
@@ -249,6 +278,8 @@ Unless user opts out:
 - [ ] File is UTF-8; no `╬` / `ΓÇö` mojibake in header, footer, share, or author card
 - [ ] ΕΛ nav labels are real Greek (`Αρχική`, `Άρθρα`, …), not symbols
 - [ ] Byline has `data-reader-count` + `data-article-slug="{slug}"` + `data-reader-hit` (engaged reader counting; 25s visible dwell in `js/main.js`)
+- [ ] **If the article body was created or rewritten:** ≥4 credible sources from authoritative organisations; European and American/international sources included where relevant; no weak/commercial/questionable citations
+- [ ] **If the article body was created or rewritten:** charts/visualisations added when cited sources provide useful statistics; chart type fits the data (not the same style by default); figures use real cited data only
 - [ ] **If the article body/titles were created or rewritten:** bilingual language & terminology QA passed for EN and EL (natural Greek, correct PH terms, meaning equivalence); listing cards use the same corrected titles/excerpts/alts
 
 ### B6 — Report
@@ -261,6 +292,6 @@ Rewriting related sidebars on older posts; git commit --trailer "Co-authored-by:
 
 ## References
 
-- Topics, types, counts, charts, path table: [reference.md](reference.md)
+- Topics, types, counts, charts, sources, path table: [reference.md](reference.md)
 - Skeleton: [template.html](template.html)
 - Live examples: `articles/*.html` (prefer `heatwaves-climate-mortality.html`)
