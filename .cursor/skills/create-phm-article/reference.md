@@ -35,6 +35,7 @@ Notes:
 - Fonts: Literata + IBM Plex Sans (existing Google Fonts link)
 - Stylesheet: `../css/style.css`
 - Script: `../js/main.js`
+- Encoding: **UTF-8 (no BOM)** for every HTML file. Never clone chrome from a UTF-16 PowerShell redirect dump — that produces Greek mojibake (`╬…`) in ΕΛ UI chrome.
 
 ## Image naming examples
 

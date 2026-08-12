@@ -56,7 +56,16 @@ Collect (ask if missing):
 | Related articles | up to 3 existing site articles |
 | Charts? | If theme fits statistics — plan 1–2 sourced charts (see below) |
 
-Copy header/footer/share/author chrome from the newest live article (prefer `articles/heatwaves-climate-mortality.html`) or [template.html](template.html).
+Copy header/footer/share/author chrome from a **live UTF-8** article under `articles/` (prefer the newest published article whose Greek chrome is intact, e.g. `ncds-premature-deaths.html`) or [template.html](template.html). Do **not** invent chrome from a temp dump.
+
+### Encoding rules (critical — prevents Greek mojibake)
+
+All site HTML must be saved as **UTF-8 without BOM**.
+
+- **Never** create a chrome reference with PowerShell `git show … > file` / `Out-File` on Windows — that writes **UTF-16 LE** and corrupts Greek when re-copied into articles (nav shows `╬…` garbled text in ΕΛ).
+- Prefer reading/copying chrome **directly** from an existing `articles/*.html` file already in the repo (editor / `fs.readFileSync(..., "utf8")` / `Get-Content -Encoding utf8`).
+- After writing an article, sanity-check: the file must **not** contain box-drawing mojibake (`╬`) or classic mangled dashes (`ΓÇö`). Nav Greek must read as real words (`Αρχική`, `Άρθρα`, …).
+- Article body Greek can be correct while header/footer/share/author chrome is corrupted — always check chrome specifically.
 
 ### Bilingual rules (critical)
 
@@ -178,6 +187,8 @@ Unless user opts out:
 - [ ] JSON-LD count = archive cards = `data-count`
 - [ ] Sitemap has the URL
 - [ ] Homepage featured/recent consistent
+- [ ] File is UTF-8; no `╬` / `ΓÇö` mojibake in header, footer, share, or author card
+- [ ] ΕΛ nav labels are real Greek (`Αρχική`, `Άρθρα`, …), not symbols
 
 ### B6 — Report
 
