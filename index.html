@@ -157,21 +157,9 @@
         <h2><span data-lang="en">Recent articles</span><span data-lang="el" hidden>Πρόσφατα άρθρα</span></h2>
         <a class="see-all" href="articles/"><span data-lang="en">Browse all articles</span><span data-lang="el" hidden>Περιήγηση σε όλα τα άρθρα</span></a>
       </div>
-      <div class="card-grid">
+      <div class="card-grid" id="recent-articles-grid" data-recent-count="3">
 
-        <article class="article-card">
-          <div class="card-media"><img src="images/thumb-heatwaves.webp" alt="Sun-baked empty city square under intense afternoon heat" data-el-alt="Άδεια πλατεία πόλης κάτω από έντονη απογευματινή ζέστη" loading="lazy" width="800" height="500"></div>
-          <div class="card-body">
-            <div class="card-tags">
-              <span class="tag" data-topic="commentary"><span data-lang="en">Commentary &amp; Current Affairs</span><span data-lang="el" hidden>Σχολιασμός &amp; Επικαιρότητα</span></span>
-            </div>
-            <h3><a href="articles/heatwaves-climate-mortality.html"><span data-lang="en">Heatwaves and Public Health: How Ready Are We?</span><span data-lang="el" hidden>Καύσωνες και δημόσια υγεία: Πόσο έτοιμοι είμαστε;</span></a></h3>
-            <p class="card-excerpt"><span data-lang="en">If heat kills and most of those deaths are preventable, why do we still treat heatwaves like bad weather? Evidence from WHO, EEA and Nature Medicine — plus a clear opinion.</span><span data-lang="el" hidden>Αν η ζέστη σκοτώνει και οι περισσότεροι θάνατοι είναι προλήψιμοι, γιατί την αντιμετωπίζουμε ακόμη σαν κακό καιρό; Στοιχεία από WHO, EEA και Nature Medicine — και μια σαφής άποψη.</span></p>
-            <div class="card-meta"><time datetime="2026-08-05">5 Aug 2026</time><span class="dot"><span data-lang="en">6 min read</span><span data-lang="el" hidden>6 λεπτά ανάγνωσης</span></span></div>
-          </div>
-        </article>
-
-        <article class="article-card">
+        <article class="article-card" data-card-topic="prevention">
           <div class="card-media"><img src="images/thumb-heatstroke.webp" alt="Sunlit empty summer sidewalk with harsh midday heat and a water bottle in shade" data-el-alt="Ηλιόλουστος άδειος πεζόδρομος το καλοκαίρι με έντονη μεσημεριανή ζέστη και μπουκάλι νερού στη σκιά" loading="lazy" width="800" height="500"></div>
           <div class="card-body">
             <div class="card-tags">
@@ -183,7 +171,19 @@
           </div>
         </article>
 
-        <article class="article-card">
+        <article class="article-card" data-card-topic="commentary">
+          <div class="card-media"><img src="images/thumb-heatwaves.webp" alt="Sun-baked empty city square under intense afternoon heat" data-el-alt="Άδεια πλατεία πόλης κάτω από έντονη απογευματινή ζέστη" loading="lazy" width="800" height="500"></div>
+          <div class="card-body">
+            <div class="card-tags">
+              <span class="tag" data-topic="commentary"><span data-lang="en">Commentary &amp; Current Affairs</span><span data-lang="el" hidden>Σχολιασμός &amp; Επικαιρότητα</span></span>
+            </div>
+            <h3><a href="articles/heatwaves-climate-mortality.html"><span data-lang="en">Heatwaves and Public Health: How Ready Are We?</span><span data-lang="el" hidden>Καύσωνες και δημόσια υγεία: Πόσο έτοιμοι είμαστε;</span></a></h3>
+            <p class="card-excerpt"><span data-lang="en">If heat kills and most of those deaths are preventable, why do we still treat heatwaves like bad weather? Evidence from WHO, EEA and Nature Medicine — plus a clear opinion.</span><span data-lang="el" hidden>Αν η ζέστη σκοτώνει και οι περισσότεροι θάνατοι είναι προλήψιμοι, γιατί την αντιμετωπίζουμε ακόμη σαν κακό καιρό; Στοιχεία από WHO, EEA και Nature Medicine — και μια σαφής άποψη.</span></p>
+            <div class="card-meta"><time datetime="2026-08-05">5 Aug 2026</time><span class="dot"><span data-lang="en">6 min read</span><span data-lang="el" hidden>6 λεπτά ανάγνωσης</span></span></div>
+          </div>
+        </article>
+
+        <article class="article-card" data-card-topic="environment">
           <div class="card-media"><img src="images/thumb-air-quality.webp" alt="Hazy city skyline with visible air pollution at dusk" data-el-alt="Ομιχλώδης αστικός ορίζοντας με ορατή ατμοσφαιρική ρύπανση στο σούρουπο" loading="lazy" width="800" height="500"></div>
           <div class="card-body">
             <div class="card-tags">

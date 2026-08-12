@@ -13,7 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initArticleFilters();
   initCurrentYear();
   initShareLinks();
-  initReaderCounts();
+  // Recent cards sync from the archive before reader counts attach.
+  initHomepageRecentArticles().finally(() => {
+    initReaderCounts();
+  });
 });
 
 const LANG_STORAGE_KEY = "site-lang";
@@ -245,6 +248,107 @@ function initLanguageToggle() {
       applyLanguage(next);
     });
   });
+}
+
+/* Homepage Recent: always the 3 newest archive articles by date,
+   excluding whatever is currently featured (no duplicate). Syncs from
+   /articles/ so new archive cards appear here automatically. */
+function articleSlugFromHref(href) {
+  if (!href) return "";
+  const clean = href.split("?")[0].split("#")[0];
+  const file = clean.split("/").pop() || "";
+  if (!file.endsWith(".html") || file === "index.html") return "";
+  return file.replace(/\.html$/, "");
+}
+
+function cardPublishTime(card) {
+  const iso = (card.querySelector("time[datetime]")?.getAttribute("datetime") || "").slice(0, 10);
+  const t = Date.parse(iso);
+  return Number.isFinite(t) ? t : 0;
+}
+
+function rewriteCardForHomepage(card) {
+  card.querySelectorAll("img[src]").forEach((img) => {
+    const src = img.getAttribute("src") || "";
+    if (src.startsWith("../images/")) {
+      img.setAttribute("src", src.replace("../images/", "images/"));
+    }
+  });
+  card.querySelectorAll("a[href]").forEach((a) => {
+    const href = a.getAttribute("href") || "";
+    if (!href || href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("#")) {
+      return;
+    }
+    if (href.startsWith("articles/")) return;
+    const file = href.replace(/^\.\//, "").split("/").pop();
+    if (file && file.endsWith(".html") && file !== "index.html") {
+      a.setAttribute("href", `articles/${file}`);
+    }
+  });
+  card.querySelectorAll(".reader-count").forEach((el) => el.remove());
+}
+
+function applyHomepageCardLanguage(root, lang) {
+  root.querySelectorAll("[data-lang]").forEach((el) => {
+    if (el.closest("a.brand")) return;
+    const match = el.getAttribute("data-lang") === lang;
+    el.hidden = !match;
+  });
+  root.querySelectorAll("img[data-el-alt]").forEach((img) => {
+    if (!img.hasAttribute("data-en-cache-alt")) {
+      img.setAttribute("data-en-cache-alt", img.getAttribute("alt") || "");
+    }
+    img.setAttribute(
+      "alt",
+      lang === "el" ? img.getAttribute("data-el-alt") || "" : img.getAttribute("data-en-cache-alt") || "",
+    );
+  });
+  root.querySelectorAll("time[datetime]").forEach((el) => {
+    const iso = (el.getAttribute("datetime") || "").slice(0, 10);
+    const formatted = formatSiteDate(iso, lang);
+    if (formatted) el.textContent = formatted;
+  });
+}
+
+async function initHomepageRecentArticles() {
+  const grid = document.querySelector("#recent-articles-grid");
+  if (!grid) return;
+
+  const limit = Number.parseInt(grid.getAttribute("data-recent-count") || "3", 10) || 3;
+  const featuredSlug = articleSlugFromHref(
+    document.querySelector(".featured-article h3 a")?.getAttribute("href"),
+  );
+
+  try {
+    const res = await fetch("articles/");
+    if (!res.ok) return;
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const cards = Array.from(doc.querySelectorAll(".card-grid [data-card-topic]"))
+      .map((card) => {
+        const slug = articleSlugFromHref(card.querySelector("h3 a")?.getAttribute("href"));
+        return { card, slug, time: cardPublishTime(card) };
+      })
+      .filter((item) => item.slug && item.slug !== featuredSlug)
+      .sort((a, b) => {
+        if (b.time !== a.time) return b.time - a.time;
+        return a.slug.localeCompare(b.slug);
+      })
+      .slice(0, limit);
+
+    if (!cards.length) return;
+
+    const frag = document.createDocumentFragment();
+    cards.forEach(({ card }) => {
+      const clone = card.cloneNode(true);
+      rewriteCardForHomepage(clone);
+      frag.appendChild(clone);
+    });
+    grid.replaceChildren(frag);
+    applyHomepageCardLanguage(grid, getStoredLang());
+  } catch (_) {
+    /* Keep the static recent cards if the archive cannot be fetched. */
+  }
 }
 
 /* Mobile navigation toggle */
