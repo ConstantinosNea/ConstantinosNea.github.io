@@ -3,9 +3,11 @@ name: create-phm-article
 description: >-
   Create or publish bilingual (EN/EL) Health in Blog articles: single HTML,
   thumb/OG images, charts from statistics when the theme fits, topic category,
-  archive card, counts, JSON-LD, homepage, and sitemap. Use when writing a new
-  article, translating PHM content, or when the user says they drag-and-dropped
-  an article and need listings updated.
+  archive card, counts, JSON-LD, homepage, and sitemap. Always run bilingual
+  language/terminology QA (natural Greek, correct PH terms, EN–EL meaning
+  equivalence) before an article is finished. Use when writing a new article,
+  translating PHM content, regenerating/rewriting copy, or when the user says
+  they drag-and-dropped an article and need listings updated.
 ---
 
 # Create / publish Health in Blog article
@@ -75,7 +77,43 @@ Every user-facing string:
 <span data-lang="en">English</span><span data-lang="el" hidden>Ελληνικά</span>
 ```
 
-Also set `data-title-en` / `data-title-el` on `<html>`, image `alt` + `data-el-alt`, and `data-el-*` aria/placeholder attributes where the site already uses them. Greek must be natural editorial Greek.
+Also set `data-title-en` / `data-title-el` on `<html>`, image `alt` + `data-el-alt`, and `data-el-*` aria/placeholder attributes where the site already uses them.
+
+### Bilingual language & terminology QA (permanent gate — never skip)
+
+Before any article is treated as finished, publishable, or ready after create / regenerate / substantial rewrite, run a **full EN + EL language review**. Listings updates alone (Path B without body rewrite) do not require rewriting Greek, but if Path A or a rewrite touched body/titles/excerpts/alts, this gate is mandatory.
+
+**Standard (both languages must pass):**
+
+| Check | Requirement |
+|-------|-------------|
+| Grammar & clarity | Correct grammar; clear, coherent, non-awkward prose |
+| Naturalness | Greek reads as professional editorial Greek — **not** a literal EN calque |
+| Terminology | Correct Public Health / medical / epi / policy terms in **both** languages |
+| Equivalence | Same intended scientific meaning; no important omissions, distortions, or false friends |
+| Voice | Evidence-informed; keep EN/EL editorial tone aligned without forcing word-for-word mirror |
+
+**Do this in context** — decide the best wording from the passage; do not mechanically swap a fixed phrase list.
+
+**High-risk calques / false friends (always scrutinize):**
+
+| Prefer natural Greek | Avoid / fix when used as EN calque |
+|----------------------|-------------------------------------|
+| παράγοντας / καθοριστικός παράγοντας / τροφοδοτεί | οδηγός / οδηγοί for causal *driver(s)* |
+| δαπάνη από την τσέπη / άμεσες πληρωμές | ιδιωτική δαπάνη for *out-of-pocket* |
+| παρεμβάσεις «best buys» / υψηλού αντίκτυπου με καλή σχέση κόστους–οφέλους | καλύτερες αγορές for WHO *best buys* |
+| ευημερία (WHO well-being definition) | ευεξία when translating formal *well-being* |
+| ανάρρωση (mental health recovery) | ανάκαμψη when MH recovery is meant |
+| ανεπάρκεια πόρων / υποχρηματοδότηση | υποστελέχωση πόρων for *under-resourcing* (υποστελέχωση = understaffing) |
+| με εστίαση στην Ευρώπη | ευρωκεντρικό for *Europe-focused* (ευρωκεντρικό ≈ Eurocentric) |
+| κλινικές κατευθυντήριες γραμμές | truncated «κλινικές κατευθυντήριες» alone |
+| PM2.5 (Latin letters) | ΡΜ2.5 (Greek Ρ) |
+| προλήψιμος | προλαμβανόμενος when *preventable* is meant |
+| προβλήματα ψυχικής υγείας (natural PH Greek) | stiff κατάσταση(εις) ψυχικής υγείας calque |
+
+**Review scope:** title, subtitle, lead, takeaways, body, chart captions/labels/alts, author note, medical disclaimer, image `alt`/`data-el-alt`, related-card titles/excerpts, and any mirrored strings in `articles/index.html` / homepage when titles change.
+
+**Pass/fail:** Article is **not** finished until both EN and EL pass. Fix issues in place before Path B (or before reporting done). See also [reference.md](reference.md#bilingual-language--terminology-qa) and `.cursor/rules/article-bilingual-language-qa.mdc`.
 
 ### Category + content type
 
@@ -151,7 +189,9 @@ Rules:
 
 ### After creating
 
-Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
+1. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
+2. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
+3. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
 
 ---
 
@@ -209,6 +249,7 @@ Unless user opts out:
 - [ ] File is UTF-8; no `╬` / `ΓÇö` mojibake in header, footer, share, or author card
 - [ ] ΕΛ nav labels are real Greek (`Αρχική`, `Άρθρα`, …), not symbols
 - [ ] Byline has `data-reader-count` + `data-article-slug="{slug}"` + `data-reader-hit` (engaged reader counting; 25s visible dwell in `js/main.js`)
+- [ ] **If the article body/titles were created or rewritten:** bilingual language & terminology QA passed for EN and EL (natural Greek, correct PH terms, meaning equivalence); listing cards use the same corrected titles/excerpts/alts
 
 ### B6 — Report
 

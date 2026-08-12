@@ -107,6 +107,38 @@ EN: `Independent author of Health in Blog — writing on public health evidence,
 
 EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κείμενα για τεκμήρια, συστήματα και πολιτική δημόσιας υγείας, για ειδικούς και για το ευρύ κοινό.`
 
+## Bilingual language & terminology QA
+
+**Permanent gate** before create / regenerate / substantial rewrite is finished (see SKILL.md).
+
+English: grammatically correct, clear, natural, scientifically precise.  
+Greek: natural professional Greek (not literal translation). Correct PH / medical / epi / policy terminology. EN and EL must carry the same intended meaning.
+
+Review in context (titles, body, charts, alts, notes, listing mirrors). Fix before Path B when copy changed.
+
+### Accepted site conventions
+
+- Acronyms OK in Greek prose when established on this site: **ΜΜΝ**, **ΧΧΜΕ**, **ΚΚΥ**, **ΧΑΠ**
+- **WHO** may stay untranslated (do not force ΠΟΥ)
+- Telehealth vs telemedicine: keep **τηλεϋγεία** / **τηλεϊατρική** aligned with EN *telehealth* / *telemedicine*; alts must match
+
+### High-risk EN→EL traps
+
+| EN sense | Prefer | Avoid |
+|----------|--------|-------|
+| causal driver(s) | παράγοντας / καθοριστικός παράγοντας | οδηγός / οδηγοί |
+| out-of-pocket | δαπάνη από την τσέπη / άμεσες πληρωμές | ιδιωτική δαπάνη |
+| WHO best buys | παρεμβάσεις «best buys» / υψηλού αντίκτυπου (κόστος–όφελος) | καλύτερες αγορές |
+| well-being (WHO def.) | ευημερία | ευεξία (unless everyday “feeling well”) |
+| MH recovery | ανάρρωση | ανάκαμψη |
+| under-resourcing | ανεπάρκεια πόρων | υποστελέχωση πόρων |
+| Europe-focused | με εστίαση στην Ευρώπη | ευρωκεντρικό (Eurocentric) |
+| preventable | προλήψιμος | προλαμβανόμενος |
+| PM2.5 | PM2.5 | ΡΜ2.5 |
+| mental health condition(s) | προβλήματα ψυχικής υγείας (or διαταραχές when disorders are meant) | κατάσταση(εις) ψυχικής υγείας |
+| policy implications | συνέπειες για την πολιτική / επιπτώσεις για την πολιτική | επιπτώσεις πολιτικής (often reads as harms *of* policy) |
+| clinical guidelines | κλινικές κατευθυντήριες γραμμές | truncated «κατευθυντήριες» alone |
+
 ## Publish checklist
 
 Required files to touch in Path B:

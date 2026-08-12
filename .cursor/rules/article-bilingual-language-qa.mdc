@@ -1,0 +1,38 @@
+---
+description: Permanent EN/EL language, terminology, and meaning-equivalence QA for Health in Blog articles
+globs: articles/**/*.html, _templates/**/*.html, .cursor/skills/create-phm-article/**
+alwaysApply: false
+---
+
+# Bilingual language & terminology QA (permanent)
+
+Before any article is **finished**, **published**, **regenerated**, or **substantially rewritten**, both English and Greek must pass a language-quality review.
+
+This is mandatory for Path A (create) and for any rewrite of titles/body/excerpts/alts. Path B–only listing wiring does not require rewriting article Greek unless copy changed.
+
+## Pass standard
+
+- **EN:** grammatically correct, clear, natural, scientifically precise
+- **EL:** natural professional Greek — not a literal translation from English
+- **Terminology:** correct Public Health, medical, epidemiological, and policy terms in both languages
+- **Equivalence:** same intended meaning; no important omissions, distortions, or false friends
+- Decide wording **in context**; do not mechanically apply a fixed phrase list
+
+## High-risk traps (scrutinize every time)
+
+- *driver(s)* → not «οδηγός/οδηγοί» for causal factors → παράγοντας / καθοριστικός παράγοντας
+- *out-of-pocket* → not «ιδιωτική δαπάνη» → δαπάνη από την τσέπη
+- WHO *best buys* → not «καλύτερες αγορές»
+- WHO *well-being* → ευημερία (not ευεξία in formal definitions)
+- MH *recovery* → ανάρρωση (not ανάκαμψη)
+- *under-resourcing* → ανεπάρκεια πόρων (υποστελέχωση = understaffing)
+- *Europe-focused* → not «ευρωκεντρικό» (Eurocentric)
+- *preventable* → προλήψιμος; **PM2.5** with Latin letters; full «κλινικές κατευθυντήριες γραμμές»
+
+## Scope to review
+
+Title, subtitle, lead, takeaways, body, chart captions/labels, author note, disclaimer, image alts, related cards, and mirrored archive/homepage strings when titles change.
+
+## Gate
+
+Do **not** treat the article as done, and do not report Path A complete, until EN and EL both pass. Full checklist: `.cursor/skills/create-phm-article/SKILL.md` and `reference.md` (Bilingual language & terminology QA).
