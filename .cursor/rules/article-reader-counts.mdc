@@ -1,0 +1,20 @@
+---
+description: Permanent engaged reader-count requirement for Health in Blog articles
+globs: articles/**/*.html, js/main.js, _templates/**/*.html, .cursor/skills/create-phm-article/**
+alwaysApply: false
+---
+
+# Engaged reader counts (permanent)
+
+Every published article **must** include in `.article-byline`:
+
+```html
+<span class="reader-count" data-reader-count data-article-slug="{slug}" data-reader-hit hidden></span>
+```
+
+- `{slug}` = filename without `.html`
+- `data-reader-hit` only on article pages (never on archive/homepage cards)
+- Counting is implemented in `js/main.js` via Abacus
+- A reader is counted only after **more than 25 seconds** of **visible** dwell time; leaving sooner must not count
+- Do not remove this markup when regenerating or replacing articles
+- Do not change the 25-second threshold unless the user explicitly asks

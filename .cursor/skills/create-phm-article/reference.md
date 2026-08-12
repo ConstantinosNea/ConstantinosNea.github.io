@@ -36,6 +36,7 @@ Notes:
 - Stylesheet: `../css/style.css`
 - Script: `../js/main.js`
 - Encoding: **UTF-8 (no BOM)** for every HTML file. Never clone chrome from a UTF-16 PowerShell redirect dump — that produces Greek mojibake (`╬…`) in ΕΛ UI chrome.
+- Reader counts (permanent): Abacus via `js/main.js`. Article bylines must include `<span class="reader-count" data-reader-count data-article-slug="{slug}" data-reader-hit hidden></span>`. Hits fire only after **>25 seconds** of visible time on the article; listing cards display counts only (no `data-reader-hit`). Missing Abacus keys (new slugs) must be treated as **0**, not as a hard failure that skips the engaged-hit timer.
 
 ## Image naming examples
 

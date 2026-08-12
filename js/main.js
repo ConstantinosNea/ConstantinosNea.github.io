@@ -1092,12 +1092,13 @@ function initShareLinks() {
 }
 
 /* Live reader counts via Abacus (free counting API for static sites).
-   Article pages increment once per browser session only after the reader
-   stays on the page for more than 20 seconds of visible time; cards display. */
+   Permanent blog rule: article pages increment once per browser session only
+   after the reader stays on the page for more than 25 seconds of visible time.
+   Opening and leaving sooner must not count. Listing cards only display counts. */
 function initReaderCounts() {
   const NAMESPACE = "constantinosnea.github.io";
   const API = "https://abacus.jasoncameron.dev";
-  const HIT_DELAY_MS = 20000;
+  const HIT_DELAY_MS = 25000;
 
   function slugFromHref(href) {
     if (!href) return "";
@@ -1112,6 +1113,9 @@ function initReaderCounts() {
       ? `${API}/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(slug)}`
       : `${API}/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(slug)}`;
     const res = await fetch(path);
+    // New article slugs have no Abacus key yet — treat missing get as 0 so the
+    // engaged-hit timer can still run and create the counter after 25s.
+    if (!hit && res.status === 404) return 0;
     if (!res.ok) throw new Error("counter failed");
     const data = await res.json();
     return Number(data.value ?? data.count ?? 0);
@@ -1232,7 +1236,8 @@ function initReaderCounts() {
     } catch (_) {
       el.hidden = true;
       el.textContent = "";
-      return;
+      /* Still schedule an engaged hit below — a transient get failure must not
+         permanently prevent counting after the 25s dwell. */
     }
 
     if (shouldHit && !alreadyHit) {

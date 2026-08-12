@@ -85,11 +85,30 @@ Keep consistent across: header tags, sidebar `../articles/?topic={{slug}}#topic=
 
 1. Head: meta, canonical, OG/Twitter, fonts, `../css/style.css`, BlogPosting + BreadcrumbList JSON-LD
 2. Skip link + site header
-3. `<article>`: header (breadcrumbs, tags, H1, subtitle, byline with `data-article-slug`), hero media, body + sidebar
+3. `<article>`: header (breadcrumbs, tags, H1, subtitle, byline with `data-article-slug` **and engaged reader-count markup**), hero media, body + sidebar
 4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with charts when the theme fits — see below), references, author note, author card, share, medical disclaimer
 5. Sidebar TOC + topic link — TOC list is rebuilt at runtime from `.article-body h2[id]` (labels stay in sync); keep a static fallback list in HTML for no-JS.
 6. Related section (3 cards)
 7. Footer + `../js/main.js`
+
+### Reader counts (permanent — never omit)
+
+This blog **always** counts engaged readers. Implemented in `js/main.js` (`initReaderCounts` / Abacus). Do **not** remove, bypass, or invent a different threshold.
+
+**Rule:** a visit counts only after **more than 25 seconds** of **visible** time on the article page (tab must be visible; time pauses when the tab is hidden). Leaving sooner must not increment. One hit per browser session per slug.
+
+**Required byline markup on every article** (inside `.article-byline`):
+
+```html
+<span class="reader-count" data-reader-count data-article-slug="{{SLUG}}" data-reader-hit hidden></span>
+```
+
+- `data-article-slug` must match the filename slug (no `.html`)
+- `data-reader-hit` is **required on article pages** (listing cards must **not** have `data-reader-hit`; `main.js` injects display-only counts there)
+- Keep the span `hidden` initially; JS reveals it when a count is available
+- Never delete this span when regenerating/replacing an article
+
+When creating, regenerating, or publishing an article, verify the byline still includes the markup above and that `../js/main.js` remains linked.
 
 URLs:
 
@@ -189,6 +208,7 @@ Unless user opts out:
 - [ ] Homepage featured/recent consistent
 - [ ] File is UTF-8; no `╬` / `ΓÇö` mojibake in header, footer, share, or author card
 - [ ] ΕΛ nav labels are real Greek (`Αρχική`, `Άρθρα`, …), not symbols
+- [ ] Byline has `data-reader-count` + `data-article-slug="{slug}"` + `data-reader-hit` (engaged reader counting; 25s visible dwell in `js/main.js`)
 
 ### B6 — Report
 
