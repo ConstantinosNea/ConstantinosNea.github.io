@@ -269,6 +269,18 @@ html[lang="el"] .tag {
   color: var(--color-teal-600);
   white-space: nowrap;
 }
+a.tag {
+  text-decoration: none;
+  cursor: pointer;
+}
+a.tag:hover,
+a.tag:focus-visible {
+  filter: brightness(0.92);
+}
+a.tag:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
 .tag[data-topic="environment"] { background: #06B6D4; color: #fff; }
 .tag[data-topic="policy"]      { background: #2563EB; color: #fff; }
 .tag[data-topic="prevention"]  { background: #F97316; color: #fff; }

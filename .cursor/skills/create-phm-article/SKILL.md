@@ -117,7 +117,7 @@ Before any article is treated as finished, publishable, or ready after create / 
 
 ### Category + content type
 
-Keep consistent across: header tags, sidebar `../articles/?topic={{slug}}#topic={{slug}}` (directory URL + hash fallback; never `index.html?topic=`), `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
+Keep consistent across: header topic tag (must be an `<a class="tag">` to `../articles/?topic={{slug}}#topic={{slug}}`, same as sidebar), sidebar topic link, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
 
 ### HTML structure (required order)
 
