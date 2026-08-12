@@ -1402,17 +1402,6 @@ a.tag:focus-visible {
   margin-left: 0.4em;
 }
 
-.author-note {
-  margin-top: var(--space-7);
-  padding: var(--space-6);
-  background: var(--bg-sunken);
-  border-radius: var(--radius-md);
-  display: flex;
-  gap: var(--space-4);
-}
-.author-note h3 { font-size: 0.95rem; margin-bottom: var(--space-2); }
-.author-note p { font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 0; }
-
 .share-section {
   margin-top: var(--space-7);
   padding-top: var(--space-6);

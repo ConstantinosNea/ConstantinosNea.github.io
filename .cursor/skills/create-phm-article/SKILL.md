@@ -113,7 +113,7 @@ Before any article is treated as finished, publishable, or ready after create / 
 | προλήψιμος | προλαμβανόμενος when *preventable* is meant |
 | προβλήματα ψυχικής υγείας (natural PH Greek) | stiff κατάσταση(εις) ψυχικής υγείας calque |
 
-**Review scope:** title, subtitle, lead, takeaways, body, chart captions/labels/alts, author note, medical disclaimer, image `alt`/`data-el-alt`, related-card titles/excerpts, and any mirrored strings in `articles/index.html` / homepage when titles change.
+**Review scope:** title, subtitle, lead, takeaways, body, chart captions/labels/alts, medical disclaimer, image `alt`/`data-el-alt`, related-card titles/excerpts, and any mirrored strings in `articles/index.html` / homepage when titles change.
 
 **Pass/fail:** Article is **not** finished until both EN and EL pass. Fix issues in place before Path B (or before reporting done). See also [reference.md](reference.md#bilingual-language--terminology-qa) and `.cursor/rules/article-bilingual-language-qa.mdc`.
 
@@ -126,7 +126,7 @@ Keep consistent across: header topic tag (must be an `<a class="tag">` to `../ar
 1. Head: meta, canonical, OG/Twitter, fonts, `../css/style.css`, BlogPosting + BreadcrumbList JSON-LD
 2. Skip link + site header
 3. `<article>`: header (breadcrumbs, tags, H1, subtitle, byline with `data-article-slug` **and engaged reader-count markup**), hero media, body + sidebar
-4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with data-based charts when sources support them — see below), references (≥4 authoritative sources), author note, author card, share, medical disclaimer
+4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with data-based charts when sources support them — see below), references (≥4 authoritative sources), author card, share, medical disclaimer
 5. Sidebar TOC + topic link — TOC list is rebuilt at runtime from `.article-body h2[id]` (labels stay in sync); keep a static fallback list in HTML for no-JS.
 6. Related section (3 cards)
 7. Footer + `../js/main.js`
