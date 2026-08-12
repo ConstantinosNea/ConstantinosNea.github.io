@@ -24,14 +24,7 @@ Then open [http://localhost:3000](http://localhost:3000).
 
 https://constantinosnea.github.io/
 
-## How to add a new article
 
-1. Copy `_templates/article-template.html` to `articles/your-slug.html`.
-2. Replace every `{{TOKEN}}` and fill both EN and EL strings.
-3. Remove the `noindex` robots meta once the article is ready to publish.
-4. Add the article to `articles/index.html`, the homepage (if featured/recent), and `sitemap.xml`.
-
-The template lives under `_templates/` so it is not listed with published articles. Because this site uses `.nojekyll`, that folder remains reachable by direct URL; the template itself is `noindex` and clearly marked as a development template, and it is excluded from navigation and `sitemap.xml`.
 
 ## Notes
 
