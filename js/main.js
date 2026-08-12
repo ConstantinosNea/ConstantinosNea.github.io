@@ -726,74 +726,48 @@ function queryTokens(query) {
   return normalizeSearchText(query).split(" ").filter(Boolean);
 }
 
+/* Allow only light inflection tails (e.g. NCDs←NCD, τηλεϋγείας←τηλεϋγεία).
+   Reject mid-word hits such as heat inside health. */
+function isLightInflectionSuffix(suffix) {
+  return /^(s|es|ς|ας|ες|ης|ων|ου|ος|εις)?$/u.test(suffix);
+}
+
+function tokenMatchesHaystack(haystack, token) {
+  if (!token) return true;
+  const words = normalizeSearchText(haystack).split(/\s+/).filter(Boolean);
+  return words.some((word) => {
+    if (word === token) return true;
+    if (word.startsWith(token) && isLightInflectionSuffix(word.slice(token.length))) {
+      return true;
+    }
+    if (token.startsWith(word) && isLightInflectionSuffix(token.slice(word.length))) {
+      return true;
+    }
+    return false;
+  });
+}
+
 function matchesSearchQuery(haystack, query) {
   const tokens = queryTokens(query);
   if (!tokens.length) return true;
-  const normalized = normalizeSearchText(haystack);
-  return tokens.every((token) => normalized.includes(token));
+  return tokens.every((token) => tokenMatchesHaystack(haystack, token));
 }
 
-function cardSearchHaystack(card) {
-  if (card.dataset.searchFull) return card.dataset.searchFull;
-  const title = card.querySelector("h3, h2")?.textContent || "";
-  const excerpt = card.querySelector(".card-excerpt")?.textContent || "";
-  const tags = card.querySelector(".card-tags")?.textContent || "";
-  const seed = card.dataset.searchIndex || "";
-  return [seed, title, excerpt, tags].join(" ");
+/* Archive search uses article titles only (EN + EL), never body/excerpt/tags/metadata. */
+function cardTitleSearchHaystack(card) {
+  const titleRoot =
+    card.querySelector("h3 a, h2 a") || card.querySelector("h3, h2");
+  if (!titleRoot) return "";
+
+  const en = titleRoot.querySelector('[data-lang="en"]')?.textContent || "";
+  const el = titleRoot.querySelector('[data-lang="el"]')?.textContent || "";
+  const parts = [en, el].map((part) => part.trim()).filter(Boolean);
+  if (parts.length) return parts.join(" ");
+
+  return titleRoot.textContent || "";
 }
 
-/* Fetch each linked article and index title + body (EN + EL) for full-text search.
-   Related-article blocks are excluded so other posts' titles don't pollute matches. */
-async function enrichArticleSearchIndexes() {
-  const cards = Array.from(document.querySelectorAll("[data-card-topic]"));
-  if (!cards.length) return;
-
-  await Promise.all(
-    cards.map(async (card) => {
-      if (card.dataset.searchFull) return;
-
-      const link = card.querySelector("h3 a, h2 a");
-      const href = link && link.getAttribute("href");
-      const localBits = [
-        card.dataset.searchIndex || "",
-        card.querySelector("h3, h2")?.textContent || "",
-        card.querySelector(".card-excerpt")?.textContent || "",
-        card.querySelector(".card-tags")?.textContent || "",
-      ];
-
-      let articleBits = "";
-      if (href) {
-        try {
-          const res = await fetch(href);
-          if (res.ok) {
-            const html = await res.text();
-            const doc = new DOMParser().parseFromString(html, "text/html");
-            doc.querySelectorAll(".related-section").forEach((el) => el.remove());
-
-            const title = doc.querySelector(".article-header h1")?.textContent || "";
-            const subtitle = doc.querySelector(".article-subtitle")?.textContent || "";
-            const bodyEl = doc.querySelector(".article-body");
-            if (bodyEl) {
-              bodyEl
-                .querySelectorAll(".related-section, .share-section")
-                .forEach((el) => el.remove());
-            }
-            const body = bodyEl?.textContent || "";
-            articleBits = [title, subtitle, body].join(" ");
-          }
-        } catch (_) {
-          /* Keep title/excerpt search if fetch fails (e.g. file://). */
-        }
-      }
-
-      card.dataset.searchFull = normalizeSearchText(
-        [...localBits, articleBits].join(" "),
-      );
-    }),
-  );
-}
-
-/* Article archive: live search across titles, excerpts, and article body */
+/* Article archive: live search against bilingual titles only */
 function initSearch() {
   const searchInput = document.querySelector("#article-search");
   if (!searchInput) return;
@@ -818,10 +792,6 @@ function initSearch() {
     searchInput.value = requestedQuery;
     applyFilters();
   }
-
-  enrichArticleSearchIndexes().then(() => {
-    if (searchInput.value.trim()) applyFilters();
-  });
 }
 
 function applyFilters() {
@@ -837,7 +807,7 @@ function applyFilters() {
 
   cards.forEach((card) => {
     const matchesTopic = activeTopic === "all" || card.dataset.cardTopic === activeTopic;
-    const matchesQuery = matchesSearchQuery(cardSearchHaystack(card), query);
+    const matchesQuery = matchesSearchQuery(cardTitleSearchHaystack(card), query);
     const matchesLatest = !latestSet || latestSet.has(card);
     const visible = matchesTopic && matchesQuery && matchesLatest;
     card.style.display = visible ? "" : "none";
