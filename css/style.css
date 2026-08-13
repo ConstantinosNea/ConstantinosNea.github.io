@@ -222,6 +222,24 @@ html[lang="el"] .article-body {
 .see-all { font-weight: 600; font-size: 0.95rem; white-space: nowrap; }
 .see-all::after { content: " →"; }
 
+/* Mobile: long EL "see all" labels (and lang-stack max-width) overflow the
+   single-row heading. Stack title + link so the section never clips/shifts. */
+@media (max-width: 860px) {
+  .section-heading:has(.see-all) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+  .see-all {
+    white-space: normal;
+    max-width: 100%;
+  }
+  .see-all .lang-stack {
+    display: grid;
+    max-width: 100%;
+  }
+}
+
 /* ---------------------------------------------------------------------- */
 /* Buttons & tags                                                        */
 /* ---------------------------------------------------------------------- */
