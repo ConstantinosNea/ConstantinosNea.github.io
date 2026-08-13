@@ -165,7 +165,7 @@ URLs:
 
 ### Writing voice
 
-Evidence-informed, non-sensational. Mark evidence vs opinion for commentary. No unfinished citations as sources. Topic-appropriate medical disclaimer.
+Evidence-informed, non-sensational. Mark evidence vs opinion for commentary. No unfinished citations as sources. Use the **shared site-wide medical disclaimer** from the template (same EN/EL on every article — do not write topic-specific variants).
 
 ### Sources (permanent gate — never skip)
 
