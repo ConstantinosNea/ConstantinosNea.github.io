@@ -151,27 +151,36 @@ button { font-family: inherit; }
 /* ---------------------------------------------------------------------- */
 /* Greek optical balance                                                  */
 /* Keep the same root/body size as English so language toggle doesn't     */
-/* rescale rem spacing and make the page jump. Only nudge glyph metrics.  */
+/* rescale rem spacing and make the page jump. Only nudge glyph metrics,  */
+/* and only on Greek copy — never via html[lang] ancestors. Document-wide */
+/* html[lang="el"] rules reflow EN+EL .lang-stack cells on every toggle.  */
 /* ---------------------------------------------------------------------- */
 
-html[lang="el"] h1,
-html[lang="el"] h2,
-html[lang="el"] h3,
-html[lang="el"] h4 {
+:is(h1, h2, h3, h4)[lang="el"],
+:is(h1, h2, h3, h4) [lang="el"] {
   letter-spacing: -0.015em;
 }
 
-html[lang="el"] .hero h1 {
+.hero h1[lang="el"],
+.hero h1 [lang="el"] {
   letter-spacing: -0.02em;
 }
 
+/* Pin both languages so .lang-stack max-height does not flip with html[lang]. */
 html[lang="el"] .article-body {
   line-height: 1.7;
 }
+.article-body [lang="en"],
+.article-body [data-lang="en"] {
+  line-height: 1.6;
+}
+.article-body [lang="el"],
+.article-body [data-lang="el"] {
+  line-height: 1.7;
+}
 
-html[lang="el"] .eyebrow,
-html[lang="el"] .hero-eyebrow,
-html[lang="el"] .tag {
+:is(.eyebrow, .hero-eyebrow, .tag)[lang="el"],
+:is(.eyebrow, .hero-eyebrow, .tag) [lang="el"] {
   letter-spacing: 0.04em;
 }
 
@@ -603,10 +612,14 @@ a.tag:focus-visible {
    container height follows the taller language. Avoids CLS on EN ↔ EL without
    hard-coding fixed heights. Inactive language stays in layout but invisible. */
 .lang-stack {
-  display: grid;
+  display: inline-grid;
+  vertical-align: top;
+  max-width: 100%;
 }
 .lang-stack > [data-lang] {
   grid-area: 1 / 1;
+  /* Override UA [hidden]{display:none!important} so inactive copy still sizes. */
+  display: block !important;
 }
 .lang-stack > .is-lang-inactive {
   visibility: hidden;
@@ -615,9 +628,31 @@ a.tag:focus-visible {
 .lang-stack > .is-lang-active {
   visibility: visible;
 }
-/* Override UA [hidden]{display:none!important} so inactive copy still sizes the stack. */
-.hero h1.lang-stack > [data-lang] {
-  display: block !important;
+/* Full-width stacks for block copy (titles, paragraphs, hero actions). */
+h1.lang-stack,
+h2.lang-stack,
+h3.lang-stack,
+.hero-actions.lang-stack,
+h1 > .lang-stack,
+h2 > .lang-stack,
+h3 > .lang-stack,
+p > .lang-stack,
+li > .lang-stack,
+.article-subtitle > .lang-stack,
+.card-excerpt > .lang-stack,
+.card-title > .lang-stack,
+.card-title a > .lang-stack,
+figcaption > .lang-stack,
+.image-caption > .lang-stack,
+.chart-source > .lang-stack,
+.chart-callout-label > .lang-stack,
+.medical-disclaimer > .lang-stack,
+.medical-disclaimer p > .lang-stack,
+.footer-disclaimer > .lang-stack,
+.takeaways-box li > .lang-stack,
+.disclaimer-box p > .lang-stack {
+  display: grid;
+  width: 100%;
 }
 .hero-actions.lang-stack > [data-lang] {
   display: flex !important;

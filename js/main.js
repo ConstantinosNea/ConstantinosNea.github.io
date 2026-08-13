@@ -47,12 +47,53 @@ function formatReaderLabel(count, lang) {
   return `${formatted} ${n === 1 ? "reader" : "readers"}`;
 }
 
-function applyLocalizedDates(lang) {
-  document.querySelectorAll("time[datetime]").forEach((el) => {
+/** Build or refresh a two-language .lang-stack inside a host element. */
+function ensureLangStackContent(host, enText, elText) {
+  if (!host || enText == null || elText == null) return null;
+  let stack = host.querySelector(":scope > .lang-stack");
+  if (!stack) {
+    host.textContent = "";
+    stack = document.createElement("span");
+    stack.className = "lang-stack";
+    stack.setAttribute("data-lang-stack-auto", "");
+    const enEl = document.createElement("span");
+    enEl.setAttribute("data-lang", "en");
+    enEl.setAttribute("lang", "en");
+    const elEl = document.createElement("span");
+    elEl.setAttribute("data-lang", "el");
+    elEl.setAttribute("lang", "el");
+    stack.append(enEl, elEl);
+    host.append(stack);
+  }
+  const enEl = stack.querySelector('[data-lang="en"]');
+  const elEl = stack.querySelector('[data-lang="el"]');
+  if (enEl) enEl.textContent = enText;
+  if (elEl) elEl.textContent = elText;
+  return stack;
+}
+
+/**
+ * Dates and reader labels used to swap a single text node on toggle.
+ * On narrow card-meta rows that changes sibling widths, so read-time
+ * .lang-stacks reflow (1 line ↔ 2) and the page grows/shrinks. Stack both
+ * forms so the flex row reserves max(EN, EL) width continuously.
+ */
+function ensureStackedDates(root = document) {
+  root.querySelectorAll("time[datetime]").forEach((el) => {
+    if (el.closest("a.brand")) return;
     const iso = (el.getAttribute("datetime") || "").slice(0, 10);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
-    const formatted = formatSiteDate(iso, lang);
-    if (formatted) el.textContent = formatted;
+    const en = formatSiteDate(iso, "en");
+    const elTxt = formatSiteDate(iso, "el");
+    if (!en || !elTxt) return;
+    ensureLangStackContent(el, en, elTxt);
+  });
+}
+
+function applyLocalizedDates(lang) {
+  ensureStackedDates(document);
+  document.querySelectorAll("time[datetime]").forEach((el) => {
+    applyLanguageToTree(el, lang);
   });
 }
 
@@ -64,14 +105,60 @@ function refreshReaderLabels(lang) {
       el.textContent = "";
       return;
     }
-    const label = formatReaderLabel(raw, lang);
-    if (!label) {
+    const en = formatReaderLabel(raw, "en");
+    const elTxt = formatReaderLabel(raw, "el");
+    if (!en || !elTxt) {
       el.hidden = true;
       el.textContent = "";
       return;
     }
     el.hidden = false;
-    el.textContent = label;
+    ensureLangStackContent(el, en, elTxt);
+    applyLanguageToTree(el, lang);
+  });
+}
+
+/** Wrap adjacent [data-lang=en]+[data-lang=el] siblings in .lang-stack. */
+function wrapBilingualPairs(root = document) {
+  root.querySelectorAll('[data-lang="en"]').forEach((el) => el.setAttribute("lang", "en"));
+  root.querySelectorAll('[data-lang="el"]').forEach((el) => el.setAttribute("lang", "el"));
+
+  const ens = Array.from(root.querySelectorAll('[data-lang="en"]'));
+  ens.forEach((en) => {
+    if (en.closest("a.brand")) return;
+    if (en.closest(".lang-stack, .header-lang-stack")) return;
+    const sibling = en.nextElementSibling;
+    if (!sibling || sibling.getAttribute("data-lang") !== "el") return;
+    const wrap = document.createElement("span");
+    wrap.className = "lang-stack";
+    wrap.setAttribute("data-lang-stack-auto", "");
+    en.before(wrap);
+    wrap.append(en, sibling);
+  });
+}
+
+function applyLanguageToTree(root, lang) {
+  root.querySelectorAll("[data-lang]").forEach((el) => {
+    if (el.closest("a.brand")) return;
+    const match = el.getAttribute("data-lang") === lang;
+    const parent = el.parentElement;
+    if (
+      parent?.classList.contains("lang-stack") ||
+      parent?.classList.contains("header-lang-stack")
+    ) {
+      el.hidden = false;
+      el.classList.toggle("is-lang-active", match);
+      el.classList.toggle("is-lang-inactive", !match);
+      el.setAttribute("aria-hidden", match ? "false" : "true");
+      el.querySelectorAll("a, button, input, select, textarea").forEach((ctrl) => {
+        if (match) ctrl.removeAttribute("tabindex");
+        else ctrl.setAttribute("tabindex", "-1");
+      });
+      return;
+    }
+    el.hidden = !match;
+    el.classList.remove("is-lang-active", "is-lang-inactive");
+    el.removeAttribute("aria-hidden");
   });
 }
 
@@ -84,6 +171,13 @@ function initLanguageToggle() {
     placeholder: "data-el-placeholder",
     title: "data-el-title",
   };
+
+  /* Adjacent EN+EL siblings that are not already stacked cause mobile CLS:
+     Greek wraps to more lines, document height changes, and scroll anchoring
+     then shifts titles/header content even when one body anchor is preserved.
+     Wrap pairs once so both languages reserve the taller/wider slot. */
+  ensureStackedDates(document);
+  wrapBilingualPairs(document);
 
   function findViewportAnchor() {
     const header = document.querySelector("header");
@@ -158,30 +252,7 @@ function initLanguageToggle() {
 
     root.setAttribute("lang", lang);
 
-    document.querySelectorAll("[data-lang]").forEach((el) => {
-      // Brand lockup (logo + name + tagline) stays English in both languages.
-      if (el.closest("a.brand")) return;
-      const match = el.getAttribute("data-lang") === lang;
-      // Stacked bilingual slots: both languages stay in layout (taller/wider wins).
-      const parent = el.parentElement;
-      if (
-        parent?.classList.contains("lang-stack") ||
-        parent?.classList.contains("header-lang-stack")
-      ) {
-        el.hidden = false;
-        el.classList.toggle("is-lang-active", match);
-        el.classList.toggle("is-lang-inactive", !match);
-        el.setAttribute("aria-hidden", match ? "false" : "true");
-        el.querySelectorAll("a, button, input, select, textarea").forEach((ctrl) => {
-          if (match) ctrl.removeAttribute("tabindex");
-          else ctrl.setAttribute("tabindex", "-1");
-        });
-        return;
-      }
-      el.hidden = !match;
-      el.classList.remove("is-lang-active", "is-lang-inactive");
-      el.removeAttribute("aria-hidden");
-    });
+    applyLanguageToTree(document, lang);
 
     Object.entries(TRANSLATED_ATTRS).forEach(([attr, elAttr]) => {
       document.querySelectorAll(`[${elAttr}]`).forEach((el) => {
@@ -289,11 +360,9 @@ function rewriteCardForHomepage(card) {
 }
 
 function applyHomepageCardLanguage(root, lang) {
-  root.querySelectorAll("[data-lang]").forEach((el) => {
-    if (el.closest("a.brand")) return;
-    const match = el.getAttribute("data-lang") === lang;
-    el.hidden = !match;
-  });
+  ensureStackedDates(root);
+  wrapBilingualPairs(root);
+  applyLanguageToTree(root, lang);
   root.querySelectorAll("img[data-el-alt]").forEach((img) => {
     if (!img.hasAttribute("data-en-cache-alt")) {
       img.setAttribute("data-en-cache-alt", img.getAttribute("alt") || "");
@@ -302,11 +371,6 @@ function applyHomepageCardLanguage(root, lang) {
       "alt",
       lang === "el" ? img.getAttribute("data-el-alt") || "" : img.getAttribute("data-en-cache-alt") || "",
     );
-  });
-  root.querySelectorAll("time[datetime]").forEach((el) => {
-    const iso = (el.getAttribute("datetime") || "").slice(0, 10);
-    const formatted = formatSiteDate(iso, lang);
-    if (formatted) el.textContent = formatted;
   });
 }
 
@@ -440,16 +504,16 @@ function initArticleToc() {
         const span = document.createElement("span");
         span.setAttribute("data-lang", "en");
         span.textContent = en.textContent.trim();
-        span.hidden = lang !== "en";
         a.appendChild(span);
       }
       if (el) {
         const span = document.createElement("span");
         span.setAttribute("data-lang", "el");
         span.textContent = el.textContent.trim();
-        span.hidden = lang !== "el";
         a.appendChild(span);
       }
+      wrapBilingualPairs(a);
+      applyLanguageToTree(a, lang);
     } else {
       a.textContent = heading.textContent.replace(/\s+/g, " ").trim();
     }
@@ -1099,14 +1163,16 @@ function initReaderCounts() {
       return;
     }
     el.setAttribute("data-reader-value-num", String(count));
-    const label = formatReaderLabel(count, getStoredLang());
-    if (!label) {
+    const en = formatReaderLabel(count, "en");
+    const elTxt = formatReaderLabel(count, "el");
+    if (!en || !elTxt) {
       el.hidden = true;
       el.textContent = "";
       return;
     }
     el.hidden = false;
-    el.textContent = label;
+    ensureLangStackContent(el, en, elTxt);
+    applyLanguageToTree(el, getStoredLang());
     if (
       document.querySelector("#article-sort") &&
       getActiveArchiveSort() === "views"
