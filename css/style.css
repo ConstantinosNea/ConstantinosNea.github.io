@@ -978,6 +978,27 @@ figcaption > .lang-stack,
 .author-block h3 { margin-bottom: var(--space-2); }
 .author-block p { color: var(--text-secondary); margin-bottom: var(--space-3); }
 
+/* CTA should hug the active label (not the wider EL stack) and stay centered. */
+.author-block .btn,
+.follow-actions .btn,
+.featured-body .btn {
+  width: fit-content;
+  max-width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+.author-block .btn > .lang-stack,
+.follow-actions .btn > .lang-stack,
+.featured-body .btn > .lang-stack {
+  justify-items: center;
+  text-align: center;
+}
+.author-block .btn > .lang-stack > .is-lang-inactive,
+.follow-actions .btn > .lang-stack > .is-lang-inactive,
+.featured-body .btn > .lang-stack > .is-lang-inactive {
+  display: none !important;
+}
+
 @media (max-width: 560px) {
   .author-block { grid-template-columns: 1fr; text-align: center; justify-items: center; }
 }
