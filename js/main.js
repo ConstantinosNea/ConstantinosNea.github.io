@@ -37,14 +37,10 @@ function formatSiteDate(iso, lang) {
   }).format(date);
 }
 
-function formatReaderLabel(count, lang, compact = false) {
+function formatReaderLabel(count, lang) {
   const n = Number(count);
   if (!Number.isFinite(n) || n < 0) return null;
   const formatted = n.toLocaleString(lang === "el" ? "el-GR" : "en-US");
-  if (compact) {
-    if (lang === "el") return `${formatted} αναγν.`;
-    return `${formatted} readers`;
-  }
   if (lang === "el") {
     return `${formatted} ${n === 1 ? "αναγνώστης" : "αναγνώστες"}`;
   }
@@ -126,9 +122,8 @@ function refreshReaderLabels(lang) {
       el.textContent = "";
       return;
     }
-    const compact = Boolean(el.closest(".card-meta"));
-    const en = formatReaderLabel(raw, "en", compact);
-    const elTxt = formatReaderLabel(raw, "el", compact);
+    const en = formatReaderLabel(raw, "en");
+    const elTxt = formatReaderLabel(raw, "el");
     if (!en || !elTxt) {
       el.hidden = true;
       el.textContent = "";
@@ -1272,9 +1267,8 @@ function initReaderCounts() {
       return;
     }
     el.setAttribute("data-reader-value-num", String(count));
-    const compact = Boolean(el.closest(".card-meta"));
-    const en = formatReaderLabel(count, "en", compact);
-    const elTxt = formatReaderLabel(count, "el", compact);
+    const en = formatReaderLabel(count, "en");
+    const elTxt = formatReaderLabel(count, "el");
     if (!en || !elTxt) {
       el.hidden = true;
       el.textContent = "";

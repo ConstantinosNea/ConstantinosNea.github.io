@@ -832,9 +832,17 @@ figcaption > .lang-stack,
   white-space: nowrap;
   line-height: 1.35;
   min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 .card-meta time {
   flex: 0 0 auto;
+}
+.card-meta .reader-count,
+.card-meta .reader-count .lang-stack {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  word-break: keep-all;
 }
 .card-meta .lang-stack {
   white-space: nowrap;
