@@ -62,6 +62,16 @@ Collect (ask if missing):
 
 Copy header/footer/share/author chrome from a **live UTF-8** article under `articles/` (prefer the newest published article whose Greek chrome is intact, e.g. `ncds-premature-deaths.html`) or [template.html](template.html). Do **not** invent chrome from a temp dump.
 
+### Epidemiology research support (optional — separate skill)
+
+When the topic needs burden, rates, trends, inequities, surveillance, or careful comparison of estimates, read and follow [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md) **before or while** outlining sources/charts. Use its **Article evidence pack** output as input to this skill.
+
+- **epidemiology-research** owns epi framing, appraisal, and interpretation only
+- **This skill** still owns HTML, bilingual QA, chart markup, ≥4 sources gate, and Path B
+- Do not let epidemiology-research edit the site or publish; do not re-implement Path A/B there
+
+If epi data are not necessary for the topic, skip that skill and continue here.
+
 ### Encoding rules (critical — prevents Greek mojibake)
 
 All site HTML must be saved as **UTF-8 without BOM**.
@@ -295,3 +305,4 @@ Rewriting related sidebars on older posts; git commit --trailer "Co-authored-by:
 - Topics, types, counts, charts, sources, path table: [reference.md](reference.md)
 - Skeleton: [template.html](template.html)
 - Live examples: `articles/*.html` (prefer `heatwaves-climate-mortality.html`)
+- Epidemiology research (evidence packs only; no publishing): [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md)
