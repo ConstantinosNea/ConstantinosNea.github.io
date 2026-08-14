@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initArticleFilters();
   initCurrentYear();
   initShareLinks();
-  // Recent cards sync from the archive before reader counts attach.
-  initHomepageRecentArticles().finally(() => {
+  // Homepage featured (most viewed) + recent cards sync before reader counts attach.
+  initHomepageFeaturedAndRecent().finally(() => {
     initReaderCounts();
   });
 });
@@ -37,14 +37,35 @@ function formatSiteDate(iso, lang) {
   }).format(date);
 }
 
-function formatReaderLabel(count, lang) {
+function formatReaderLabel(count, lang, compact = false) {
   const n = Number(count);
   if (!Number.isFinite(n) || n < 0) return null;
   const formatted = n.toLocaleString(lang === "el" ? "el-GR" : "en-US");
+  if (compact) {
+    if (lang === "el") return `${formatted} αναγν.`;
+    return `${formatted} readers`;
+  }
   if (lang === "el") {
     return `${formatted} ${n === 1 ? "αναγνώστης" : "αναγνώστες"}`;
   }
   return `${formatted} ${n === 1 ? "reader" : "readers"}`;
+}
+
+/** Card footers are narrow (~300px in the 3-col grid). Shorten read-time
+ *  labels so EN+EL .lang-stack width still fits date · read · readers on one line. */
+function compactCardMetaReadLabels(root = document) {
+  root.querySelectorAll(".card-meta").forEach((meta) => {
+    meta.querySelectorAll('[data-lang="en"]').forEach((el) => {
+      if (el.closest(".reader-count")) return;
+      const next = el.textContent.trim().replace(/^(\d+)\s*min(?:utes?)?(?:\s*read)?$/i, "$1 min");
+      if (next) el.textContent = next;
+    });
+    meta.querySelectorAll('[data-lang="el"]').forEach((el) => {
+      if (el.closest(".reader-count")) return;
+      const next = el.textContent.trim().replace(/^(\d+)\s*λεπτά(?:\s+ανάγνωσης)?$/i, "$1 λεπτά");
+      if (next) el.textContent = next;
+    });
+  });
 }
 
 /** Build or refresh a two-language .lang-stack inside a host element. */
@@ -105,8 +126,9 @@ function refreshReaderLabels(lang) {
       el.textContent = "";
       return;
     }
-    const en = formatReaderLabel(raw, "en");
-    const elTxt = formatReaderLabel(raw, "el");
+    const compact = Boolean(el.closest(".card-meta"));
+    const en = formatReaderLabel(raw, "en", compact);
+    const elTxt = formatReaderLabel(raw, "el", compact);
     if (!en || !elTxt) {
       el.hidden = true;
       el.textContent = "";
@@ -178,6 +200,7 @@ function initLanguageToggle() {
      Wrap pairs once so both languages reserve the taller/wider slot. */
   ensureStackedDates(document);
   wrapBilingualPairs(document);
+  compactCardMetaReadLabels(document);
 
   function findViewportAnchor() {
     const header = document.querySelector("header");
@@ -321,9 +344,10 @@ function initLanguageToggle() {
   });
 }
 
-/* Homepage Recent: always the 3 newest archive articles by date,
-   excluding whatever is currently featured (no duplicate). Syncs from
-   /articles/ so new archive cards appear here automatically. */
+/* Homepage Featured + Recent:
+   - Featured = highest Abacus reader count (ties → newest publish date)
+   - Recent = 3 newest archive articles excluding the featured slug
+   Syncs from /articles/ so archive cards remain the source of truth. */
 function articleSlugFromHref(href) {
   if (!href) return "";
   const clean = href.split("?")[0].split("#")[0];
@@ -362,6 +386,7 @@ function rewriteCardForHomepage(card) {
 function applyHomepageCardLanguage(root, lang) {
   ensureStackedDates(root);
   wrapBilingualPairs(root);
+  compactCardMetaReadLabels(root);
   applyLanguageToTree(root, lang);
   root.querySelectorAll("img[data-el-alt]").forEach((img) => {
     if (!img.hasAttribute("data-en-cache-alt")) {
@@ -374,44 +399,143 @@ function applyHomepageCardLanguage(root, lang) {
   });
 }
 
-async function initHomepageRecentArticles() {
-  const grid = document.querySelector("#recent-articles-grid");
-  if (!grid) return;
+const ABACUS_NAMESPACE = "constantinosnea.github.io";
+const ABACUS_API = "https://abacus.jasoncameron.dev";
 
-  const limit = Number.parseInt(grid.getAttribute("data-recent-count") || "3", 10) || 3;
-  const featuredSlug = articleSlugFromHref(
-    document.querySelector(".featured-article h3 a")?.getAttribute("href"),
-  );
+async function fetchAbacusCount(slug, hit = false) {
+  if (!slug) return 0;
+  const path = hit
+    ? `${ABACUS_API}/hit/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`
+    : `${ABACUS_API}/get/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`;
+  const res = await fetch(path);
+  if (!hit && res.status === 404) return 0;
+  if (!res.ok) throw new Error("counter failed");
+  const data = await res.json();
+  return Number(data.value ?? data.count ?? 0);
+}
+
+async function fetchHomepageArchiveItems() {
+  const res = await fetch("articles/");
+  if (!res.ok) throw new Error("archive fetch failed");
+  const html = await res.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return Array.from(doc.querySelectorAll(".card-grid [data-card-topic]"))
+    .map((card) => {
+      const slug = articleSlugFromHref(card.querySelector("h3 a")?.getAttribute("href"));
+      return { card, slug, time: cardPublishTime(card) };
+    })
+    .filter((item) => item.slug);
+}
+
+function populateFeaturedFromArchiveCard(featuredEl, archiveCard) {
+  const source = archiveCard.cloneNode(true);
+  rewriteCardForHomepage(source);
+
+  const img = source.querySelector(".card-media img");
+  const tags = source.querySelector(".card-tags");
+  const titleLink = source.querySelector("h3 a");
+  const excerpt = source.querySelector(".card-excerpt");
+  const meta = source.querySelector(".card-meta");
+  const href = titleLink?.getAttribute("href") || "#";
+  const topic = source.getAttribute("data-card-topic");
+
+  const media = featuredEl.querySelector(".featured-media");
+  const body = featuredEl.querySelector(".featured-body");
+  if (!media || !body || !titleLink) return;
+
+  if (topic) featuredEl.setAttribute("data-card-topic", topic);
+  else featuredEl.removeAttribute("data-card-topic");
+
+  if (img) {
+    const nextImg = img.cloneNode(true);
+    nextImg.setAttribute("fetchpriority", "high");
+    nextImg.removeAttribute("loading");
+    media.replaceChildren(nextImg);
+  }
+
+  body.replaceChildren();
+  if (tags) body.appendChild(tags.cloneNode(true));
+
+  const h3 = document.createElement("h3");
+  h3.appendChild(titleLink.cloneNode(true));
+  body.appendChild(h3);
+
+  if (excerpt) body.appendChild(excerpt.cloneNode(true));
+
+  if (meta) {
+    const metaClone = meta.cloneNode(true);
+    metaClone.querySelectorAll(".reader-count").forEach((el) => el.remove());
+    body.appendChild(metaClone);
+  }
+
+  const ctaWrap = document.createElement("p");
+  ctaWrap.style.marginTop = "var(--space-5)";
+  const cta = document.createElement("a");
+  cta.className = "btn btn-outline";
+  cta.setAttribute("href", href);
+  cta.innerHTML =
+    '<span data-lang="en">Read the full article</span><span data-lang="el" hidden>Διαβάστε ολόκληρο το άρθρο</span>';
+  ctaWrap.appendChild(cta);
+  body.appendChild(ctaWrap);
+}
+
+async function initHomepageFeaturedAndRecent() {
+  const featured = document.querySelector(".featured-article");
+  const grid = document.querySelector("#recent-articles-grid");
+  if (!featured && !grid) return;
 
   try {
-    const res = await fetch("articles/");
-    if (!res.ok) return;
-    const html = await res.text();
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    const cards = Array.from(doc.querySelectorAll(".card-grid [data-card-topic]"))
-      .map((card) => {
-        const slug = articleSlugFromHref(card.querySelector("h3 a")?.getAttribute("href"));
-        return { card, slug, time: cardPublishTime(card) };
-      })
-      .filter((item) => item.slug && item.slug !== featuredSlug)
-      .sort((a, b) => {
-        if (b.time !== a.time) return b.time - a.time;
-        return a.slug.localeCompare(b.slug);
-      })
-      .slice(0, limit);
+    const items = await fetchHomepageArchiveItems();
+    if (!items.length) return;
 
-    if (!cards.length) return;
+    const withViews = await Promise.all(
+      items.map(async (item) => {
+        let views = 0;
+        try {
+          views = await fetchAbacusCount(item.slug, false);
+        } catch (_) {
+          views = 0;
+        }
+        return { ...item, views: Number.isFinite(views) ? views : 0 };
+      }),
+    );
 
-    const frag = document.createDocumentFragment();
-    cards.forEach(({ card }) => {
-      const clone = card.cloneNode(true);
-      rewriteCardForHomepage(clone);
-      frag.appendChild(clone);
+    const byViews = [...withViews].sort((a, b) => {
+      if (b.views !== a.views) return b.views - a.views;
+      if (b.time !== a.time) return b.time - a.time;
+      return a.slug.localeCompare(b.slug);
     });
-    grid.replaceChildren(frag);
-    applyHomepageCardLanguage(grid, getStoredLang());
+    const top = byViews[0];
+    const featuredSlug = top?.slug || "";
+
+    if (featured && top) {
+      populateFeaturedFromArchiveCard(featured, top.card);
+      applyHomepageCardLanguage(featured, getStoredLang());
+    }
+
+    if (grid) {
+      const limit = Number.parseInt(grid.getAttribute("data-recent-count") || "3", 10) || 3;
+      const recent = withViews
+        .filter((item) => item.slug !== featuredSlug)
+        .sort((a, b) => {
+          if (b.time !== a.time) return b.time - a.time;
+          return a.slug.localeCompare(b.slug);
+        })
+        .slice(0, limit);
+
+      if (recent.length) {
+        const frag = document.createDocumentFragment();
+        recent.forEach(({ card }) => {
+          const clone = card.cloneNode(true);
+          rewriteCardForHomepage(clone);
+          frag.appendChild(clone);
+        });
+        grid.replaceChildren(frag);
+        applyHomepageCardLanguage(grid, getStoredLang());
+      }
+    }
   } catch (_) {
-    /* Keep the static recent cards if the archive cannot be fetched. */
+    /* Keep the static homepage cards if the archive/counts cannot be fetched. */
   }
 }
 
@@ -1130,29 +1254,14 @@ function initShareLinks() {
    after the reader stays on the page for more than 25 seconds of visible time.
    Opening and leaving sooner must not count. Listing cards only display counts. */
 function initReaderCounts() {
-  const NAMESPACE = "constantinosnea.github.io";
-  const API = "https://abacus.jasoncameron.dev";
   const HIT_DELAY_MS = 25000;
 
   function slugFromHref(href) {
-    if (!href) return "";
-    const clean = href.split("?")[0].split("#")[0];
-    const file = clean.split("/").pop() || "";
-    if (!file.endsWith(".html") || file === "index.html") return "";
-    return file.replace(/\.html$/, "");
+    return articleSlugFromHref(href);
   }
 
   async function fetchCount(slug, hit) {
-    const path = hit
-      ? `${API}/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(slug)}`
-      : `${API}/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(slug)}`;
-    const res = await fetch(path);
-    // New article slugs have no Abacus key yet — treat missing get as 0 so the
-    // engaged-hit timer can still run and create the counter after 25s.
-    if (!hit && res.status === 404) return 0;
-    if (!res.ok) throw new Error("counter failed");
-    const data = await res.json();
-    return Number(data.value ?? data.count ?? 0);
+    return fetchAbacusCount(slug, hit);
   }
 
   function setCount(el, count) {
@@ -1163,8 +1272,9 @@ function initReaderCounts() {
       return;
     }
     el.setAttribute("data-reader-value-num", String(count));
-    const en = formatReaderLabel(count, "en");
-    const elTxt = formatReaderLabel(count, "el");
+    const compact = Boolean(el.closest(".card-meta"));
+    const en = formatReaderLabel(count, "en", compact);
+    const elTxt = formatReaderLabel(count, "el", compact);
     if (!en || !elTxt) {
       el.hidden = true;
       el.textContent = "";

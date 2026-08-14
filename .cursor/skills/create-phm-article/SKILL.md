@@ -260,9 +260,9 @@ Add article `<url>` (`changefreq` yearly, `priority` 0.8). Bump `<lastmod>` on `
 
 Unless user opts out:
 
-1. Replace `.featured-article` with the new article (root paths: `images/…`, `articles/{slug}.html`)
-2. Keep **exactly 3** recent cards in `#recent-articles-grid`, newest-first by `time[datetime]`, **excluding** the featured slug (no duplicate). Drop the oldest when inserting.
-3. Runtime: `initHomepageRecentArticles()` rebuilds those 3 from `articles/` by publish date, so the archive card is the source of truth — still update the static HTML as a no-JS fallback.
+1. Do **not** hardcode a new article as featured. Featured is chosen at runtime by **highest Abacus view count** (`initHomepageFeaturedAndRecent()` in `js/main.js`). Ties break to newest `time[datetime]`.
+2. Keep **exactly 3** recent cards in `#recent-articles-grid` as a no-JS fallback (newest-first). Runtime rebuilds them from `articles/`, **excluding** the current most-viewed featured slug (no duplicate).
+3. Still add/update the new article’s **archive card** in `articles/index.html` — that card is the source of truth for both Featured (when it leads views) and Recent.
 
 `topics.html` needs no per-article change.
 

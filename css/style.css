@@ -654,7 +654,7 @@ h3.lang-stack,
 h1 > .lang-stack,
 h2 > .lang-stack,
 h3 > .lang-stack,
-p > .lang-stack,
+p:not(.breadcrumbs) > .lang-stack,
 li > .lang-stack,
 .article-subtitle > .lang-stack,
 .card-excerpt > .lang-stack,
@@ -812,12 +812,39 @@ figcaption > .lang-stack,
 .card-body { position: relative; }
 .card-excerpt { color: var(--text-secondary); font-size: 0.95rem; margin: 0; flex: 1; }
 .card-meta {
-  display: flex; align-items: center; gap: var(--space-3);
-  font-size: 0.82rem; color: var(--color-charcoal-300);
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  column-gap: 0;
+  row-gap: 0;
+  font-size: 0.78rem;
+  color: var(--color-charcoal-300);
   padding-top: var(--space-3);
   border-top: 1px solid var(--border-subtle);
+  min-width: 0;
 }
-.card-meta .dot::before { content: "·"; margin-right: var(--space-3); }
+/* Single-line chips: bilingual stacks must not wrap date/read/readers
+   onto a second row inside narrow desktop grid cards (~300px). */
+.card-meta > * {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  white-space: nowrap;
+  line-height: 1.35;
+  min-width: 0;
+}
+.card-meta time {
+  flex: 0 0 auto;
+}
+.card-meta .lang-stack {
+  white-space: nowrap;
+}
+.card-meta .dot::before {
+  content: "·";
+  margin-inline: 0.35em;
+  flex-shrink: 0;
+  line-height: 1;
+}
 
 /* Featured article (large) */
 .featured-article {
@@ -1065,13 +1092,35 @@ figcaption > .lang-stack,
 .brand-highlight { color: var(--color-forest-700); }
 
 .breadcrumbs {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin-bottom: var(--space-4);
+  white-space: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
 }
-.breadcrumbs a { color: var(--text-secondary); }
+.breadcrumbs a {
+  color: var(--text-secondary);
+  flex: 0 0 auto;
+}
 .breadcrumbs a:hover { color: var(--color-forest-700); }
-.breadcrumbs .sep { margin: 0 0.5em; color: var(--color-charcoal-300); }
+.breadcrumbs .sep {
+  margin: 0 0.5em;
+  color: var(--color-charcoal-300);
+  flex: 0 0 auto;
+}
+.breadcrumbs > .lang-stack,
+.breadcrumbs a > .lang-stack {
+  display: inline-grid;
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
 
 /* ---------------------------------------------------------------------- */
 /* Articles archive controls                                             */
