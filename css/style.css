@@ -1273,7 +1273,9 @@ figcaption > .lang-stack,
 
 .article-layout {
   display: grid;
-  grid-template-columns: minmax(0, var(--reading-width)) minmax(0, 1fr);
+  /* Sidebar keeps a usable floor so topic tags / TOC are not crushed when the
+     viewport is only slightly above the 980px single-column breakpoint. */
+  grid-template-columns: minmax(0, var(--reading-width)) minmax(14rem, 1fr);
   gap: var(--space-8);
   max-width: var(--content-width);
   margin: var(--space-7) auto;
@@ -1404,9 +1406,11 @@ figcaption > .lang-stack,
 }
 .chart-col {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  /* Fixed bar row keeps value/bar baselines aligned when labels wrap. */
+  grid-template-rows: auto 8.5rem minmax(2.6em, auto);
+  justify-items: center;
+  align-content: end;
   gap: var(--space-2);
   min-width: 0;
   max-width: 6.5rem;
@@ -1414,7 +1418,7 @@ figcaption > .lang-stack,
 .chart-col-bar-wrap {
   width: 100%;
   max-width: 3.75rem;
-  height: 8.5rem;
+  height: 100%;
   display: flex;
   align-items: flex-end;
   background: var(--color-cream-200);
@@ -1441,6 +1445,24 @@ figcaption > .lang-stack,
   color: var(--text-secondary);
   text-align: center;
   line-height: 1.3;
+  width: 100%;
+  align-self: start;
+}
+/* Size label slot to the active language only (same idea as TOC). */
+.chart-col-label .lang-stack {
+  display: block;
+  width: 100%;
+}
+.chart-col-label .lang-stack > [data-lang] {
+  grid-area: unset;
+}
+.chart-col-label .lang-stack > .is-lang-inactive {
+  display: none !important;
+  visibility: hidden;
+}
+.chart-col-label .lang-stack > .is-lang-active {
+  display: block !important;
+  visibility: visible;
 }
 
 /* Two-part share / proportion */
@@ -1676,6 +1698,10 @@ figcaption > .lang-stack,
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: var(--space-5);
+  /* Keep nowrap pills (topic tags) from painting outside the card when the
+     sidebar column is squeezed on mid-width desktops. */
+  overflow: hidden;
+  min-width: 0;
 }
 .sidebar-card h3 {
   font-size: 0.82rem; font-family: var(--font-sans);
@@ -1683,9 +1709,60 @@ figcaption > .lang-stack,
   color: var(--text-secondary); margin-bottom: var(--space-4);
   font-weight: 600;
 }
+/* Topic pills: .tag uses nowrap + letter-spacing, so long labels (and
+   bilingual max(EN,EL) width) can exceed a narrow sidebar. Cap to the card
+   and size to the active language only — same idea as the TOC list. */
+.sidebar-card .tag {
+  max-width: 100%;
+  box-sizing: border-box;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.sidebar-card .tag .lang-stack {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+.sidebar-card .tag .lang-stack > [data-lang] {
+  grid-area: unset;
+}
+.sidebar-card .tag .lang-stack > .is-lang-inactive {
+  display: none !important;
+  visibility: hidden;
+}
+.sidebar-card .tag .lang-stack > .is-lang-active {
+  display: block !important;
+  visibility: visible;
+}
 .toc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
-.toc-list a { font-size: 0.9rem; color: var(--color-charcoal-700); display: block; padding: 0.2em 0; }
+.toc-list li { margin: 0; padding: 0; }
+.toc-list a {
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: var(--color-charcoal-700);
+  display: block;
+  padding: 0.15em 0;
+}
 .toc-list a:hover { color: var(--color-forest-700); }
+/* TOC: size to the active language only. Reserving max(EN, EL) height here
+   makes short English labels look unevenly spaced when Greek wraps longer. */
+.toc-list .lang-stack {
+  display: block;
+  width: 100%;
+}
+.toc-list .lang-stack > [data-lang] {
+  grid-area: unset;
+}
+.toc-list .lang-stack > .is-lang-inactive {
+  display: none !important;
+  visibility: hidden;
+}
+.toc-list .lang-stack > .is-lang-active {
+  display: block !important;
+  visibility: visible;
+}
 
 @media (max-width: 980px) {
   .article-layout { grid-template-columns: 1fr; }
