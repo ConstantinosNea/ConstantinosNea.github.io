@@ -82,7 +82,16 @@
         <div class="article-byline">
           <span class="byline-avatar" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
           <!-- Permanent: data-reader-hit required. js/main.js counts only after >25s visible dwell. -->
-          <span><span class="byline-name">Constantinos Nearchou</span> · <time datetime="{{DATE_ISO}}">{{DATE_DISPLAY}}</time> · <span data-lang="en">{{READ_MIN}} min read</span><span data-lang="el" hidden>{{READ_MIN}} λεπτά ανάγνωσης</span> · <span class="reader-count" data-reader-count data-article-slug="{{SLUG}}" data-reader-hit hidden></span></span>
+          <span class="byline-text">
+            <span class="byline-name">Constantinos Nearchou</span>
+            <span class="byline-meta">
+              <time datetime="{{DATE_ISO}}">{{DATE_DISPLAY}}</time>
+              <span class="byline-sep" aria-hidden="true">·</span>
+              <span class="byline-read"><span data-lang="en">{{READ_MIN}} min read</span><span data-lang="el" hidden>{{READ_MIN}} λεπτά</span></span>
+              <span class="byline-sep" aria-hidden="true">·</span>
+              <span class="reader-count" data-reader-count data-article-slug="{{SLUG}}" data-reader-hit hidden></span>
+            </span>
+          </span>
         </div>
       </div>
     </header>

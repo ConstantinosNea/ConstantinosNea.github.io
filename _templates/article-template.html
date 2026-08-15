@@ -138,7 +138,17 @@
           <span class="byline-avatar" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
           </span>
-          <span><span class="byline-name">Constantinos Nearchou</span> · <time datetime="{{YYYY-MM-DD}}">{{DD Mon YYYY}}</time> · <span data-lang="en">{{N}} min read</span><span data-lang="el" hidden>{{N}} λεπτά ανάγνωσης</span> · <!-- Permanent engaged reader count: keep data-reader-hit; js/main.js hits only after >25s visible dwell --><span class="reader-count" data-reader-count data-article-slug="{{slug}}" data-reader-hit hidden></span></span>
+          <!-- Permanent: data-reader-hit required. js/main.js counts only after >25s visible dwell. -->
+          <span class="byline-text">
+            <span class="byline-name">Constantinos Nearchou</span>
+            <span class="byline-meta">
+              <time datetime="{{YYYY-MM-DD}}">{{DD Mon YYYY}}</time>
+              <span class="byline-sep" aria-hidden="true">·</span>
+              <span class="byline-read"><span data-lang="en">{{N}} min read</span><span data-lang="el" hidden>{{N}} λεπτά</span></span>
+              <span class="byline-sep" aria-hidden="true">·</span>
+              <span class="reader-count" data-reader-count data-article-slug="{{slug}}" data-reader-hit hidden></span>
+            </span>
+          </span>
         </div>
       </div>
     </header>
