@@ -1342,12 +1342,15 @@ function initReaderCounts() {
     const slug = slugFromHref(link.getAttribute("href"));
     if (!slug) return;
     if (meta.querySelector(`[data-article-slug="${slug}"]`)) return;
+    const sep = document.createElement("span");
+    sep.className = "card-meta-sep";
+    sep.setAttribute("aria-hidden", "true");
     const span = document.createElement("span");
-    span.className = "dot reader-count";
+    span.className = "reader-count";
     span.dataset.readerCount = "";
     span.dataset.articleSlug = slug;
     span.hidden = true;
-    meta.appendChild(span);
+    meta.append(sep, span);
   });
 
   // Normalize any legacy markup that still nests value/label spans.

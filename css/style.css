@@ -309,7 +309,8 @@ html[lang="el"] .article-body {
   .article-author-card-label,
   .results-meta,
   .breadcrumbs,
-  .card-meta .dot,
+  .card-meta time,
+  .card-meta-read,
   .card-meta .reader-count,
   .article-byline,
   .btn:not(.header-lang-stack):not(.nav-cta)
@@ -331,7 +332,8 @@ html[lang="el"] .article-body {
   .article-author-card-label,
   .results-meta,
   .breadcrumbs,
-  .card-meta .dot,
+  .card-meta time,
+  .card-meta-read,
   .card-meta .reader-count,
   .article-byline,
   .btn:not(.header-lang-stack):not(.nav-cta)
@@ -352,7 +354,8 @@ html[lang="el"] .article-body {
   .article-author-card-label,
   .results-meta,
   .breadcrumbs,
-  .card-meta .dot,
+  .card-meta time,
+  .card-meta-read,
   .card-meta .reader-count,
   .article-byline,
   .btn:not(.header-lang-stack):not(.nav-cta)
@@ -936,8 +939,7 @@ li > .lang-stack,
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  column-gap: 0;
-  row-gap: 0;
+  gap: 0.45em;
   font-size: 0.78rem;
   color: var(--color-charcoal-300);
   padding-top: var(--space-3);
@@ -946,7 +948,7 @@ li > .lang-stack,
 }
 /* Single-line chips: bilingual stacks must not wrap date/read/readers
    onto a second row inside narrow desktop grid cards (~300px). */
-.card-meta > * {
+.card-meta > :not(.card-meta-sep) {
   display: inline-flex;
   align-items: center;
   flex: 0 1 auto;
@@ -956,9 +958,8 @@ li > .lang-stack,
   word-break: keep-all;
   overflow-wrap: normal;
 }
-.card-meta time {
-  flex: 0 0 auto;
-}
+.card-meta time,
+.card-meta-read,
 .card-meta .reader-count,
 .card-meta .reader-count .lang-stack {
   flex: 0 0 auto;
@@ -968,11 +969,19 @@ li > .lang-stack,
 .card-meta .lang-stack {
   white-space: nowrap;
 }
-.card-meta .dot::before {
-  content: "·";
-  margin-inline: 0.35em;
-  flex-shrink: 0;
-  line-height: 1;
+/* Geometric separators — avoid font middots that can look like doubled punctuation. */
+.card-meta-sep {
+  display: inline-block;
+  width: 0.2rem;
+  height: 0.2rem;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
+  opacity: 0.85;
+  align-self: center;
+}
+.card-meta-sep:has(+ .reader-count[hidden]) {
+  display: none;
 }
 
 /* Featured article (large) */
@@ -1391,10 +1400,16 @@ li > .lang-stack,
   max-width: 100%;
 }
 .byline-sep {
+  display: inline-block;
+  width: 0.2rem;
+  height: 0.2rem;
+  border-radius: 50%;
+  background: currentColor;
   flex-shrink: 0;
+  opacity: 0.85;
+  align-self: center;
   user-select: none;
 }
-/* Hide the separator before a still-loading / empty reader count. */
 .byline-sep:has(+ .reader-count[hidden]) {
   display: none;
 }
