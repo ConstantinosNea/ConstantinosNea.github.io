@@ -137,7 +137,7 @@ EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κε�
 
 ## Author’s perspective (permanent)
 
-Every article must end with an identifiable personal perspective from Constantinos Nearchou (takeaway, interpretation, or what matters), clearly distinguished from evidence. See SKILL.md § Author’s perspective. Complements sources — does not replace them.
+Every article must end with an identifiable personal perspective from Constantinos Nearchou (takeaway, interpretation, or what matters), clearly distinguished from evidence. Prefer the bilingual marker **Author’s perspective:** / **Οπτική του συγγραφέα:** (not *Opinion:* / *Γνώμη:*). See SKILL.md § Author’s perspective. Complements sources — does not replace them.
 
 ## Bilingual language & terminology QA
 

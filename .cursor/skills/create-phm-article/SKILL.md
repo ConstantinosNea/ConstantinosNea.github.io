@@ -187,7 +187,7 @@ Health in Blog is authored writing, not an anonymous research digest. **Every ar
 |-------------|--------|
 | Presence | A clear personal takeaway, interpretation, or judgment of what matters — in the author’s voice |
 | Placement | Near the end of the body (closing / final reflective section), after the evidence has been laid out |
-| Distinguishability | Opinion must remain clearly separable from factual or evidence-based claims (e.g. explicit framing such as *Opinion:* / *Γνώμη:*, or unmistakable first-person interpretive language that does not masquerade as a sourced finding) |
+| Distinguishability | Personal interpretation must remain clearly separable from factual or evidence-based claims. **Standard marker (prefer this):** lead the passage with bold **Author’s perspective:** / **Οπτική του συγγραφέα:** so readers can see at a glance that the following lines are the author’s judgement, not a sourced finding. Do **not** use the generic label *Opinion:* / *Γνώμη:*. First-person interpretive language may support the passage but does not replace the clear marker. |
 | Role | Complements the evidence; does **not** replace sources, charts, or the ≥4-sources gate |
 | Tone | Human, thoughtful, recognisably authored — aligned with the site’s editorial policy on distinguishing evidence from interpretation |
 
@@ -226,7 +226,7 @@ Decide during outline (before writing HTML):
 |------------------|-------------|
 | Sources give clear rates, counts, shares, trends, or comparisons the reader should see | No useful quantitative figures in the cited sources |
 | A visualisation clarifies magnitude, gap, or comparison better than prose alone | Pure process / how-to with little quantitative claim |
-| | Opinion-led passages without cited figures (still mark opinion clearly in prose) |
+| | Author-perspective passages without cited figures (still mark clearly with **Author’s perspective:** / **Οπτική του συγγραφέα:**) |
 
 Rules:
 
