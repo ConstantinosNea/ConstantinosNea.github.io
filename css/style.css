@@ -151,20 +151,12 @@ button { font-family: inherit; }
 /* ---------------------------------------------------------------------- */
 /* Greek optical balance                                                  */
 /* Keep the same root/body size as English so language toggle doesn't     */
-/* rescale rem spacing and make the page jump. Only nudge glyph metrics,  */
+/* rescale rem spacing and make the page jump. Only nudge line-height,    */
 /* and only on Greek copy — never via html[lang] ancestors. Document-wide */
 /* html[lang="el"] rules reflow EN+EL .lang-stack cells on every toggle.  */
+/* Do not apply negative letter-spacing on Greek headings: it pulls       */
+/* punctuation into the previous glyph (clipped / stuck full stops).      */
 /* ---------------------------------------------------------------------- */
-
-:is(h1, h2, h3, h4)[lang="el"],
-:is(h1, h2, h3, h4) [lang="el"] {
-  letter-spacing: -0.015em;
-}
-
-.hero h1[lang="el"],
-.hero h1 [lang="el"] {
-  letter-spacing: -0.02em;
-}
 
 /* Pin both languages so .lang-stack max-height does not flip with html[lang]. */
 html[lang="el"] .article-body {
@@ -179,8 +171,11 @@ html[lang="el"] .article-body {
   line-height: 1.7;
 }
 
+/* Tags/eyebrows already set letter-spacing on the control; don't double it
+   on Greek in a way that opens gaps before punctuation. */
 :is(.eyebrow, .hero-eyebrow, .tag)[lang="el"],
-:is(.eyebrow, .hero-eyebrow, .tag) [lang="el"] {
+:is(.eyebrow, .hero-eyebrow, .tag) [lang="el"],
+:is(.eyebrow, .hero-eyebrow, .tag) [data-lang="el"] {
   letter-spacing: 0.04em;
 }
 
@@ -712,11 +707,22 @@ a.tag:focus-visible {
 .lang-stack > .is-lang-inactive {
   visibility: hidden;
   pointer-events: none;
+  /* Belt-and-suspenders: never leave inactive glyphs able to paint.
+     Overlaid EN/EL end at different widths, so a visible inactive full stop
+     reads as a period floating away from the active sentence. */
+  opacity: 0;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 .lang-stack > .is-lang-active {
   visibility: visible;
+  opacity: 1;
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
 }
-/* Full-width stacks for block copy (titles, paragraphs, hero actions). */
+/* Full-width stacks for block copy (titles, paragraphs, hero actions).
+   Keep height reservation here for CLS. Compact lines (chart sources,
+   captions, subtitles) are handled below — active language only. */
 h1.lang-stack,
 h2.lang-stack,
 h3.lang-stack,
@@ -724,16 +730,11 @@ h3.lang-stack,
 h1 > .lang-stack,
 h2 > .lang-stack,
 h3 > .lang-stack,
-p:not(.breadcrumbs) > .lang-stack,
+p:not(.breadcrumbs):not(.chart-source):not(.image-caption):not(.article-subtitle):not(.chart-callout-label) > .lang-stack,
 li > .lang-stack,
-.article-subtitle > .lang-stack,
 .card-excerpt > .lang-stack,
 .card-title > .lang-stack,
 .card-title a > .lang-stack,
-figcaption > .lang-stack,
-.image-caption > .lang-stack,
-.chart-source > .lang-stack,
-.chart-callout-label > .lang-stack,
 .medical-disclaimer > .lang-stack,
 .medical-disclaimer p > .lang-stack,
 .footer-disclaimer > .lang-stack,
@@ -741,6 +742,46 @@ figcaption > .lang-stack,
 .disclaimer-box p > .lang-stack {
   display: grid;
   width: 100%;
+}
+/* Single-line / caption chrome: size to the active language only so
+   terminal punctuation stays glued to the visible sentence (not to the
+   wider inactive language’s end position). */
+:is(
+  .chart-source,
+  figcaption,
+  .image-caption,
+  .article-subtitle,
+  .chart-callout-label
+) > .lang-stack {
+  display: inline-grid;
+  width: max-content;
+  max-width: 100%;
+  vertical-align: top;
+}
+:is(
+  .chart-source,
+  figcaption,
+  .image-caption,
+  .article-subtitle,
+  .chart-callout-label
+) > .lang-stack > .is-lang-inactive {
+  display: none !important;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+:is(
+  .chart-source,
+  figcaption,
+  .image-caption,
+  .article-subtitle,
+  .chart-callout-label
+) > .lang-stack > .is-lang-active {
+  display: block !important;
+  visibility: visible;
+  opacity: 1;
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
 }
 .hero-actions.lang-stack > [data-lang] {
   display: flex !important;
@@ -1440,7 +1481,10 @@ figcaption > .lang-stack,
 .chart-source {
   margin: var(--space-4) 0 0;
   font-size: 0.78rem;
+  line-height: 1.45;
   color: var(--text-secondary);
+  /* Keep terminal punctuation from feeling clipped in small caption type. */
+  overflow: visible;
 }
 
 /* Annotated callout (single standout magnitude) */
