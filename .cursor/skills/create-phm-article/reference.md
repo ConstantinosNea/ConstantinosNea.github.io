@@ -1,4 +1,4 @@
-# Topics, types, and publish helpers
+# Topics and publish helpers
 
 ## Topics (`data-topic` / `data-card-topic` / `?topic=`)
 
@@ -15,15 +15,7 @@
 Notes:
 - Archive filter chip for commentary uses short EN "Commentary" / EL "Σχολιασμός"; article tags for commentary topic use the longer "Commentary & Current Affairs" form.
 - Only one primary topic per article.
-
-## Content types (`data-type`)
-
-| Key | EN label | EL label |
-|-----|----------|----------|
-| `evidence` | Evidence Overview | Επισκόπηση Τεκμηρίωσης |
-| `analysis` | Analysis | Ανάλυση |
-| `explainer` | Explainer | Επεξήγηση |
-| `commentary` | Commentary | Σχολιασμός |
+- **No content-type taxonomy.** Do not use `data-type` or labels such as Explainer / Analysis / Evidence Overview / Commentary-as-type. Topic/category is the only formal classification; evidence vs opinion is handled in the prose.
 
 ## Site constants
 
@@ -142,6 +134,10 @@ Prefer real `<ol>` source links when available. Published articles need ≥4 aut
 EN: `Independent author of Health in Blog — writing on public health evidence, systems, and policy for specialists and the general public.`
 
 EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κείμενα για τεκμήρια, συστήματα και πολιτική δημόσιας υγείας, για ειδικούς και για το ευρύ κοινό.`
+
+## Author’s perspective (permanent)
+
+Every article must end with an identifiable personal perspective from Constantinos Nearchou (takeaway, interpretation, or what matters), clearly distinguished from evidence. See SKILL.md § Author’s perspective. Complements sources — does not replace them.
 
 ## Bilingual language & terminology QA
 

@@ -1509,6 +1509,42 @@ figcaption > .lang-stack,
   .chart-columns { gap: var(--space-3); }
 }
 
+/* Named policy package (non-quantitative list inside article-chart) */
+.chart-package {
+  margin: 0;
+}
+.chart-package-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.chart-package-list li {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--color-charcoal-900);
+  background: var(--color-cream-200);
+  border-left: 3px solid var(--color-forest-700);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: var(--space-3) var(--space-4);
+  counter-increment: salt-buys;
+}
+.chart-package-list {
+  counter-reset: salt-buys;
+}
+.chart-package-list li::before {
+  content: counter(salt-buys);
+  display: inline-block;
+  min-width: 1.4em;
+  margin-right: var(--space-2);
+  font-weight: 600;
+  color: var(--color-forest-700);
+  font-variant-numeric: tabular-nums;
+}
+
 .takeaways-box {
   background: var(--color-teal-100);
   border-radius: var(--radius-md);

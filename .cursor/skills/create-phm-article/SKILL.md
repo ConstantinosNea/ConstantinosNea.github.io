@@ -4,8 +4,9 @@ description: >-
   Create or publish bilingual (EN/EL) Health in Blog articles: single HTML,
   thumb/OG images, charts from statistics when sources support them (varied
   chart types; real cited data only), at least 4 authoritative sources
-  (European and American/international where relevant), topic category,
-  archive card, counts, JSON-LD, homepage, and sitemap. Always run bilingual
+  (European and American/international where relevant), topic category only
+  (no content-type taxonomy), author’s perspective near the end, archive card,
+  counts, JSON-LD, homepage, and sitemap. Always run bilingual
   language/terminology QA (natural Greek, correct PH terms, EN–EL meaning
   equivalence) before an article is finished. Use when writing a new article,
   translating PHM content, regenerating/rewriting copy, or when the user says
@@ -50,8 +51,7 @@ Collect (ask if missing):
 |-------|--------|
 | `slug` | kebab-case filename, no `.html` |
 | `image-key` | short kebab key for assets (may differ from slug) |
-| Topic | one `data-topic` from [reference.md](reference.md) |
-| Content type | one `data-type` from [reference.md](reference.md) |
+| Topic | one `data-topic` from [reference.md](reference.md) — topic/category only; do **not** assign a content type |
 | Titles / subtitle / excerpt | EN + EL |
 | Date | ISO `YYYY-MM-DD` |
 | Read time | integer minutes |
@@ -127,16 +127,18 @@ Before any article is treated as finished, publishable, or ready after create / 
 
 **Pass/fail:** Article is **not** finished until both EN and EL pass. Fix issues in place before Path B (or before reporting done). See also [reference.md](reference.md#bilingual-language--terminology-qa) and `.cursor/rules/article-bilingual-language-qa.mdc`.
 
-### Category + content type
+### Category (topic only)
 
-Keep consistent across: header topic tag (must be an `<a class="tag">` to `../articles/?topic={{slug}}#topic={{slug}}`, same as sidebar), sidebar topic link, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
+Keep the topic consistent across: header topic tag (must be an `<a class="tag">` to `../articles/?topic={{slug}}#topic={{slug}}`, same as sidebar), sidebar topic link, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
+
+**Do not** assign or render a content-type classification (`data-type`, Explainer / Analysis / Evidence Overview / Commentary labels, or equivalent). Topic/category is enough. Distinguish evidence from opinion **in the prose** (and with clear opinion markers where needed), not via a formal type taxonomy.
 
 ### HTML structure (required order)
 
 1. Head: meta, canonical, OG/Twitter, fonts, `../css/style.css`, BlogPosting + BreadcrumbList JSON-LD
 2. Skip link + site header
 3. `<article>`: header (breadcrumbs, tags, H1, subtitle, byline with `data-article-slug` **and engaged reader-count markup**), hero media, body + sidebar
-4. Body: optional commentary disclaimer, lead, takeaways, `h2[id]` sections (with data-based charts when sources support them — see below), references (≥4 authoritative sources), author card, share, medical disclaimer
+4. Body: lead, takeaways, `h2[id]` sections (with data-based charts when sources support them — see below), references (≥4 authoritative sources), author card, share, medical disclaimer
 5. Sidebar TOC + topic link — TOC list is rebuilt at runtime from `.article-body h2[id]` (labels stay in sync); keep a static fallback list in HTML for no-JS.
 6. Related section (3 cards)
 7. Footer + `../js/main.js`
@@ -175,7 +177,21 @@ URLs:
 
 ### Writing voice
 
-Evidence-informed, non-sensational. Mark evidence vs opinion for commentary. No unfinished citations as sources. Use the **shared site-wide medical disclaimer** from the template (same EN/EL on every article — do not write topic-specific variants).
+Evidence-informed, non-sensational. Distinguish evidence from personal interpretation in the prose itself. No unfinished citations as sources. Use the **shared site-wide medical disclaimer** from the template (same EN/EL on every article — do not write topic-specific variants).
+
+### Author’s perspective (permanent — every article)
+
+Health in Blog is authored writing, not an anonymous research digest. **Every article must include an identifiable element of Constantinos Nearchou’s own perspective near the end** (typically in or just before the closing section).
+
+| Requirement | Detail |
+|-------------|--------|
+| Presence | A clear personal takeaway, interpretation, or judgment of what matters — in the author’s voice |
+| Placement | Near the end of the body (closing / final reflective section), after the evidence has been laid out |
+| Distinguishability | Opinion must remain clearly separable from factual or evidence-based claims (e.g. explicit framing such as *Opinion:* / *Γνώμη:*, or unmistakable first-person interpretive language that does not masquerade as a sourced finding) |
+| Role | Complements the evidence; does **not** replace sources, charts, or the ≥4-sources gate |
+| Tone | Human, thoughtful, recognisably authored — aligned with the site’s editorial policy on distinguishing evidence from interpretation |
+
+This applies to **every article**, across all topic categories. An article is **not** finished if it ends as a neutral summary with no authored perspective.
 
 ### Sources (permanent gate — never skip)
 
@@ -210,7 +226,7 @@ Decide during outline (before writing HTML):
 |------------------|-------------|
 | Sources give clear rates, counts, shares, trends, or comparisons the reader should see | No useful quantitative figures in the cited sources |
 | A visualisation clarifies magnitude, gap, or comparison better than prose alone | Pure process / how-to with little quantitative claim |
-| | Commentary that is mainly opinion without cited figures |
+| | Opinion-led passages without cited figures (still mark opinion clearly in prose) |
 
 Rules:
 
@@ -228,9 +244,10 @@ Rules:
 
 1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant).
 2. Complete the **Charts** check (include data-based visuals when sources provide useful stats; varied types; real cited data only).
-3. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
-4. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
-5. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
+3. Complete the **Author’s perspective** check (identifiable personal takeaway near the end; clearly distinguished from evidence).
+4. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
+5. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
+6. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
 
 ---
 
@@ -252,7 +269,7 @@ When files are already in `articles/` (created here or drag-and-dropped), update
 
 ### B1 — Extract metadata from `articles/{slug}.html`
 
-Title EN/EL, excerpt, topic, type, labels, date, read time, thumb `src`/`alt`/`data-el-alt`, published ISO. Build `data-search-index` with EN+EL keywords.
+Title EN/EL, excerpt, topic, labels, date, read time, thumb `src`/`alt`/`data-el-alt`, published ISO. Build `data-search-index` with EN+EL keywords.
 
 ### B2 — `articles/index.html` (required)
 
@@ -291,6 +308,7 @@ Unless user opts out:
 - [ ] **If the article body was created or rewritten:** ≥4 credible sources from authoritative organisations; European and American/international sources included where relevant; no weak/commercial/questionable citations
 - [ ] **If the article body was created or rewritten:** charts/visualisations added when cited sources provide useful statistics; chart type fits the data (not the same style by default); figures use real cited data only
 - [ ] **If the article body/titles were created or rewritten:** bilingual language & terminology QA passed for EN and EL (natural Greek, correct PH terms, meaning equivalence); listing cards use the same corrected titles/excerpts/alts
+- [ ] **If the article body was created or rewritten:** author’s perspective present near the end and clearly distinguishable from evidence claims
 
 ### B6 — Report
 
@@ -302,7 +320,7 @@ Rewriting related sidebars on older posts; git commit --trailer "Co-authored-by:
 
 ## References
 
-- Topics, types, counts, charts, sources, path table: [reference.md](reference.md)
+- Topics, counts, charts, sources, path table: [reference.md](reference.md)
 - Skeleton: [template.html](template.html)
 - Live examples: `articles/*.html` (prefer `heatwaves-climate-mortality.html`)
 - Epidemiology research (evidence packs only; no publishing): [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md)
