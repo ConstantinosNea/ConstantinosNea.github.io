@@ -375,7 +375,16 @@ function rewriteCardForHomepage(card) {
       a.setAttribute("href", `articles/${file}`);
     }
   });
-  card.querySelectorAll(".reader-count").forEach((el) => el.remove());
+  removeCardMetaReaderCounts(card);
+}
+
+/** Drop reader-count chips and the separator that precedes them. */
+function removeCardMetaReaderCounts(root) {
+  root.querySelectorAll(".reader-count").forEach((el) => {
+    const prev = el.previousElementSibling;
+    if (prev?.classList.contains("card-meta-sep")) prev.remove();
+    el.remove();
+  });
 }
 
 function applyHomepageCardLanguage(root, lang) {
@@ -459,7 +468,7 @@ function populateFeaturedFromArchiveCard(featuredEl, archiveCard) {
 
   if (meta) {
     const metaClone = meta.cloneNode(true);
-    metaClone.querySelectorAll(".reader-count").forEach((el) => el.remove());
+    removeCardMetaReaderCounts(metaClone);
     body.appendChild(metaClone);
   }
 
@@ -1342,15 +1351,20 @@ function initReaderCounts() {
     const slug = slugFromHref(link.getAttribute("href"));
     if (!slug) return;
     if (meta.querySelector(`[data-article-slug="${slug}"]`)) return;
-    const sep = document.createElement("span");
-    sep.className = "card-meta-sep";
-    sep.setAttribute("aria-hidden", "true");
     const span = document.createElement("span");
     span.className = "reader-count";
     span.dataset.readerCount = "";
     span.dataset.articleSlug = slug;
     span.hidden = true;
-    meta.append(sep, span);
+    // Reuse a trailing separator left after cloning, otherwise add one.
+    if (meta.lastElementChild?.classList.contains("card-meta-sep")) {
+      meta.append(span);
+    } else {
+      const sep = document.createElement("span");
+      sep.className = "card-meta-sep";
+      sep.setAttribute("aria-hidden", "true");
+      meta.append(sep, span);
+    }
   });
 
   // Normalize any legacy markup that still nests value/label spans.
