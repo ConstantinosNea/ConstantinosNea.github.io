@@ -5,8 +5,8 @@ description: >-
   thumb/OG images, charts from statistics when sources support them (varied
   chart types; real cited data only), at least 4 authoritative sources
   (European and American/international where relevant), topic category only
-  (no content-type taxonomy), a strong labelled author’s perspective near the
-  end (judgement and implications, distinct from evidence), archive card,
+  (no content-type taxonomy),   a strong authored closing (judgement woven into the article, not a
+  labelled opinion box), archive card,
   counts, JSON-LD, homepage, and sitemap. Always run bilingual
   language/terminology QA (natural Greek, correct PH terms, EN–EL meaning
   equivalence) before an article is finished. Use when writing a new article,
@@ -132,7 +132,7 @@ Before any article is treated as finished, publishable, or ready after create / 
 
 Keep the topic consistent across: header topic tag (must be an `<a class="tag">` to `../articles/?topic={{slug}}#topic={{slug}}`, same as sidebar), sidebar topic link, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
 
-**Do not** assign or render a content-type classification (`data-type`, Explainer / Analysis / Evidence Overview / Commentary labels, or equivalent). Topic/category is enough. Distinguish evidence from opinion **in the prose** (and with clear opinion markers where needed), not via a formal type taxonomy.
+**Do not** assign or render a content-type classification (`data-type`, Explainer / Analysis / Evidence Overview / Commentary labels, or equivalent). Topic/category is enough. Distinguish evidence from opinion **in the prose** (sourced body vs authored closing voice), not via a formal type taxonomy or a separate opinion label.
 
 ### HTML structure (required order)
 
@@ -178,30 +178,30 @@ URLs:
 
 ### Writing voice
 
-Evidence-informed, non-sensational, and **authored** — this is Constantinos Nearchou’s Public Health blog, not an anonymous institutional digest. Evidence remains the foundation; the reader should also leave knowing **what the author thinks matters** and **how he interprets the implications**. Distinguish evidence from personal interpretation in the prose itself. No unfinished citations as sources. Use the **shared site-wide medical disclaimer** from the template (same EN/EL on every article — do not write topic-specific variants).
+Evidence-informed, non-sensational, and **authored** — this is Constantinos Nearchou’s Public Health blog, not an anonymous institutional digest. Evidence remains the foundation; the reader should also leave knowing **what the author thinks matters** and **how he interprets the implications**. Distinguish evidence from personal interpretation **in the prose itself** (framing, first person where natural, clear argument) — not with a bolted-on labelled box. No unfinished citations as sources. Use the **shared site-wide medical disclaimer** from the template (same EN/EL on every article — do not write topic-specific variants).
 
-### Author’s perspective (permanent — every article)
+### Author’s voice in the closing (permanent — every article)
 
-Health in Blog is personal Public Health writing grounded in evidence. **Every article must include a clear, labelled element of Constantinos Nearchou’s own perspective near the end** (typically in or just before the closing section). An article that only summarises agencies and studies — without the author’s judgement — is **not** finished.
+Health in Blog is personal Public Health writing grounded in evidence. **Every article must carry the author’s judgement near the end** — woven into the closing so it reads as part of the article, not as a separate “opinion” module. An article that only summarises agencies and studies — without interpretation — is **not** finished.
 
 | Requirement | Detail |
 |-------------|--------|
 | Purpose | Show what the author considers important, how he reads the evidence, and what implications he draws — so the piece feels like *his* blog, not a generic briefing |
-| Presence | A clear personal takeaway, interpretation, or judgement of what matters — in the author’s voice (first person is welcome when natural) |
+| Integration | Perspective must **fit the article flow**. Prefer closing paragraphs that move from evidence synthesis into judgement without a hard break in tone or layout |
+| **Do not** | Do **not** use a separate bold label such as **Author’s perspective:** / **Οπτική του συγγραφέα:** or *Opinion:* / *Γνώμη:*. Those markers make the voice look bolted on. Do **not** put the takeaway in a special box, callout, or differently styled block |
+| Distinguishability | Keep facts/findings separable from judgement through writing craft: attribute evidence to sources in the body; use authorial language in the closing (“I read…”, “the better test is…”, “I am less interested in…”) when natural. Disagreement with common framings is fine when grounded |
 | Placement | Near the end of the body (closing / final reflective section), **after** the evidence has been laid out |
-| Distinguishability | Personal interpretation must remain clearly separable from factual or evidence-based claims. **Standard marker (required):** lead the perspective passage with bold **Author’s perspective:** / **Οπτική του συγγραφέα:** so readers can see at a glance that the following lines are the author’s judgement, not a sourced finding. Do **not** use *Opinion:* / *Γνώμη:*. First-person interpretive language may support the passage but does not replace the clear marker. |
-| Closing pairing | Prefer a short evidence-grounded closing paragraph **plus** a labelled author’s-perspective paragraph. The closing may synthesise; the labelled block must carry the personal judgement. |
-| Depth (calibrate by topic) | Usually **2–4 sentences** in the labelled block. Say what you prioritise, what test you apply, or what implication you think readers/decision-makers should not miss. Do **not** force the same length or style on every article — match the topic — but do not leave a one-line gesture that adds no interpretation. |
-| Role | Complements the evidence; does **not** replace sources, charts, or the ≥4-sources gate. Do not invent facts inside the perspective block. |
-| Tone | Professional, balanced, credible, recognisably authored. **Not** ranting, informal venting, or unsupported hot takes. Strong judgement is fine when it follows from the article’s evidence. |
+| Depth (calibrate by topic) | Usually one or two closing paragraphs that include real interpretation — what you prioritise, what test you apply, or what implication readers should not miss. Match the topic; do not force identical length or style |
+| Role | Complements the evidence; does **not** replace sources, charts, or the ≥4-sources gate. Do not invent facts in the closing |
+| Tone | Professional, balanced, credible, recognisably authored. **Not** ranting, informal venting, or unsupported hot takes |
 
 **Pass/fail examples:**
 
 | Weak (fail) | Strong (pass) |
 |-------------|---------------|
-| Restates the WHO finding in softer words | States what the author prioritises and why the finding changes practice or policy |
-| Generic “more research is needed” with no stance | Names the test the author applies (budgets, exclusion, quiet prevention, etc.) |
-| Missing marker, or marker with only one vague sentence | Marked block with clear judgement + implication for readers |
+| Restates the WHO finding in softer words | States what the author prioritises and why it changes practice or policy |
+| Generic “more research is needed” with no stance | Names the test applied (budgets, exclusion, quiet prevention, etc.) |
+| Separate **Author’s perspective:** label or opinion box | Closing that naturally continues the article in the author’s voice |
 
 This applies to **every article**, across all topic categories. Complete this check before Path B / publish.
 
@@ -238,7 +238,7 @@ Decide during outline (before writing HTML):
 |------------------|-------------|
 | Sources give clear rates, counts, shares, trends, or comparisons the reader should see | No useful quantitative figures in the cited sources |
 | A visualisation clarifies magnitude, gap, or comparison better than prose alone | Pure process / how-to with little quantitative claim |
-| | Author-perspective passages without cited figures (still mark clearly with **Author’s perspective:** / **Οπτική του συγγραφέα:**) |
+| | Closing interpretation without cited figures (still no invented stats) |
 
 Rules:
 
@@ -256,7 +256,7 @@ Rules:
 
 1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant).
 2. Complete the **Charts** check (include data-based visuals when sources provide useful stats; varied types; real cited data only).
-3. Complete the **Author’s perspective** check (labelled **Author’s perspective:** / **Οπτική του συγγραφέα:** near the end; clear personal judgement and implications — not a neutral institutional wrap-up only).
+3. Complete the **author’s voice in the closing** check (judgement woven into the closing; no separate **Author’s perspective:** label; not a neutral institutional wrap-up only).
 4. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
 5. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
 6. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.

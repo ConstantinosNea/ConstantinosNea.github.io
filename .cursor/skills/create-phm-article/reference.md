@@ -135,19 +135,19 @@ EN: `Independent author of Health in Blog — writing on public health evidence,
 
 EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κείμενα για τεκμήρια, συστήματα και πολιτική δημόσιας υγείας, για ειδικούς και για το ευρύ κοινό.`
 
-## Author’s perspective (permanent)
+## Author’s voice in the closing (permanent)
 
-Health in Blog is **authored** Public Health writing. Every article must include a labelled personal perspective from Constantinos Nearchou near the end — what he considers important, how he interprets the evidence, and what implications he draws — clearly distinguished from facts/findings.
+Health in Blog is **authored** Public Health writing. Every article must end with the author’s interpretation woven into the closing — what matters, how the evidence is read, what implications follow — **as part of the article**, not as a separate labelled module.
 
 | Requirement | Detail |
 |-------------|--------|
-| Marker | **Author’s perspective:** / **Οπτική του συγγραφέα:** (required; not *Opinion:* / *Γνώμη:*) |
-| Depth | Usually 2–4 sentences; calibrate by topic — never a one-line empty gesture |
-| Pairing | Prefer short evidence-grounded closing + labelled perspective block |
-| Tone | Professional, evidence-informed, balanced; strong judgement OK when grounded; not ranting or unsupported |
-| Role | Complements sources/charts — does not replace them or invent facts |
+| Integration | Closing flows from evidence synthesis into judgement; same prose style as the rest of the piece |
+| **Avoid** | Bold **Author’s perspective:** / **Οπτική του συγγραφέα:**, *Opinion:* / *Γνώμη:*, callout boxes, or any layout that looks bolted on |
+| Distinguish | Via writing craft (sourced claims in the body; authorial framing in the close), not via a formal label |
+| Depth | Real interpretation, calibrated by topic — not a one-line empty gesture |
+| Tone | Professional, evidence-informed, balanced; disagreement OK when grounded |
 
-See SKILL.md § Author’s perspective and § Writing voice. An article that only summarises institutions is **not** finished.
+See SKILL.md § Author’s voice in the closing and § Writing voice. An article that only summarises institutions is **not** finished.
 
 ## Bilingual language & terminology QA
 
