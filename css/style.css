@@ -191,6 +191,23 @@ html[lang="el"] .article-body {
   clip: rect(0,0,0,0);
   white-space: nowrap;
   border: 0;
+  /* Bilingual .lang-stack forces display:block on both languages; without a
+     hard clip, nowrap chart/aria copy can inflate scrollWidth on mobile. */
+  max-width: 1px;
+}
+.visually-hidden .lang-stack {
+  display: inline !important;
+  width: 1px !important;
+  max-width: 1px !important;
+  overflow: hidden !important;
+}
+.visually-hidden .lang-stack > [data-lang] {
+  display: inline !important;
+  width: auto !important;
+  max-width: none !important;
+}
+.visually-hidden .lang-stack > .is-lang-inactive {
+  display: none !important;
 }
 
 .eyebrow {
@@ -699,16 +716,22 @@ a.tag:focus-visible {
 
 /* Bilingual layout stack: both language nodes share one grid cell so the
    container height follows the taller language. Avoids CLS on EN ↔ EL without
-   hard-coding fixed heights. Inactive language stays in layout but invisible. */
+   hard-coding fixed heights. Inactive language stays in layout but invisible.
+   min-width:0 lets stacks shrink inside CSS grid/flex parents (mobile articles
+   otherwise expand past the viewport from max(EN,EL) min-content). */
 .lang-stack {
   display: inline-grid;
   vertical-align: top;
   max-width: 100%;
+  min-width: 0;
 }
 .lang-stack > [data-lang] {
   grid-area: 1 / 1;
   /* Override UA [hidden]{display:none!important} so inactive copy still sizes. */
   display: block !important;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .lang-stack > .is-lang-inactive {
   visibility: hidden;
@@ -760,8 +783,10 @@ li > .lang-stack,
   .chart-callout-label
 ) > .lang-stack {
   display: inline-grid;
-  width: max-content;
+  /* Prefer wrapping inside the parent over max-content blowouts on mobile. */
+  width: auto;
   max-width: 100%;
+  min-width: 0;
   vertical-align: top;
 }
 :is(
@@ -1453,16 +1478,29 @@ li > .lang-stack,
 .article-layout {
   display: grid;
   /* Sidebar keeps a usable floor so topic tags / TOC are not crushed when the
-     viewport is only slightly above the 980px single-column breakpoint. */
+     viewport is only slightly above the 980px single-column breakpoint.
+     minmax(0, …) is required so bilingual body copy cannot force the track
+     wider than the viewport (default min-width:auto on grid items). */
   grid-template-columns: minmax(0, var(--reading-width)) minmax(14rem, 1fr);
   gap: var(--space-8);
   max-width: var(--content-width);
   margin: var(--space-7) auto;
   padding: 0 var(--space-6);
   align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.article-body { max-width: var(--reading-width); font-size: 1.08rem; }
+.article-body {
+  max-width: var(--reading-width);
+  min-width: 0;
+  width: 100%;
+  font-size: 1.08rem;
+}
+.article-sidebar {
+  min-width: 0;
+  max-width: 100%;
+}
 .article-body h2 { font-size: 1.5rem; margin-top: var(--space-7); }
 .article-body h3 { font-size: 1.2rem; margin-top: var(--space-6); }
 .article-body p { margin-bottom: var(--space-5); }
@@ -1495,6 +1533,9 @@ li > .lang-stack,
   background: var(--bg-sunken);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
 }
 .article-chart figcaption {
   font-family: var(--font-sans);
@@ -1511,7 +1552,7 @@ li > .lang-stack,
 }
 .chart-row {
   display: grid;
-  grid-template-columns: minmax(5.5rem, 7.5rem) 1fr auto;
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr) auto;
   gap: var(--space-3);
   align-items: center;
 }
@@ -1572,9 +1613,13 @@ li > .lang-stack,
   font-family: var(--font-sans);
   font-size: 0.95rem;
   color: var(--text-secondary);
-  max-width: 36rem;
+  /* Cap to the chart, not a fixed 36rem — 36rem overflows phones. */
+  max-width: min(36rem, 100%);
+  width: 100%;
   line-height: 1.45;
   margin: 0;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 /* Vertical columns */
@@ -1910,6 +1955,7 @@ li > .lang-stack,
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  /* min-width/max-width also set with .article-body above */
 }
 .sidebar-card {
   background: var(--bg-surface);
@@ -1983,7 +2029,8 @@ li > .lang-stack,
 }
 
 @media (max-width: 980px) {
-  .article-layout { grid-template-columns: 1fr; }
+  /* Bare 1fr keeps min-width:auto — bilingual stacks then overflow phones. */
+  .article-layout { grid-template-columns: minmax(0, 1fr); }
   .article-sidebar { position: static; order: -1; }
 }
 
