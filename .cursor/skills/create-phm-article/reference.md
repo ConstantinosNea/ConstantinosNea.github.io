@@ -137,7 +137,17 @@ EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κε�
 
 ## Author’s perspective (permanent)
 
-Every article must end with an identifiable personal perspective from Constantinos Nearchou (takeaway, interpretation, or what matters), clearly distinguished from evidence. Prefer the bilingual marker **Author’s perspective:** / **Οπτική του συγγραφέα:** (not *Opinion:* / *Γνώμη:*). See SKILL.md § Author’s perspective. Complements sources — does not replace them.
+Health in Blog is **authored** Public Health writing. Every article must include a labelled personal perspective from Constantinos Nearchou near the end — what he considers important, how he interprets the evidence, and what implications he draws — clearly distinguished from facts/findings.
+
+| Requirement | Detail |
+|-------------|--------|
+| Marker | **Author’s perspective:** / **Οπτική του συγγραφέα:** (required; not *Opinion:* / *Γνώμη:*) |
+| Depth | Usually 2–4 sentences; calibrate by topic — never a one-line empty gesture |
+| Pairing | Prefer short evidence-grounded closing + labelled perspective block |
+| Tone | Professional, evidence-informed, balanced; strong judgement OK when grounded; not ranting or unsupported |
+| Role | Complements sources/charts — does not replace them or invent facts |
+
+See SKILL.md § Author’s perspective and § Writing voice. An article that only summarises institutions is **not** finished.
 
 ## Bilingual language & terminology QA
 
