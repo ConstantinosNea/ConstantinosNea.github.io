@@ -137,7 +137,7 @@ EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κε�
 
 ## Author’s voice in the closing (permanent)
 
-Health in Blog is **authored** Public Health writing. Every article must end with the author’s interpretation woven into the closing — what matters, how the evidence is read, what implications follow — **as part of the article**, not as a separate labelled module.
+Health in Blog is **authored** Public Health writing. Every article must end with the author’s interpretation woven into the closing — what matters, how the evidence is read, what implications follow — **as part of the article**, not as a separate labelled module. Evidence-informed judgement may also appear earlier in the body where it helps interpret sourced findings; keep attribution clear.
 
 | Requirement | Detail |
 |-------------|--------|

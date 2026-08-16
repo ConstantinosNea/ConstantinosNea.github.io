@@ -132,7 +132,7 @@ Before any article is treated as finished, publishable, or ready after create / 
 
 Keep the topic consistent across: header topic tag (must be an `<a class="tag">` to `../articles/?topic={{slug}}#topic={{slug}}`, same as sidebar), sidebar topic link, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
 
-**Do not** assign or render a content-type classification (`data-type`, Explainer / Analysis / Evidence Overview / Commentary labels, or equivalent). Topic/category is enough. Distinguish evidence from opinion **in the prose** (sourced body vs authored closing voice), not via a formal type taxonomy or a separate opinion label.
+**Do not** assign or render a content-type classification (`data-type`, Explainer / Analysis / Evidence Overview / Commentary labels, or equivalent). Topic/category is enough. Distinguish evidence from opinion **in the prose** (attribute sourced findings; allow evidence-informed judgement in the body where it helps interpretation; develop the author’s perspective most fully in the closing), not via a formal type taxonomy or a separate opinion label.
 
 ### HTML structure (required order)
 
@@ -182,15 +182,15 @@ Evidence-informed, non-sensational, and **authored** — this is Constantinos Ne
 
 ### Author’s voice in the closing (permanent — every article)
 
-Health in Blog is personal Public Health writing grounded in evidence. **Every article must carry the author’s judgement near the end** — woven into the closing so it reads as part of the article, not as a separate “opinion” module. An article that only summarises agencies and studies — without interpretation — is **not** finished.
+Health in Blog is personal Public Health writing grounded in evidence. **Every article must carry the author’s judgement** — usually developed most fully in the closing — so the piece reads as authored writing, not as a separate “opinion” module. Evidence-informed interpretation may also appear earlier in the body when it helps the reader understand what the evidence means. An article that only summarises agencies and studies — without interpretation — is **not** finished.
 
 | Requirement | Detail |
 |-------------|--------|
 | Purpose | Show what the author considers important, how he reads the evidence, and what implications he draws — so the piece feels like *his* blog, not a generic briefing |
-| Integration | Perspective must **fit the article flow**. Prefer closing paragraphs that move from evidence synthesis into judgement without a hard break in tone or layout |
+| Integration | Perspective must **fit the article flow**. Closing paragraphs should move from evidence synthesis into judgement without a hard break in tone or layout; body passages may include brief, grounded interpretation where useful |
 | **Do not** | Do **not** use a separate bold label such as **Author’s perspective:** / **Οπτική του συγγραφέα:** or *Opinion:* / *Γνώμη:*. Those markers make the voice look bolted on. Do **not** put the takeaway in a special box, callout, or differently styled block |
-| Distinguishability | Keep facts/findings separable from judgement through writing craft: attribute evidence to sources in the body; use authorial language in the closing (“I read…”, “the better test is…”, “I am less interested in…”) when natural. Disagreement with common framings is fine when grounded |
-| Placement | Near the end of the body (closing / final reflective section), **after** the evidence has been laid out |
+| Distinguishability | Keep facts/findings separable from judgement through writing craft: attribute evidence to sources; use authorial language (“I read…”, “the better test is…”, “I am less interested in…”, “the figure I keep returning to…”) when natural, in the body or closing. Disagreement with common framings is fine when grounded |
+| Placement | A clear authored closing near the end remains **required**, after the main evidence has been laid out. Judgement earlier in the body is allowed when it interprets sourced findings; it must not invent facts or blur attribution |
 | Depth (calibrate by topic) | Usually one or two closing paragraphs that include real interpretation — what you prioritise, what test you apply, or what implication readers should not miss. Match the topic; do not force identical length or style |
 | Role | Complements the evidence; does **not** replace sources, charts, or the ≥4-sources gate. Do not invent facts in the closing |
 | Tone | Professional, balanced, credible, recognisably authored. **Not** ranting, informal venting, or unsupported hot takes |
@@ -256,7 +256,7 @@ Rules:
 
 1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant).
 2. Complete the **Charts** check (include data-based visuals when sources provide useful stats; varied types; real cited data only).
-3. Complete the **author’s voice in the closing** check (judgement woven into the closing; no separate **Author’s perspective:** label; not a neutral institutional wrap-up only).
+3. Complete the **author’s voice** check (evidence-informed judgement present; developed most fully in the closing; no separate **Author’s perspective:** label; not a neutral institutional wrap-up only).
 4. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
 5. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
 6. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
