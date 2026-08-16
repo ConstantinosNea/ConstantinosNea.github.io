@@ -1801,8 +1801,36 @@ li > .lang-stack,
   letter-spacing: 0.03em; text-transform: uppercase;
   color: var(--color-teal-600); margin-bottom: var(--space-3);
 }
-.takeaways-box ul { margin: 0; padding-left: 1.2em; }
-.takeaways-box li { color: var(--color-charcoal-900); }
+/* Custom bullets: UA outside markers get clipped on narrow viewports when
+   bilingual .lang-stack children (display:grid) sit inside the list item —
+   especially with longer Greek copy. Keep markers painted inside the item. */
+.takeaways-box ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.takeaways-box li {
+  position: relative;
+  padding-left: 1.25em;
+  color: var(--color-charcoal-900);
+}
+.takeaways-box li::before {
+  content: "";
+  position: absolute;
+  left: 0.2em;
+  top: 0.7em;
+  width: 0.35em;
+  height: 0.35em;
+  border-radius: 50%;
+  background: currentColor;
+}
+/* On tablet/phone, size takeaway lines to the active language only so the
+   dual EN/EL grid overlay cannot push or clip list chrome. */
+@media (max-width: 980px) {
+  .takeaways-box li > .lang-stack > .is-lang-inactive {
+    display: none !important;
+  }
+}
 
 .disclaimer-box {
   background: var(--color-clay-100);
