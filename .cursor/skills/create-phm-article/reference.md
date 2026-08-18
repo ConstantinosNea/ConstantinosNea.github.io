@@ -15,7 +15,7 @@
 Notes:
 - Archive filter chip for commentary uses short EN "Commentary" / EL "Σχολιασμός"; article tags for commentary topic use the longer "Commentary & Current Affairs" form.
 - Only one primary topic per article.
-- **No content-type taxonomy.** Do not use `data-type` or labels such as Explainer / Analysis / Evidence Overview / Commentary-as-type. Topic/category is the only formal classification; evidence vs opinion is handled in the prose.
+- **No content-type taxonomy.** Do not use `data-type` or labels such as Explainer / Analysis / Evidence Overview / Commentary-as-type. Topic/category is the only formal classification; evidence vs interpretation is handled in the prose (authored arc throughout; see Authorial voice).
 
 ## Site constants
 
@@ -135,26 +135,30 @@ EN: `Independent author of Health in Blog — writing on public health evidence,
 
 EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κείμενα για τεκμήρια, συστήματα και πολιτική δημόσιας υγείας, για ειδικούς και για το ευρύ κοινό.`
 
-## Author’s voice in the closing (permanent)
+## Authorial voice throughout (permanent)
 
-Health in Blog is **authored** Public Health writing. Every article must end with the author’s interpretation woven into the closing — what matters, how the evidence is read, what implications follow — **as part of the article**, not as a separate labelled module. Evidence-informed judgement may also appear earlier in the body where it helps interpret sourced findings; keep attribution clear.
+Health in Blog is **authored** Public Health writing grounded in evidence. Guide readers with the editorial principle **evidence → interpretation → significance → implication** across the piece — not only at the end. This is a compass, **not** a rigid per-section template: structure, emphasis, and narrative shape should vary with the topic so articles feel distinct. Closing remains a required culmination. Do **not** use a separate labelled opinion module.
 
 | Requirement | Detail |
 |-------------|--------|
-| Integration | Closing flows from evidence synthesis into judgement; same prose style as the rest of the piece |
-| **Avoid** | Bold **Author’s perspective:** / **Οπτική του συγγραφέα:**, *Opinion:* / *Γνώμη:*, callout boxes, or any layout that looks bolted on |
-| Distinguish | Via writing craft (sourced claims in the body; authorial framing in the close), not via a formal label |
-| Depth | Real interpretation, calibrated by topic — not a one-line empty gesture |
-| Tone | Professional, evidence-informed, balanced; disagreement OK when grounded |
+| Principle | Across the article, help the reader see what the evidence means, why it matters, and what public-health implications follow |
+| Flexibility | Do not force every section through the same four-beat sequence or cadence; let argument and evidence dictate the shape |
+| Body | Must not read as stacked agency/study summaries; interpretation belongs where the reasoning needs it |
+| Closing | Required deepening of priorities/tests/implications — not the first appearance of authorial reasoning |
+| **Avoid** | Bold **Author’s perspective:** / **Οπτική του συγγραφέα:**, *Opinion:* / *Γνώμη:*, callout boxes; repetitive “I think” / “in my opinion” / «νομίζω» as the main voice signal; predictable identical section rhythms across articles |
+| Distinguish | Via writing craft (attribute evidence; signal inference), not via a formal label |
+| Preserve | Accuracy, sourcing, methodological caution, ≥4-sources gate, charts rules, bilingual QA |
+| Tone | Serious, accessible, professional — neither institutional report nor unsupported hot take |
+| Greek | Same authored guidance in natural idiomatic Greek; keep PH terminology; avoid translated institutional register |
 
-See SKILL.md § Author’s voice in the closing and § Writing voice. An article that only summarises institutions is **not** finished.
+See SKILL.md § Writing voice. An article that only summarises institutions — or saves almost all interpretation for the closing — is **not** finished. Equally, an article that marches every section through an identical four-step formula is **not** the intended outcome.
 
 ## Bilingual language & terminology QA
 
 **Permanent gate** before create / regenerate / substantial rewrite is finished (see SKILL.md).
 
-English: grammatically correct, clear, natural, scientifically precise.  
-Greek: natural professional Greek (not literal translation). Correct PH / medical / epi / policy terminology. EN and EL must carry the same intended meaning.
+English: grammatically correct, clear, natural, scientifically precise, and **authored** (interpretation and significance, not only restated sources).  
+Greek: natural professional Greek (not literal translation or institutional calque). Correct PH / medical / epi / policy terminology. EN and EL must carry the same intended meaning and the same authored guidance — without forcing identical section rhythms.
 
 Review in context (titles, body, charts, alts, notes, listing mirrors). Fix before Path B when copy changed.
 

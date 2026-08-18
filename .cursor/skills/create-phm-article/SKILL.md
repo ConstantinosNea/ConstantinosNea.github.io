@@ -5,13 +5,15 @@ description: >-
   thumb/OG images, charts from statistics when sources support them (varied
   chart types; real cited data only), at least 4 authoritative sources
   (European and American/international where relevant), topic category only
-  (no content-type taxonomy),   a strong authored closing (judgement woven into the article, not a
-  labelled opinion box), archive card,
-  counts, JSON-LD, homepage, and sitemap. Always run bilingual
-  language/terminology QA (natural Greek, correct PH terms, EN–EL meaning
-  equivalence) before an article is finished. Use when writing a new article,
-  translating PHM content, regenerating/rewriting copy, or when the user says
-  they drag-and-dropped an article and need listings updated.
+  (no content-type taxonomy), evidence-led authored voice throughout
+  (evidence → interpretation → significance → implication as a flexible
+  editorial principle, not a rigid per-section formula; strong closing;
+  no labelled opinion box), archive card, counts, JSON-LD, homepage, and
+  sitemap. Always run bilingual language/terminology QA (natural Greek,
+  correct PH terms, EN–EL meaning equivalence) before an article is finished.
+  Use when writing a new article, translating PHM content, regenerating/rewriting
+  copy, or when the user says they drag-and-dropped an article and need
+  listings updated.
 ---
 
 # Create / publish Health in Blog article
@@ -56,7 +58,7 @@ Collect (ask if missing):
 | Titles / subtitle / excerpt | EN + EL |
 | Date | ISO `YYYY-MM-DD` |
 | Read time | integer minutes |
-| Body outline | H2 sections with `id`s for TOC |
+| Body outline | H2 sections with `id`s for TOC; ensure the outline leaves room for authorial reasoning (not sources-only bullets) — shape and emphasis should fit the topic, not a fixed per-section template |
 | Sources | **≥4** authoritative URLs (see Sources gate); else sources-pending only for demos |
 | Related articles | up to 3 existing site articles |
 | Charts? | If sources provide useful stats — plan data-based chart(s); vary type to fit the data (see below) |
@@ -65,7 +67,7 @@ Copy header/footer/share/author chrome from a **live UTF-8** article under `arti
 
 ### Epidemiology research support (optional — separate skill)
 
-When the topic needs burden, rates, trends, inequities, surveillance, or careful comparison of estimates, read and follow [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md) **before or while** outlining sources/charts. Use its **Article evidence pack** output as input to this skill.
+When the topic needs burden, rates, trends, inequities, surveillance, or careful comparison of estimates, read and follow [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md) **before or while** outlining sources/charts. Use its **Article evidence pack** output as input to this skill — then write the article with the **authorial arc** in § Writing voice (evidence remains central; interpretation and implications are still required in the prose).
 
 - **epidemiology-research** owns epi framing, appraisal, and interpretation only
 - **This skill** still owns HTML, bilingual QA, chart markup, ≥4 sources gate, and Path B
@@ -104,7 +106,7 @@ Before any article is treated as finished, publishable, or ready after create / 
 | Naturalness | Greek reads as professional editorial Greek — **not** a literal EN calque |
 | Terminology | Correct Public Health / medical / epi / policy terms in **both** languages |
 | Equivalence | Same intended scientific meaning; no important omissions, distortions, or false friends |
-| Voice | Evidence-informed and authored; keep EN/EL editorial tone aligned without forcing word-for-word mirror; labelled author’s perspective must sound natural in both languages |
+| Voice | Evidence-informed and authored **throughout** both languages — interpretation and significance, not only a late closing; keep EN/EL editorial tone aligned without forcing word-for-word mirror; never use a labelled opinion box |
 
 **Do this in context** — decide the best wording from the passage; do not mechanically swap a fixed phrase list.
 
@@ -132,7 +134,7 @@ Before any article is treated as finished, publishable, or ready after create / 
 
 Keep the topic consistent across: header topic tag (must be an `<a class="tag">` to `../articles/?topic={{slug}}#topic={{slug}}`, same as sidebar), sidebar topic link, `article:section` / JSON-LD `articleSection`, and archive `data-card-topic`. Labels: [reference.md](reference.md).
 
-**Do not** assign or render a content-type classification (`data-type`, Explainer / Analysis / Evidence Overview / Commentary labels, or equivalent). Topic/category is enough. Distinguish evidence from opinion **in the prose** (attribute sourced findings; allow evidence-informed judgement in the body where it helps interpretation; develop the author’s perspective most fully in the closing), not via a formal type taxonomy or a separate opinion label.
+**Do not** assign or render a content-type classification (`data-type`, Explainer / Analysis / Evidence Overview / Commentary labels, or equivalent). Topic/category is enough. Distinguish evidence from interpretation **in the prose** (attribute sourced findings; guide the reader through what the evidence means, why it matters, and what public-health implications follow; deepen that arc in the closing), not via a formal type taxonomy or a separate opinion label.
 
 ### HTML structure (required order)
 
@@ -176,32 +178,81 @@ URLs:
 | `thumb-{image-key}.webp` | 800×500, calm documentary tone, no text/logos |
 | `cover-{image-key}-og.png` | ~1200×630 for OG/Twitter/JSON-LD |
 
-### Writing voice
+### Writing voice (permanent — every article)
 
-Evidence-informed, non-sensational, and **authored** — this is Constantinos Nearchou’s Public Health blog, not an anonymous institutional digest. Evidence remains the foundation; the reader should also leave knowing **what the author thinks matters** and **how he interprets the implications**. Distinguish evidence from personal interpretation **in the prose itself** (framing, first person where natural, clear argument) — not with a bolted-on labelled box. No unfinished citations as sources. Use the **shared site-wide medical disclaimer** from the template (same EN/EL on every article — do not write topic-specific variants).
+Evidence-informed, non-sensational, and **authored** — this is Constantinos Nearchou’s Public Health blog, not an anonymous institutional digest, academic abstract, or policy brief. Evidence remains central and must not be weakened; the reader should still leave knowing **what the evidence shows**, **how the author reads it**, **why it matters**, and **what broader public-health implications follow**.
 
-### Author’s voice in the closing (permanent — every article)
+Distinguish evidence from interpretation **in the prose itself** — not with a bolted-on labelled box. No unfinished citations as sources. Use the **shared site-wide medical disclaimer** from the template (same EN/EL on every article — do not write topic-specific variants).
 
-Health in Blog is personal Public Health writing grounded in evidence. **Every article must carry the author’s judgement** — usually developed most fully in the closing — so the piece reads as authored writing, not as a separate “opinion” module. Evidence-informed interpretation may also appear earlier in the body when it helps the reader understand what the evidence means. An article that only summarises agencies and studies — without interpretation — is **not** finished.
+#### Authorial arc (editorial principle — not a template)
 
-| Requirement | Detail |
-|-------------|--------|
-| Purpose | Show what the author considers important, how he reads the evidence, and what implications he draws — so the piece feels like *his* blog, not a generic briefing |
-| Integration | Perspective must **fit the article flow**. Closing paragraphs should move from evidence synthesis into judgement without a hard break in tone or layout; body passages may include brief, grounded interpretation where useful |
-| **Do not** | Do **not** use a separate bold label such as **Author’s perspective:** / **Οπτική του συγγραφέα:** or *Opinion:* / *Γνώμη:*. Those markers make the voice look bolted on. Do **not** put the takeaway in a special box, callout, or differently styled block |
-| Distinguishability | Keep facts/findings separable from judgement through writing craft: attribute evidence to sources; use authorial language (“I read…”, “the better test is…”, “I am less interested in…”, “the figure I keep returning to…”) when natural, in the body or closing. Disagreement with common framings is fine when grounded |
-| Placement | A clear authored closing near the end remains **required**, after the main evidence has been laid out. Judgement earlier in the body is allowed when it interprets sourced findings; it must not invent facts or blur attribution |
-| Depth (calibrate by topic) | Usually one or two closing paragraphs that include real interpretation — what you prioritise, what test you apply, or what implication readers should not miss. Match the topic; do not force identical length or style |
-| Role | Complements the evidence; does **not** replace sources, charts, or the ≥4-sources gate. Do not invent facts in the closing |
-| Tone | Professional, balanced, credible, recognisably authored. **Not** ranting, informal venting, or unsupported hot takes |
+Guide the reader with this compass:
 
-**Pass/fail examples:**
+**Evidence → interpretation → significance → implication**
+
+Treat it as an **editorial principle**, not a rigid four-beat formula. Different articles — and different sections within an article — should feel genuinely distinct. Let subject, evidence, and argument decide where interpretation sits, how much weight each element gets, and how the narrative unfolds. Do **not** force every H2 through the same sequence, cadence, or mini-structure.
+
+| Element | What it does | Constraint |
+|---------|--------------|------------|
+| Evidence | Sourced findings, figures, definitions, method notes | Attribute clearly; no invented numbers |
+| Interpretation | What the finding means in public-health terms | Grounded in the cited evidence; mark uncertainty |
+| Significance | Why this deserves attention (scale, inequity, preventability, system failure, etc.) | Not hype; not unsupported moralising |
+| Implication | What follows for practice, policy, systems, or how we frame the problem | Inference, not new factual claims |
+
+Across the piece as a whole (lead, body, closing), the reader should encounter all four kinds of thinking — but **not** as a repeating checklist. Some sections may stay closer to evidence and limits; others may lean into significance or implication. What fails is stacking agency/study summaries and saving almost all interpretation for the end — even if that closing is strong.
+
+#### Where voice belongs
+
+| Part | Expectation |
+|------|-------------|
+| Lead / opening | Frame the problem in the author’s public-health lens: what is at stake and why this article exists — still evidence-led, not a hot take. Opening shape may vary by topic |
+| Body sections | After presenting sourced material, let interpretation emerge where the argument needs it: what the evidence shows or does not show, what deserves attention, what follows. Do not leave the body as “agency paragraph → next agency paragraph,” and do not impose the same four-step rhythm on every section |
+| Takeaways | Capture the article’s authored reading of the evidence (what matters), not only restated statistics — wording and emphasis can vary |
+| Closing | **Required culmination** — deepen synthesis, priorities, and implications in a way that fits *this* article. Must not be the *first* place the author’s reasoning appears |
+
+#### How to sound authored (without weakening credibility)
+
+- Prefer **interpretive craft** over stock opinion markers: framing, selective emphasis, critical questions, comparisons the reader should not miss, and clear public-health reasoning.
+- First person is fine when natural (“I read…”, “the better test is…”, “the figure I keep returning to…”). Do **not** rely on repetitive “I think…” / “in my opinion…” / «νομίζω…» / «κατά τη γνώμη μου…».
+- Keep facts separable from inference: attribute findings to sources; signal when you move from evidence to judgement (“this suggests…”, “the practical test is…”, “what matters more than the headline rate is…”).
+- Disagreement with common framings is welcome when grounded in the evidence and stated carefully.
+- Tone: serious, professional, accessible to a general audience — recognisably a person writing, **not** an agency report rewritten in softer prose.
+
+#### What must not change
+
+- Quantitative claims stay accurate and sourced
+- Methodological caution and limits stay visible where relevant
+- ≥4 authoritative sources, charts rules, and bilingual QA remain mandatory
+- Do **not** invent facts, inflate certainty, or blur attribution to sound more “opinionated”
+
+#### Labels and layout — do not
+
+Do **not** use a separate bold label such as **Author’s perspective:** / **Οπτική του συγγραφέα:** or *Opinion:* / *Γνώμη:*. Do **not** put judgement in a special box, callout, or differently styled block. Voice lives in ordinary paragraphs.
+
+#### Closing (required, but not the whole of the voice)
+
+A clear authored closing near the end remains **required**. Usually one or two paragraphs that synthesise priorities, the test the author applies, or the implication readers should not miss. Calibrate depth by topic. The closing **complements** voice already present in the body; it does **not** replace body-level interpretation, sources, charts, or the ≥4-sources gate.
+
+#### Pass/fail examples
 
 | Weak (fail) | Strong (pass) |
 |-------------|---------------|
-| Restates the WHO finding in softer words | States what the author prioritises and why it changes practice or policy |
-| Generic “more research is needed” with no stance | Names the test applied (budgets, exclusion, quiet prevention, etc.) |
-| Separate **Author’s perspective:** label or opinion box | Closing that naturally continues the article in the author’s voice |
+| Body is mostly paraphrased WHO/OECD/CDC findings; voice appears only in the last section | Authorial reasoning runs through the piece naturally; structure and emphasis fit the topic rather than a repeated template |
+| Restates an agency finding in softer words | States what the author prioritises and why it changes practice, policy, or framing |
+| Generic “more research is needed” with no stance | Names a real test or priority when the argument calls for one (budgets, exclusion, quiet prevention, equity, systems capacity, etc.) — not the same stock ending every time |
+| Sounds like a briefing note or literature summary | Reads as authored public-health writing a general reader can follow; articles on different topics feel distinct |
+| Every section marches through the same four beats in the same order | Flexible narrative: the editorial principle is present overall without predictable section-by-section rhythm |
+| Separate **Author’s perspective:** label or opinion box | Continuous editorial voice; closing deepens reasoning already underway |
+| “I think” / “in my opinion” as the main signal of voice | Interpretation through framing and reasoning; first person only when it earns its keep |
+
+#### Bilingual voice (EN + EL)
+
+Apply the same authored arc in **both** languages. In Greek especially:
+
+- Preserve correct scientific / PH terminology
+- Prefer natural, idiomatic editorial Greek over EN calques or stiff institutional phrasing
+- Do not “translate the summary tone” into Greek — write Greek that also interprets and guides
+- Keep EN/EL meaning aligned without forcing word-for-word mirroring
 
 This applies to **every article**, across all topic categories. Complete this check before Path B / publish.
 
@@ -256,7 +307,7 @@ Rules:
 
 1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant).
 2. Complete the **Charts** check (include data-based visuals when sources provide useful stats; varied types; real cited data only).
-3. Complete the **author’s voice** check (evidence-informed judgement present; developed most fully in the closing; no separate **Author’s perspective:** label; not a neutral institutional wrap-up only).
+3. Complete the **authorial voice** check (reasoning present through the piece **and** a strong closing; flexible structure by topic — not a repeated four-beat formula; not a neutral agency summary with late opinion; no separate **Author’s perspective:** label; evidence standards intact).
 4. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
 5. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
 6. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
@@ -320,7 +371,7 @@ Unless user opts out:
 - [ ] **If the article body was created or rewritten:** ≥4 credible sources from authoritative organisations; European and American/international sources included where relevant; no weak/commercial/questionable citations
 - [ ] **If the article body was created or rewritten:** charts/visualisations added when cited sources provide useful statistics; chart type fits the data (not the same style by default); figures use real cited data only
 - [ ] **If the article body/titles were created or rewritten:** bilingual language & terminology QA passed for EN and EL (natural Greek, correct PH terms, meaning equivalence); listing cards use the same corrected titles/excerpts/alts
-- [ ] **If the article body was created or rewritten:** author’s perspective present near the end and clearly distinguishable from evidence claims
+- [ ] **If the article body was created or rewritten:** authored voice present throughout as an editorial principle (evidence, interpretation, significance, implication) without forcing the same section-by-section formula; closing deepens rather than debuts that voice; evidence claims remain attributed and distinguishable from inference; the piece feels distinct for its topic
 
 ### B6 — Report
 
