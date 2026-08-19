@@ -2084,10 +2084,184 @@ li > .lang-stack,
   visibility: visible;
 }
 
+/* Mobile article TOC: sticky control + right-edge drawer (phones only).
+   Hidden by default so tablets/desktops keep the sidebar TOC unchanged. */
+.toc-mobile-toggle,
+.toc-mobile-backdrop,
+.toc-mobile-panel {
+  display: none;
+}
+
 @media (max-width: 980px) {
   /* Bare 1fr keeps min-width:auto — bilingual stacks then overflow phones. */
   .article-layout { grid-template-columns: minmax(0, 1fr); }
   .article-sidebar { position: static; order: -1; }
+}
+
+@media (max-width: 640px) {
+  /* Hide the inline “In this article” card; Topic card stays above the body. */
+  .article-sidebar .sidebar-card:has(.toc-list) {
+    display: none;
+  }
+
+  .toc-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    position: fixed;
+    right: max(var(--space-4), env(safe-area-inset-right, 0px));
+    bottom: max(var(--space-5), env(safe-area-inset-bottom, 0px));
+    z-index: 90;
+    margin: 0;
+    padding: 0.7rem 1rem 0.7rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    background: var(--bg-surface);
+    color: var(--color-forest-700);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: var(--shadow-lift);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .toc-mobile-toggle:hover,
+  .toc-mobile-toggle:focus-visible {
+    border-color: var(--color-forest-700);
+    color: var(--color-forest-800);
+  }
+  .toc-mobile-toggle[aria-expanded="true"] {
+    background: var(--color-forest-700);
+    border-color: var(--color-forest-700);
+    color: #fff;
+  }
+  .toc-mobile-toggle-icon {
+    display: block;
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+  }
+  .toc-mobile-toggle-label {
+    display: inline-block;
+    max-width: 9.5rem;
+    min-width: 0;
+  }
+  .toc-mobile-toggle-label .lang-stack {
+    display: inline-grid;
+    max-width: 100%;
+    min-width: 0;
+    vertical-align: top;
+  }
+  .toc-mobile-toggle-label .lang-stack > [data-lang] {
+    grid-area: 1 / 1;
+  }
+  .toc-mobile-toggle-label .lang-stack > .is-lang-inactive {
+    display: none !important;
+  }
+
+  .toc-mobile-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 91;
+    background: rgba(16, 36, 28, 0.4);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .toc-mobile-backdrop.is-open {
+    display: block;
+  }
+
+  .toc-mobile-panel {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(86vw, 320px);
+    max-width: 100%;
+    z-index: 92;
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-lift);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--space-6) var(--space-5)
+      calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+  }
+  .toc-mobile-panel.is-open {
+    transform: translateX(0);
+  }
+  .toc-mobile-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .toc-mobile-panel-title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    line-height: 1.35;
+  }
+  .toc-mobile-panel-title .lang-stack,
+  .toc-mobile-panel-title > .lang-stack {
+    display: block;
+    width: 100%;
+  }
+  .toc-mobile-panel-title .lang-stack > .is-lang-inactive {
+    display: none !important;
+  }
+  .toc-mobile-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: -0.35rem -0.35rem 0 0;
+    padding: 0;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--bg-page);
+    color: var(--color-charcoal-900);
+    cursor: pointer;
+  }
+  .toc-mobile-close:hover,
+  .toc-mobile-close:focus-visible {
+    border-color: var(--color-forest-700);
+    color: var(--color-forest-700);
+  }
+  .toc-mobile-close-icon {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+  }
+  .toc-mobile-panel .toc-list {
+    gap: var(--space-1);
+  }
+  .toc-mobile-panel .toc-list a {
+    font-size: 1rem;
+    line-height: 1.4;
+    padding: 0.65rem 0.15rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .toc-mobile-panel .toc-list li:last-child a {
+    border-bottom: 0;
+  }
 }
 
 /* Related articles */

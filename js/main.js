@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initLanguageToggle();
   initMobileNav();
   initNavCurrent();
+  initMobileArticleToc();
   initArticleToc();
+  closeMobileArticleToc();
   // Hydrate ?q= into the search box before archive URL sync runs.
   initSearch();
   initArticleSort();
@@ -544,28 +546,34 @@ async function initHomepageFeaturedAndRecent() {
 }
 
 /* Mobile navigation toggle */
+function closeMobileNav() {
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector(".main-nav");
+  const backdrop = document.querySelector(".nav-backdrop");
+  if (!nav) return;
+  nav.classList.remove("is-open");
+  backdrop && backdrop.classList.remove("is-open");
+  toggle && toggle.setAttribute("aria-expanded", "false");
+}
+
 function initMobileNav() {
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector(".main-nav");
   const backdrop = document.querySelector(".nav-backdrop");
   if (!toggle || !nav) return;
 
-  const closeNav = () => {
-    nav.classList.remove("is-open");
-    backdrop && backdrop.classList.remove("is-open");
-    toggle.setAttribute("aria-expanded", "false");
-  };
-
   toggle.addEventListener("click", () => {
+    const willOpen = !nav.classList.contains("is-open");
+    if (willOpen) closeMobileArticleToc();
     const isOpen = nav.classList.toggle("is-open");
     backdrop && backdrop.classList.toggle("is-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));
   });
 
-  backdrop && backdrop.addEventListener("click", closeNav);
-  nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeNav));
+  backdrop && backdrop.addEventListener("click", closeMobileNav);
+  nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMobileNav));
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeNav();
+    if (e.key === "Escape") closeMobileNav();
   });
 }
 
@@ -607,11 +615,12 @@ function initNavCurrent() {
   if (current) current.setAttribute("aria-current", "page");
 }
 
-/* Keep TOC labels in lockstep with article H2s (EN/EL) — headings are the source of truth. */
+/* Keep TOC labels in lockstep with article H2s (EN/EL) — headings are the source of truth.
+   Fills every .toc-list (sidebar + phone drawer) from the same heading set. */
 function initArticleToc() {
-  const toc = document.querySelector(".toc-list");
+  const lists = document.querySelectorAll(".toc-list");
   const body = document.querySelector(".article-body");
-  if (!toc || !body) return;
+  if (!lists.length || !body) return;
 
   const headings = Array.from(body.querySelectorAll("h2[id]"));
   if (!headings.length) return;
@@ -650,7 +659,139 @@ function initArticleToc() {
     frag.appendChild(li);
   });
 
-  toc.replaceChildren(frag);
+  lists.forEach((toc) => {
+    toc.replaceChildren(frag.cloneNode(true));
+  });
+}
+
+const TOC_MOBILE_MQ = "(max-width: 640px)";
+
+function closeMobileArticleToc() {
+  const toggle = document.querySelector(".toc-mobile-toggle");
+  const panel = document.querySelector(".toc-mobile-panel");
+  const backdrop = document.querySelector(".toc-mobile-backdrop");
+  if (!panel) return;
+  panel.classList.remove("is-open");
+  backdrop && backdrop.classList.remove("is-open");
+  if (toggle) toggle.setAttribute("aria-expanded", "false");
+  panel.setAttribute("aria-hidden", "true");
+  panel.querySelectorAll("a, button").forEach((el) => {
+    el.setAttribute("tabindex", "-1");
+  });
+}
+
+function openMobileArticleToc() {
+  const toggle = document.querySelector(".toc-mobile-toggle");
+  const panel = document.querySelector(".toc-mobile-panel");
+  const backdrop = document.querySelector(".toc-mobile-backdrop");
+  if (!panel || !window.matchMedia(TOC_MOBILE_MQ).matches) return;
+
+  closeMobileNav();
+  panel.classList.add("is-open");
+  backdrop && backdrop.classList.add("is-open");
+  panel.setAttribute("aria-hidden", "false");
+  if (toggle) toggle.setAttribute("aria-expanded", "true");
+  panel.querySelectorAll("a, button").forEach((el) => {
+    el.removeAttribute("tabindex");
+  });
+  const closeBtn = panel.querySelector(".toc-mobile-close");
+  (closeBtn || panel.querySelector("a") || panel).focus();
+}
+
+/** Phone-only sticky TOC control + right-edge drawer (shell only; links from initArticleToc). */
+function initMobileArticleToc() {
+  const sidebarList = document.querySelector(".article-sidebar .toc-list");
+  if (!sidebarList || document.querySelector(".toc-mobile-panel")) return;
+
+  const lang = getStoredLang();
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "toc-mobile-toggle";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-controls", "toc-mobile-panel");
+  toggle.innerHTML =
+    '<svg class="toc-mobile-toggle-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">' +
+    '<path fill="currentColor" d="M3 5h14v1.5H3V5zm0 4.25h14v1.5H3v-1.5zm0 4.25h10V15H3v-1.5z"/>' +
+    "</svg>" +
+    '<span class="toc-mobile-toggle-label">' +
+    '<span data-lang="en">Contents</span>' +
+    '<span data-lang="el" hidden>Περιεχόμενα</span>' +
+    "</span>";
+
+  const backdrop = document.createElement("button");
+  backdrop.type = "button";
+  backdrop.className = "toc-mobile-backdrop";
+  backdrop.setAttribute("aria-label", "Close table of contents");
+  backdrop.setAttribute("data-el-aria-label", "Κλείσιμο πίνακα περιεχομένων");
+  backdrop.tabIndex = -1;
+
+  const panel = document.createElement("nav");
+  panel.id = "toc-mobile-panel";
+  panel.className = "toc-mobile-panel";
+  panel.setAttribute("aria-labelledby", "toc-mobile-title");
+  panel.setAttribute("aria-hidden", "true");
+  panel.innerHTML =
+    '<div class="toc-mobile-panel-header">' +
+    '<h2 id="toc-mobile-title" class="toc-mobile-panel-title">' +
+    '<span data-lang="en">In this article</span>' +
+    '<span data-lang="el" hidden>Περιεχόμενα</span>' +
+    "</h2>" +
+    '<button type="button" class="toc-mobile-close" aria-label="Close table of contents" data-el-aria-label="Κλείσιμο πίνακα περιεχομένων">' +
+    '<svg class="toc-mobile-close-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">' +
+    '<path fill="currentColor" d="M3.2 3.2 8 8l4.8-4.8 1.1 1.1L9.1 9.1l4.8 4.8-1.1 1.1L8 10.2l-4.8 4.8-1.1-1.1 4.8-4.8-4.8-4.8 1.1-1.1z"/>' +
+    "</svg>" +
+    "</button>" +
+    "</div>" +
+    '<ul class="toc-list"></ul>';
+
+  document.body.append(toggle, backdrop, panel);
+
+  wrapBilingualPairs(toggle);
+  wrapBilingualPairs(panel);
+  applyLanguageToTree(toggle, lang);
+  applyLanguageToTree(panel, lang);
+
+  [backdrop, panel.querySelector(".toc-mobile-close")].forEach((el) => {
+    if (!el) return;
+    if (!el.hasAttribute("data-en-cache-aria-label")) {
+      el.setAttribute("data-en-cache-aria-label", el.getAttribute("aria-label") || "");
+    }
+    const elLabel = el.getAttribute("data-el-aria-label");
+    if (lang === "el" && elLabel) el.setAttribute("aria-label", elLabel);
+  });
+
+  panel.querySelectorAll("a, button").forEach((el) => {
+    el.setAttribute("tabindex", "-1");
+  });
+
+  toggle.addEventListener("click", () => {
+    if (panel.classList.contains("is-open")) closeMobileArticleToc();
+    else openMobileArticleToc();
+  });
+  backdrop.addEventListener("click", () => closeMobileArticleToc());
+  panel.querySelector(".toc-mobile-close")?.addEventListener("click", () => {
+    closeMobileArticleToc();
+    toggle.focus();
+  });
+  panel.addEventListener("click", (e) => {
+    const link = e.target.closest("a[href^='#']");
+    if (!link || !panel.contains(link)) return;
+    closeMobileArticleToc();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!panel.classList.contains("is-open")) return;
+    closeMobileArticleToc();
+    toggle.focus();
+  });
+
+  const mq = window.matchMedia(TOC_MOBILE_MQ);
+  const onMq = () => {
+    if (!mq.matches) closeMobileArticleToc();
+  };
+  if (typeof mq.addEventListener === "function") mq.addEventListener("change", onMq);
+  else if (typeof mq.addListener === "function") mq.addListener(onMq);
 }
 
 /* Canonical archive listing path is always …/articles/ (trailing slash).
