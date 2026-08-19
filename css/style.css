@@ -750,8 +750,10 @@ a.tag:focus-visible {
   -webkit-text-fill-color: currentColor;
 }
 /* Full-width stacks for block copy (titles, paragraphs, hero actions).
-   Keep height reservation here for CLS. Compact lines (chart sources,
-   captions, subtitles) are handled below — active language only. */
+   Keep height reservation here for CLS on wider viewports. On ≤980px article
+   pages, inactive language is display:none (see media query near takeaways)
+   so narrow columns do not grow empty gaps from taller Greek wrap. Compact
+   lines (chart sources, captions, subtitles) are always active-language only. */
 h1.lang-stack,
 h2.lang-stack,
 h3.lang-stack,
@@ -1824,10 +1826,18 @@ li > .lang-stack,
   border-radius: 50%;
   background: currentColor;
 }
-/* On tablet/phone, size takeaway lines to the active language only so the
-   dual EN/EL grid overlay cannot push or clip list chrome. */
+/* On tablet/phone, size article bilingual stacks to the active language only.
+   Reserving max(EN, EL) height avoids CLS on language toggle, but on a narrow
+   reading column Greek often wraps much taller than English — leaving large
+   empty gaps under paragraphs, headings, and before charts/takeaways. */
 @media (max-width: 980px) {
-  .takeaways-box li > .lang-stack > .is-lang-inactive {
+  .article-header .lang-stack > .is-lang-inactive,
+  .article-body .lang-stack > .is-lang-inactive,
+  .takeaways-box .lang-stack > .is-lang-inactive,
+  .disclaimer-box .lang-stack > .is-lang-inactive,
+  .references-section .lang-stack > .is-lang-inactive,
+  .article-author-card .lang-stack > .is-lang-inactive,
+  .related-section .lang-stack > .is-lang-inactive {
     display: none !important;
   }
 }
