@@ -698,7 +698,7 @@ function openMobileArticleToc() {
   (closeBtn || panel.querySelector("a") || panel).focus();
 }
 
-/** Phone-only sticky TOC control + right-edge drawer (shell only; links from initArticleToc). */
+/** Phone-only sticky TOC control + bottom sheet (shell only; links from initArticleToc). */
 function initMobileArticleToc() {
   const sidebarList = document.querySelector(".article-sidebar .toc-list");
   if (!sidebarList || document.querySelector(".toc-mobile-panel")) return;

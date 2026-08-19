@@ -2084,7 +2084,7 @@ li > .lang-stack,
   visibility: visible;
 }
 
-/* Mobile article TOC: sticky control + right-edge drawer (phones only).
+/* Mobile article TOC: sticky control + bottom sheet (phones only).
    Hidden by default so tablets/desktops keep the sidebar TOC unchanged. */
 .toc-mobile-toggle,
 .toc-mobile-backdrop,
@@ -2125,16 +2125,20 @@ li > .lang-stack,
     box-shadow: var(--shadow-lift);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    transition: opacity var(--transition-fast), visibility var(--transition-fast),
+      background var(--transition-fast), color var(--transition-fast),
+      border-color var(--transition-fast);
   }
   .toc-mobile-toggle:hover,
   .toc-mobile-toggle:focus-visible {
     border-color: var(--color-forest-700);
     color: var(--color-forest-800);
   }
+  /* Sheet has its own close control; tuck the FAB away while open. */
   .toc-mobile-toggle[aria-expanded="true"] {
-    background: var(--color-forest-700);
-    border-color: var(--color-forest-700);
-    color: #fff;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
   }
   .toc-mobile-toggle-icon {
     display: block;
@@ -2178,33 +2182,49 @@ li > .lang-stack,
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 0;
+    left: 0;
     right: 0;
     bottom: 0;
-    width: min(86vw, 320px);
+    top: auto;
+    width: 100%;
     max-width: 100%;
+    /* Partial-height sheet: room for links without covering the article. */
+    max-height: min(58vh, 26rem);
     z-index: 92;
     background: var(--bg-surface);
     box-shadow: var(--shadow-lift);
-    transform: translateX(100%);
+    border-radius: 12px 12px 0 0;
+    border: 1px solid var(--border-subtle);
+    border-bottom: 0;
+    transform: translateY(100%);
     transition: transform var(--transition-base);
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     overscroll-behavior: contain;
-    padding: var(--space-6) var(--space-5)
-      calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+    padding: var(--space-3) var(--space-5)
+      calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
     box-sizing: border-box;
   }
   .toc-mobile-panel.is-open {
-    transform: translateX(0);
+    transform: translateY(0);
+  }
+  .toc-mobile-panel::before {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 0.28rem;
+    margin: 0.15rem auto var(--space-3);
+    border-radius: 999px;
+    background: var(--color-line);
+    flex-shrink: 0;
   }
   .toc-mobile-panel-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-3);
-    margin-bottom: var(--space-5);
-    padding-bottom: var(--space-4);
+    flex-shrink: 0;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
     border-bottom: 1px solid var(--border-subtle);
   }
   .toc-mobile-panel-title {
@@ -2252,6 +2272,13 @@ li > .lang-stack,
   }
   .toc-mobile-panel .toc-list {
     gap: var(--space-1);
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0;
+    padding: 0 0 var(--space-2);
   }
   .toc-mobile-panel .toc-list a {
     font-size: 1rem;
