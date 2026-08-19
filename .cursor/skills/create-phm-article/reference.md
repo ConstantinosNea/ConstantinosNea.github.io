@@ -158,7 +158,9 @@ See SKILL.md § Writing voice. An article that only summarises institutions — 
 **Permanent gate** before create / regenerate / substantial rewrite is finished (see SKILL.md).
 
 English: grammatically correct, clear, natural, scientifically precise, and **authored** (interpretation and significance, not only restated sources).  
-Greek: natural professional Greek (not literal translation or institutional calque). Correct PH / medical / epi / policy terminology. EN and EL must carry the same intended meaning and the same authored guidance — without forcing identical section rhythms.
+Greek: reads as **originally written** fluent Public Health Greek — not a literal translation, not EN word order in Greek clothes, and not stiff institutional calque. Correct PH / medical / epi / policy terminology. EN and EL must carry the **same** intended meaning, nuance, qualifications, and authored guidance — without forcing sentence-by-sentence resemblance or identical section rhythms.
+
+**Pass/fail:** Grammatically correct Greek that still feels translated is a **fail**. Rewrite until a Greek Public Health reader would not notice an English source underneath — while losing none of the English intellectual content.
 
 Review in context (titles, body, charts, alts, notes, listing mirrors). Fix before Path B when copy changed.
 

@@ -9,11 +9,12 @@ description: >-
   (evidence → interpretation → significance → implication as a flexible
   editorial principle, not a rigid per-section formula; strong closing;
   no labelled opinion box), archive card, counts, JSON-LD, homepage, and
-  sitemap. Always run bilingual language/terminology QA (natural Greek,
-  correct PH terms, EN–EL meaning equivalence) before an article is finished.
-  Use when writing a new article, translating PHM content, regenerating/rewriting
-  copy, or when the user says they drag-and-dropped an article and need
-  listings updated.
+  sitemap. Always run bilingual language/terminology QA treating Greek as a
+  natural Public Health adaptation of the English meaning (not a literal
+  translation; grammatically correct but translated-sounding Greek fails),
+  before an article is finished. Use when writing a new article, translating
+  PHM content, regenerating/rewriting copy, or when the user says they
+  drag-and-dropped an article and need listings updated.
 ---
 
 # Create / publish Health in Blog article
@@ -103,10 +104,18 @@ Before any article is treated as finished, publishable, or ready after create / 
 | Check | Requirement |
 |-------|-------------|
 | Grammar & clarity | Correct grammar; clear, coherent, non-awkward prose |
-| Naturalness | Greek reads as professional editorial Greek — **not** a literal EN calque |
+| Naturalness | Greek reads as if **originally written** by a fluent Greek Public Health writer — **not** a direct or literal EN translation |
 | Terminology | Correct Public Health / medical / epi / policy terms in **both** languages |
-| Equivalence | Same intended scientific meaning; no important omissions, distortions, or false friends |
+| Equivalence | Same intended scientific meaning, nuance, qualifications, evidence, and conclusions; no important omissions, distortions, simplifications, or false friends |
 | Voice | Evidence-informed and authored **throughout** both languages — interpretation and significance, not only a late closing; keep EN/EL editorial tone aligned without forcing word-for-word mirror; never use a labelled opinion box |
+
+**Greek is an adaptation, not a translation (permanent):**
+
+- English is the reference for **meaning**, evidence, argument, nuance, and level of detail
+- Greek must **not** preserve English sentence structure, idioms, or word order when natural Greek would say it differently
+- Do **not** aim for sentence-by-sentence resemblance; aim for the **same intellectual content** in natural Greek syntax, flow, and expression
+- Grammatically correct Greek that still *feels translated* is a **fail** — rewrite until it sounds authored in Greek
+- Do **not** lose, soften, invent, or inflate meaning to make Greek smoother
 
 **Do this in context** — decide the best wording from the passage; do not mechanically swap a fixed phrase list.
 
@@ -247,12 +256,14 @@ A clear authored closing near the end remains **required**. Usually one or two p
 
 #### Bilingual voice (EN + EL)
 
-Apply the same authored arc in **both** languages. In Greek especially:
+Apply the same authored guidance in **both** languages. In Greek especially:
 
-- Preserve correct scientific / PH terminology
-- Prefer natural, idiomatic editorial Greek over EN calques or stiff institutional phrasing
+- Treat Greek as a **natural Public Health adaptation** of the English meaning — not a direct translation
+- Preserve correct scientific / PH terminology and full intellectual equivalence
+- Prefer natural, idiomatic editorial Greek over EN calques, English word order, or stiff institutional phrasing
 - Do not “translate the summary tone” into Greek — write Greek that also interprets and guides
-- Keep EN/EL meaning aligned without forcing word-for-word mirroring
+- Keep EN/EL meaning aligned without forcing word-for-word or sentence-by-sentence mirroring
+- Grammatically correct but still translated-sounding Greek is a **fail**
 
 This applies to **every article**, across all topic categories. Complete this check before Path B / publish.
 
