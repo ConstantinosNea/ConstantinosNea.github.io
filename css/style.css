@@ -2084,8 +2084,9 @@ li > .lang-stack,
   visibility: visible;
 }
 
-/* Mobile article TOC: sticky control + bottom sheet (phones only).
-   Hidden by default so tablets/desktops keep the sidebar TOC unchanged. */
+/* Compact article TOC (sticky control + bottom sheet):
+   phones (≤640px), and tablets in portrait (≤1024px + portrait).
+   Landscape tablets and desktops keep the sidebar TOC. */
 .toc-mobile-toggle,
 .toc-mobile-backdrop,
 .toc-mobile-panel {
@@ -2098,7 +2099,7 @@ li > .lang-stack,
   .article-sidebar { position: static; order: -1; }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 640px), ((max-width: 1024px) and (orientation: portrait)) {
   /* Hide the inline “In this article” card; Topic card stays above the body. */
   .article-sidebar .sidebar-card:has(.toc-list) {
     display: none;

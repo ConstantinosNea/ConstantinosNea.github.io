@@ -664,7 +664,9 @@ function initArticleToc() {
   });
 }
 
-const TOC_MOBILE_MQ = "(max-width: 640px)";
+/* Phones, or tablets in portrait — landscape tablets / desktops use the sidebar TOC. */
+const TOC_MOBILE_MQ =
+  "(max-width: 640px), ((max-width: 1024px) and (orientation: portrait))";
 
 function closeMobileArticleToc() {
   const toggle = document.querySelector(".toc-mobile-toggle");
@@ -698,7 +700,7 @@ function openMobileArticleToc() {
   (closeBtn || panel.querySelector("a") || panel).focus();
 }
 
-/** Phone-only sticky TOC control + bottom sheet (shell only; links from initArticleToc). */
+/** Sticky TOC control + bottom sheet for phones and portrait tablets. */
 function initMobileArticleToc() {
   const sidebarList = document.querySelector(".article-sidebar .toc-list");
   if (!sidebarList || document.querySelector(".toc-mobile-panel")) return;
