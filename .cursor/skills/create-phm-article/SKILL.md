@@ -2,8 +2,10 @@
 name: create-phm-article
 description: >-
   Create or publish bilingual (EN/EL) Health in Blog articles: single HTML,
-  thumb/OG images, charts from statistics when sources support them (varied
-  chart types; real cited data only), at least 4 authoritative sources
+  thumb/OG images, charts from statistics when sources support them (column,
+  bar, pie/share, line, area, combo, callout, and other supported forms —
+  choose type for the data and story; real cited data only; never invent
+  stats for a chart), at least 4 authoritative sources
   (European and American/international where relevant), topic category only
   (no content-type taxonomy), evidence-led authored voice throughout
   (evidence → interpretation → significance → implication as a flexible
@@ -62,7 +64,7 @@ Collect (ask if missing):
 | Body outline | H2 sections with `id`s for TOC; ensure the outline leaves room for authorial reasoning (not sources-only bullets) — shape and emphasis should fit the topic, not a fixed per-section template |
 | Sources | **≥4** authoritative URLs (see Sources gate); else sources-pending only for demos |
 | Related articles | up to 3 existing site articles |
-| Charts? | If sources provide useful stats — plan data-based chart(s); vary type to fit the data (see below) |
+| Charts? | If sources provide useful stats — plan chart(s) only when data support a clear visualisation; choose type for the data/story (see Charts section) |
 
 Copy header/footer/share/author chrome from a **live UTF-8** article under `articles/` (prefer the newest published article whose Greek chrome is intact, e.g. `ncds-premature-deaths.html`) or [template.html](template.html). Do **not** invent chrome from a temp dump.
 
@@ -291,22 +293,43 @@ Demo/template stubs may keep sources-pending; real published articles may **not*
 
 Whenever the available sources provide useful statistics, include **data-based charts or visualisations** where they genuinely improve the article.
 
-- Do not rely on the same chart style every time. Use the type of chart or graphical representation that best fits the data and vary the visual approach when appropriate.
-- Charts must always be based on real data from the cited sources and must not invent statistics.
+**Selection principle (permanent):** Choose the chart type that **best represents the available data and the story being told** — not for visual novelty. Variety across the site is welcome **only** when different data shapes call for different forms.
+
+**Only create a chart when all of the following are true:**
+
+1. Cited sources provide suitable **real** statistics (rates, counts, shares, time series, or clear comparisons)
+2. That data **genuinely supports** the chosen visualisation (right shape for the claim)
+3. The chart **adds understanding** the prose alone would not convey as clearly
+
+**Never** invent, estimate, interpolate, or reshape numbers just to make a preferred chart type possible. If the sources do not support a chart, skip it.
 
 Decide during outline (before writing HTML):
 
 | Include chart(s) | Skip charts |
 |------------------|-------------|
 | Sources give clear rates, counts, shares, trends, or comparisons the reader should see | No useful quantitative figures in the cited sources |
-| A visualisation clarifies magnitude, gap, or comparison better than prose alone | Pure process / how-to with little quantitative claim |
+| A visualisation clarifies magnitude, gap, composition, or trend better than prose alone | Pure process / how-to with little quantitative claim |
 | | Closing interpretation without cited figures (still no invented stats) |
+
+**Supported forms** (use site CSS / inline SVG — see [reference.md](reference.md#charts-from-statistics)):
+
+| Form | Typical use |
+|------|-------------|
+| **Column chart** (vertical bars) | Few categories, same unit — compare magnitudes |
+| **Bar chart** (horizontal) | Same as columns; often better for long labels |
+| **Pie / share** | Parts of a whole (few slices; avoid many tiny wedges) |
+| **Line chart** | Trend over time (few verified points) |
+| **Area chart** | Trend with emphasis on cumulative/volume feel |
+| **Combined column + line** | Two related series with different scales/roles (both from cited data) |
+| **Callout** | Single standout magnitude |
+| **Package / list figure** | Named policy packages (non-quantitative structure) |
+| Other existing site patterns | When they fit better than the above |
 
 Rules:
 
 - Use **verified** statistics only; cite the same source in References; **never invent** numbers for a chart
 - Prefer **static** markup (HTML/CSS or inline SVG) — no Chart.js / CDN chart libraries
-- **Vary chart type** to fit the data (horizontal/vertical bars, simple comparison blocks, proportion/share visuals, small trend lines via SVG, annotated callout figures, etc.). Do **not** default to the same bar pattern on every article when another form fits better
+- Match form to data (table above); do **not** default to the same bar or callout pattern on every article when another form fits better
 - Add CSS for a new pattern in `css/style.css` when needed; keep it minimal and bilingual-friendly
 - Bilingual caption + source line (`data-lang` EN/EL); keep labels short so Greek fits
 - Place the chart **inside** the section that discusses those numbers (not in the hero)
@@ -317,7 +340,7 @@ Rules:
 ### After creating
 
 1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant).
-2. Complete the **Charts** check (include data-based visuals when sources provide useful stats; varied types; real cited data only).
+2. Complete the **Charts** check (include data-based visuals only when sources support them; choose type for the data/story; real cited data only — never invent stats for a chart).
 3. Complete the **authorial voice** check (reasoning present through the piece **and** a strong closing; flexible structure by topic — not a repeated four-beat formula; not a neutral agency summary with late opinion; no separate **Author’s perspective:** label; evidence standards intact).
 4. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
 5. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
@@ -380,7 +403,7 @@ Unless user opts out:
 - [ ] ΕΛ nav labels are real Greek (`Αρχική`, `Άρθρα`, …), not symbols
 - [ ] Byline has `data-reader-count` + `data-article-slug="{slug}"` + `data-reader-hit` (engaged reader counting; 25s visible dwell in `js/main.js`)
 - [ ] **If the article body was created or rewritten:** ≥4 credible sources from authoritative organisations; European and American/international sources included where relevant; no weak/commercial/questionable citations
-- [ ] **If the article body was created or rewritten:** charts/visualisations added when cited sources provide useful statistics; chart type fits the data (not the same style by default); figures use real cited data only
+- [ ] **If the article body was created or rewritten:** charts/visualisations added only when cited sources provide suitable real statistics **and** the chart improves understanding; chart type chosen for the data/story (column, bar, pie/share, line, area, combo, callout, or other supported form — not novelty); figures use real cited data only — never invent or reshape numbers for a chart type
 - [ ] **If the article body/titles were created or rewritten:** bilingual language & terminology QA passed for EN and EL (natural Greek, correct PH terms, meaning equivalence); listing cards use the same corrected titles/excerpts/alts
 - [ ] **If the article body was created or rewritten:** authored voice present throughout as an editorial principle (evidence, interpretation, significance, implication) without forcing the same section-by-section formula; closing deepens rather than debuts that voice; evidence claims remain attributed and distinguishable from inference; the piece feels distinct for its topic
 

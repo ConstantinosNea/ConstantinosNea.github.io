@@ -165,19 +165,21 @@
             <span data-lang="en">Share of excess deaths by income group (WHO)</span>
             <span data-lang="el" hidden>Κατανομή επιπλέον θανάτων ανά εισοδηματική ομάδα (WHO)</span>
           </figcaption>
-          <div class="chart-share" role="img" aria-describedby="chart-mic-desc">
+          <div class="chart-pie-wrap" role="img" aria-describedby="chart-mic-desc">
             <p id="chart-mic-desc" class="visually-hidden">
-              <span data-lang="en">Middle-income countries accounted for 81% of the 14.9 million excess deaths; high- and low-income countries accounted for the remaining 19% combined.</span>
-              <span data-lang="el" hidden>Οι χώρες μεσαίου εισοδήματος αντιστοιχούσαν στο 81% των 14,9 εκατομμυρίων επιπλέον θανάτων· οι χώρες υψηλού και χαμηλού εισοδήματος μαζί στο υπόλοιπο 19%.</span>
+              <span data-lang="en">Of excess deaths associated with COVID-19 in 2020–2021, lower-middle-income countries accounted for 53%, upper-middle-income countries for 28%, and high- and low-income countries combined for the remaining 19%.</span>
+              <span data-lang="el" hidden>Από τους επιπλέον θανάτους που συνδέονται με την COVID-19 το 2020–2021, οι χώρες χαμηλότερου μεσαίου εισοδήματος αντιστοιχούσαν στο 53%, οι χώρες ανώτερου μεσαίου εισοδήματος στο 28%, και οι χώρες υψηλού και χαμηλού εισοδήματος μαζί στο υπόλοιπο 19%.</span>
             </p>
-            <div class="chart-share-track" aria-hidden="true">
-              <span class="chart-share-seg" style="width:81%"></span>
-              <span class="chart-share-seg chart-share-seg--alt" style="width:19%"></span>
-            </div>
-            <p class="chart-share-legend">
-              <span><strong>81%</strong> <span data-lang="en">middle-income</span><span data-lang="el" hidden>μεσαίου εισοδήματος</span></span>
-              <span><strong>19%</strong> <span data-lang="en">high- + low-income</span><span data-lang="el" hidden>υψηλού + χαμηλού εισοδήματος</span></span>
-            </p>
+            <div
+              class="chart-pie"
+              aria-hidden="true"
+              style="--chart-pie-gradient: conic-gradient(var(--color-forest-700) 0% 53%, var(--color-teal-500) 53% 81%, var(--color-charcoal-300) 81% 100%)"
+            ></div>
+            <ul class="chart-pie-legend">
+              <li><span class="chart-pie-swatch chart-pie-swatch--a" aria-hidden="true"></span><span><strong>53%</strong> <span data-lang="en">lower-middle-income</span><span data-lang="el" hidden>χαμηλότερου μεσαίου εισοδήματος</span></span></li>
+              <li><span class="chart-pie-swatch chart-pie-swatch--b" aria-hidden="true"></span><span><strong>28%</strong> <span data-lang="en">upper-middle-income</span><span data-lang="el" hidden>ανώτερου μεσαίου εισοδήματος</span></span></li>
+              <li><span class="chart-pie-swatch chart-pie-swatch--c" aria-hidden="true"></span><span><strong>19%</strong> <span data-lang="en">high- + low-income</span><span data-lang="el" hidden>υψηλού + χαμηλού εισοδήματος</span></span></li>
+            </ul>
           </div>
           <p class="chart-source">
             <span data-lang="en">Source: WHO — 14.9 million excess deaths associated with COVID-19 (2020–2021).</span>

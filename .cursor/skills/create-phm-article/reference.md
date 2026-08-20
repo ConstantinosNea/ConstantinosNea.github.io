@@ -57,23 +57,25 @@ Examples of acceptable families: WHO, ECDC, EEA, Eurostat, OECD, UN agencies, CD
 
 **Permanent:** Whenever the available sources provide useful statistics, include **data-based charts or visualisations** where they genuinely improve the article.
 
-- Do not rely on the same chart style every time. Use the type of chart or graphical representation that best fits the data and vary the visual approach when appropriate.
-- Charts must always be based on real data from the cited sources and must not invent statistics.
+**Choose type for the data and the story — not for novelty.** Use a wider repertoire when appropriate (columns, bars, pie/share, line, area, column+line combos, callouts, and other supported site patterns). Only chart when cited sources supply suitable real numbers, the data shape fits that form, and the figure adds understanding. **Never** invent, estimate, or reshape data to force a chart type.
 
-Use site classes in `css/style.css` (`.article-chart`, `.chart-bars`, `.chart-row`, `.chart-bar`, `.chart-label`, `.chart-value`, `.chart-source`). Add minimal new classes when a different visual form fits better. Prefer static HTML/CSS or inline SVG — no Chart.js / CDN chart libraries.
+Use site classes in `css/style.css`. Prefer static HTML/CSS or inline SVG — no Chart.js / CDN chart libraries. Add minimal new classes when a different visual form fits better.
 
 ### Choosing a visual form
 
-| Data shape | Prefer |
-|------------|--------|
-| Few categories, same unit (rates, %) | Horizontal or vertical bars |
-| Two-way share / gap | Simple comparison or split proportion |
-| Trend over time (few points) | Inline SVG line / area |
-| Single standout magnitude | Annotated callout figure with sourced number (still cite in References) |
+| Data shape / story | Prefer |
+|--------------------|--------|
+| Few categories, same unit (rates, counts, %) | **Column** (vertical) or **bar** (horizontal — better for long labels) |
+| Parts of a whole (2–4 slices) | **Share** track or **pie** (conic); avoid many tiny slices |
+| Two-way gap / access vs no access | Share / split proportion |
+| Trend over time (few verified points) | Inline SVG **line** or **area** |
+| Two related series (e.g. level + rate) both cited | **Combined** columns + line (dual encoding; document both series) |
+| Single standout magnitude | Annotated **callout** |
+| Named policy package (structure, not quantities) | **Package** list figure |
 
-Do not default to horizontal bars on every article when another form fits better.
+Do not default to horizontal bars or callouts on every article when another form fits better.
 
-### Bar-chart pattern (one option)
+### Bar-chart pattern (horizontal — one option)
 
 ```html
 <figure class="article-chart" aria-labelledby="chart-{id}-caption">
@@ -102,24 +104,36 @@ Do not default to horizontal bars on every article when another form fits better
 
 Set `--chart-pct` to the bar width (0–100%). Absolute counts: put the number in `.chart-value` and scale bars relative to the largest value.
 
-### Other supported patterns (vary by data)
+### Column chart (vertical)
 
-Site CSS also includes:
+Use `.chart-columns` / `.chart-col` / `.chart-col-bar` with `--chart-pct` as **height** (relative to the largest category). Same bilingual caption + source rules.
+
+### Pie / multi-part share
+
+- **Two-part:** `.chart-share` + `.chart-share-seg` / `--alt` (existing).
+- **Three+ parts (few slices):** `.chart-pie` with `conic-gradient` stops that sum to 100%, plus `.chart-pie-legend`. Prefer share/pie only when composition of a whole is the story.
+
+### Line / area (SVG)
+
+Inline SVG inside `.article-chart`: `viewBox` with polyline/polygon, bilingual `visually-hidden` summary of each point, visible point labels when sparse. Use only with **cited** time points — do not interpolate missing years.
+
+### Combined column + line
+
+Use when two cited series belong together (e.g. counts as columns, a rate as line). Keep scales honest in the accessible summary; do not imply a shared axis if units differ.
+
+### Other supported patterns
 
 - **Callout** (`.chart-callout`, `.chart-callout-value`, `.chart-callout-label`) — single standout magnitude
-- **Vertical columns** (`.chart-columns`, `.chart-col`, `.chart-col-bar`) — few categories for visual comparison
-- **Share / proportion** (`.chart-share`, `.chart-share-track`, `.chart-share-seg`) — two-part composition of a whole
-
-Use the form that fits the statistic; do not default to horizontal bars on every article.
+- **Package** (`.chart-package`) — named policy measures without fake quantities
 
 ### Do / don’t
 
 - Do: one comparison the prose already explains; units in the caption or values
 - Do: match References (same agency/year as the chart source line)
-- Do: vary visual approach across articles when the data warrants it
+- Do: pick the form that fits the statistic and the claim
 - Don’t: invent statistics; decorative charts with no numbers; stock “infographic” images with embedded text
 - Don’t: reuse the identical chart layout on every article by habit
-- Don’t: pie charts for many tiny slices; JS chart libraries or remote chart APIs
+- Don’t: pie charts for many tiny slices; reshape or invent points for line/area/combo; JS chart libraries or remote chart APIs
 
 ## Sources-pending copy
 
