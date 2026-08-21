@@ -21,7 +21,7 @@ Notes:
 
 - Author: `Constantinos Nearchou`
 - Site: `Health in Blog`
-- Contact: `mailto:con1999nea@gmail.com`
+- Contact: `mailto:contact@healthinblog.com`
 - LinkedIn: `https://www.linkedin.com/in/constantinos-nearchou/`
 - Base URL: `https://constantinosnea.github.io`
 - Fonts: Literata + IBM Plex Sans (existing Google Fonts link)
