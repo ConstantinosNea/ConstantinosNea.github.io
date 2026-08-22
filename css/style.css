@@ -705,25 +705,14 @@ a.tag:focus-visible {
 /* ---------------------------------------------------------------------- */
 
 .hero {
-  /* Full-bleed band: always spans the viewport, never inherits content max-width. */
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  box-sizing: border-box;
   background: linear-gradient(160deg, var(--color-forest-800) 0%, var(--color-forest-700) 55%, var(--color-teal-600) 100%);
   color: var(--text-on-dark);
-  padding: clamp(2.75rem, 2rem + 3vw, var(--space-8)) 0 clamp(2.25rem, 1.5rem + 2.5vw, var(--space-7));
+  padding: var(--space-8) 0 var(--space-7);
   position: relative;
   overflow: hidden;
   /* Prefer anchoring to content below the hero when language swap changes copy length. */
   overflow-anchor: none;
   isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* Keep a stable full-bleed presence across laptop/phone heights without
-     forcing a redesign of the type/CTA stack. */
-  min-height: clamp(26rem, 58svh, 38rem);
 }
 
 /* Atmospheric civic layer: cities, environment, walkable public space —
@@ -731,21 +720,13 @@ a.tag:focus-visible {
 .hero-atmosphere {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
 }
 .hero-atmosphere-img {
-  /* Absolute cover overrides global `img { max-width:100%; height:auto }` so
-     the photo stays an edge-to-edge bleed plane in every browser. */
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
-  max-width: none;
-  max-height: none;
   object-fit: cover;
   object-position: 78% 52%;
   opacity: 0.4;
@@ -896,8 +877,10 @@ li > .lang-stack,
   align-items: end;
   position: relative;
   z-index: 1;
-  width: 100%;
-  box-sizing: border-box;
+  /* Size hero type from the copy column, not the viewport — keeps MacBook and
+     Windows laptop wrap/composition aligned when the column is rem-capped. */
+  container-type: inline-size;
+  container-name: hero-copy;
 }
 
 .hero-eyebrow {
@@ -919,8 +902,8 @@ li > .lang-stack,
 }
 @supports (font-size: 1cqi) {
   .hero h1 {
-    /* cqi tracks the readable copy column; avoids extra MacBook wraps from
-       vw growth while that column stays rem-capped. */
+    /* cqi tracks .hero-inner width; avoids extra MacBook wraps from vw growth
+       while the column stays fixed at max-width: 58rem. */
     font-size: clamp(2.05rem, 1.55rem + 3.35cqi, 3.35rem);
   }
 }
@@ -932,9 +915,9 @@ li > .lang-stack,
 }
 
 .hero-lede {
-  font-size: clamp(1.02rem, 0.96rem + 0.35vw, 1.15rem);
+  font-size: 1.15rem;
   color: rgba(250,248,243,0.88);
-  max-width: min(54ch, 100%);
+  max-width: 54ch;
   margin-bottom: var(--space-5);
 }
 
@@ -948,7 +931,6 @@ li > .lang-stack,
   gap: var(--space-4);
   flex-wrap: wrap;
   align-content: start;
-  max-width: 100%;
 }
 
 .hero-panel {
@@ -965,38 +947,10 @@ li > .lang-stack,
 
 @media (max-width: 860px) {
   .hero-inner { grid-template-columns: 1fr; }
-  .hero {
-    padding: clamp(2.25rem, 1.5rem + 3vw, var(--space-7)) 0 clamp(1.75rem, 1.25rem + 2vw, var(--space-6));
-    min-height: clamp(24rem, 64svh, 34rem);
-  }
-  /* Match header chrome inset so brand + hero copy share one left edge. */
-  .hero > .container.hero-inner {
-    padding-left: var(--space-5);
-    padding-right: var(--space-5);
-  }
+  .hero { padding: var(--space-7) 0 var(--space-6); }
   .hero-atmosphere-img {
     opacity: 0.34;
     object-position: 82% 55%;
-  }
-  .hero-byline,
-  .hero-lede {
-    max-width: 100%;
-  }
-  .hero-actions-set {
-    width: 100%;
-  }
-  .hero-actions-set .btn {
-    flex: 1 1 12rem;
-    justify-content: center;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-atmosphere-img {
-    object-position: 88% 50%;
-    transform: scale(1.08);
-    transform-origin: 90% 45%;
   }
 }
 
@@ -1297,10 +1251,7 @@ li > .lang-stack,
 }
 
 @media (max-width: 480px) {
-  .hero {
-    padding: var(--space-6) 0 var(--space-5);
-    min-height: 0; /* Let content define height on small phones; avoid cramped CTAs. */
-  }
+  .hero { padding: var(--space-6) 0 var(--space-5); }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -2677,17 +2628,7 @@ li > .lang-stack,
 /* Homepage refinements */
 .hero-inner-single {
   grid-template-columns: 1fr;
-  width: 100%;
-  /* Align with site chrome; atmosphere stays viewport-bleed behind. */
-  max-width: var(--content-width);
-}
-.hero-inner-single > div {
-  width: 100%;
-  max-width: min(58rem, 100%);
-  /* Size hero type from the readable copy column — not viewport vw —
-     so MacBook/Windows wrap composition stays aligned. */
-  container-type: inline-size;
-  container-name: hero-copy;
+  max-width: 58rem;
 }
 .hero-byline {
   font-size: 1rem;
