@@ -712,6 +712,56 @@ a.tag:focus-visible {
   overflow: hidden;
   /* Prefer anchoring to content below the hero when language swap changes copy length. */
   overflow-anchor: none;
+  isolation: isolate;
+}
+
+/* Atmospheric civic layer: cities, environment, walkable public space —
+   kept low-contrast under the forest wash so type stays primary. */
+.hero-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-atmosphere-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 78% 52%;
+  opacity: 0.4;
+  transform: scale(1.05);
+  transform-origin: 80% 50%;
+  filter: saturate(0.72) contrast(1.02) brightness(0.74) grayscale(0.08);
+  animation: heroAtmosphereDrift 28s ease-in-out infinite alternate;
+}
+.hero-atmosphere-wash {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg,
+      rgba(16, 36, 28, 0.95) 0%,
+      rgba(22, 53, 41, 0.86) 26%,
+      rgba(27, 67, 50, 0.52) 48%,
+      rgba(27, 67, 50, 0.22) 70%,
+      rgba(47, 110, 106, 0.08) 100%),
+    linear-gradient(180deg,
+      rgba(16, 36, 28, 0.28) 0%,
+      transparent 32%,
+      transparent 58%,
+      rgba(16, 36, 28, 0.38) 100%);
+}
+.hero-atmosphere-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+@keyframes heroAtmosphereDrift {
+  from { transform: scale(1.05) translate3d(0, 0, 0); }
+  to { transform: scale(1.09) translate3d(-1.2%, 0.6%, 0); }
 }
 
 /* Bilingual layout stack: both language nodes share one grid cell so the
@@ -820,25 +870,6 @@ li > .lang-stack,
   display: flex !important;
 }
 
-.hero::after {
-  content: "";
-  position: absolute;
-  right: -10%; top: -20%;
-  width: 560px; height: 560px;
-  border-radius: 50%;
-  border: 1px solid rgba(250,248,243,0.08);
-  pointer-events: none;
-}
-.hero::before {
-  content: "";
-  position: absolute;
-  right: 6%; top: 10%;
-  width: 360px; height: 360px;
-  border-radius: 50%;
-  border: 1px solid rgba(250,248,243,0.10);
-  pointer-events: none;
-}
-
 .hero-inner {
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,0.7fr);
@@ -899,6 +930,10 @@ li > .lang-stack,
 @media (max-width: 860px) {
   .hero-inner { grid-template-columns: 1fr; }
   .hero { padding: var(--space-7) 0 var(--space-6); }
+  .hero-atmosphere-img {
+    opacity: 0.34;
+    object-position: 82% 55%;
+  }
 }
 
 /* ---------------------------------------------------------------------- */
