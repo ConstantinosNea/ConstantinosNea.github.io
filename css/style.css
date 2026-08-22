@@ -877,10 +877,6 @@ li > .lang-stack,
   align-items: end;
   position: relative;
   z-index: 1;
-  /* Size hero type from the copy column, not the viewport — keeps MacBook and
-     Windows laptop wrap/composition aligned when the column is rem-capped. */
-  container-type: inline-size;
-  container-name: hero-copy;
 }
 
 .hero-eyebrow {
@@ -894,24 +890,10 @@ li > .lang-stack,
 
 .hero h1 {
   color: #fff;
-  /* Fallback when container query units are unavailable. */
-  font-size: clamp(2.05rem, 1.45rem + 2.1vw, 3.35rem);
+  font-size: clamp(2.05rem, 1.4rem + 2.35vw, 3.625rem);
   line-height: 1.15;
   margin-bottom: var(--space-4);
-  max-width: 100%;
-}
-@supports (font-size: 1cqi) {
-  .hero h1 {
-    /* cqi tracks .hero-inner width; avoids extra MacBook wraps from vw growth
-       while the column stays fixed at max-width: 58rem. */
-    font-size: clamp(2.05rem, 1.55rem + 3.35cqi, 3.35rem);
-  }
-}
-/* Prefer whole-word wraps in the hero; `anywhere` is harsher in Safari and
-   shifts line breaks between macOS and Windows. */
-.hero h1.lang-stack > [data-lang] {
-  overflow-wrap: break-word;
-  word-break: normal;
+  max-width: min(28ch, 100%);
 }
 
 .hero-lede {
