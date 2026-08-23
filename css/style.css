@@ -75,6 +75,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--sticky-header-offset, 5.5rem) + 0.75rem);
   -webkit-text-size-adjust: 100%;
+  background-color: var(--bg-page);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -705,7 +706,9 @@ a.tag:focus-visible {
 /* ---------------------------------------------------------------------- */
 
 .hero {
-  background: linear-gradient(160deg, var(--color-forest-800) 0%, var(--color-forest-700) 55%, var(--color-teal-600) 100%);
+  /* Solid base under the gradient so the band stays opaque end-to-end. */
+  background-color: var(--color-forest-700);
+  background-image: linear-gradient(160deg, var(--color-forest-800) 0%, var(--color-forest-700) 55%, var(--color-teal-600) 100%);
   color: var(--text-on-dark);
   /* Fluid vertical rhythm — scales with viewport, no device-width breakpoints. */
   padding: clamp(2.5rem, 1.6rem + 2.2vw, var(--space-8)) 0 clamp(2rem, 1.3rem + 1.8vw, var(--space-7));
@@ -713,7 +716,11 @@ a.tag:focus-visible {
   overflow: hidden;
   /* Prefer anchoring to content below the hero when language swap changes copy length. */
   overflow-anchor: none;
-  isolation: isolate;
+  /* Content-sized height leaves cream page/section bg peeking under the hero
+     on taller laptop/desktop windows. Fill remaining viewport below the sticky
+     header; content padding/type stay unchanged — extra space is green only. */
+  min-height: calc(100vh - var(--sticky-header-offset, 5.5rem));
+  min-height: calc(100svh - var(--sticky-header-offset, 5.5rem));
 }
 
 /* Atmospheric civic layer: cities, environment, walkable public space —
@@ -755,8 +762,8 @@ a.tag:focus-visible {
 .hero-atmosphere-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.06;
-  mix-blend-mode: soft-light;
+  opacity: 0.055;
+  /* Avoid mix-blend-mode soft-light — it can fringe light pixels at clip edges. */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
   background-size: 160px 160px;
 }
