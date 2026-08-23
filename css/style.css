@@ -246,11 +246,11 @@ html[lang="el"] .article-body {
   .see-all {
     white-space: normal;
     max-width: 100%;
-  }
+}
   .see-all .lang-stack {
     display: grid;
     max-width: 100%;
-  }
+}
 }
 
 /* ---------------------------------------------------------------------- */
@@ -2645,9 +2645,21 @@ li > .lang-stack,
 }
 
 /* Homepage refinements */
+/* Editorial headline breaks: inactive by default so mobile/tablet wrap
+   naturally; on laptop/desktop they produce the intended 3-line measure. */
+.hero-headline-break {
+  display: none;
+}
+@media (min-width: 1200px) {
+  .hero-headline-break {
+    display: inline;
+  }
+}
 .hero-inner-single {
   grid-template-columns: 1fr;
-  max-width: min(58rem, 100%);
+  /* Slightly wider than 58rem so laptop/desktop can hold
+     “and the systems shaping our health” on one line. */
+  max-width: min(62rem, 100%);
 }
 .hero-byline {
   font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1rem);
