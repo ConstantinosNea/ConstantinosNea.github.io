@@ -707,7 +707,8 @@ a.tag:focus-visible {
 .hero {
   background: linear-gradient(160deg, var(--color-forest-800) 0%, var(--color-forest-700) 55%, var(--color-teal-600) 100%);
   color: var(--text-on-dark);
-  padding: var(--space-8) 0 var(--space-7);
+  /* Fluid vertical rhythm — scales with viewport, no device-width breakpoints. */
+  padding: clamp(2.5rem, 1.6rem + 2.2vw, var(--space-8)) 0 clamp(2rem, 1.3rem + 1.8vw, var(--space-7));
   position: relative;
   overflow: hidden;
   /* Prefer anchoring to content below the hero when language swap changes copy length. */
@@ -877,6 +878,12 @@ li > .lang-stack,
   align-items: end;
   position: relative;
   z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  /* Query the copy column so headline size tracks available width, not the
+     raw viewport — once the column rem-caps, type stops growing with vw. */
+  container-type: inline-size;
+  container-name: hero-copy;
 }
 
 .hero-eyebrow {
@@ -890,16 +897,29 @@ li > .lang-stack,
 
 .hero h1 {
   color: #fff;
-  font-size: clamp(2.05rem, 1.4rem + 2.35vw, 3.625rem);
+  /* Fallback when container query units are unavailable. Flatter than the
+     previous vw curve so capped columns don't keep enlarging type. */
+  font-size: clamp(2.05rem, 1.45rem + 2vw, 3.35rem);
   line-height: 1.15;
   margin-bottom: var(--space-4);
-  max-width: min(28ch, 100%);
+  /* Column owns the measure; font-relative `ch` max-widths fight fluid type. */
+  max-width: 100%;
+}
+@supports (font-size: 1cqi) {
+  .hero h1 {
+    font-size: clamp(2.05rem, 1.55rem + 3.2cqi, 3.35rem);
+  }
+}
+/* Prefer whole-word wraps; `anywhere` shifts breaks between Safari and Chromium. */
+.hero h1.lang-stack > [data-lang] {
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .hero-lede {
-  font-size: 1.15rem;
+  font-size: clamp(1.02rem, 0.96rem + 0.35vw, 1.15rem);
   color: rgba(250,248,243,0.88);
-  max-width: 54ch;
+  max-width: min(54ch, 100%);
   margin-bottom: var(--space-5);
 }
 
@@ -929,7 +949,6 @@ li > .lang-stack,
 
 @media (max-width: 860px) {
   .hero-inner { grid-template-columns: 1fr; }
-  .hero { padding: var(--space-7) 0 var(--space-6); }
   .hero-atmosphere-img {
     opacity: 0.34;
     object-position: 82% 55%;
@@ -2610,14 +2629,14 @@ li > .lang-stack,
 /* Homepage refinements */
 .hero-inner-single {
   grid-template-columns: 1fr;
-  max-width: 58rem;
+  max-width: min(58rem, 100%);
 }
 .hero-byline {
-  font-size: 1rem;
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1rem);
   color: rgba(250, 248, 243, 0.82);
   margin: 0 0 var(--space-3);
   font-weight: 500;
-  max-width: 42rem;
+  max-width: min(42rem, 100%);
 }
 .follow-section {
   border-top: 1px solid var(--border-subtle);
