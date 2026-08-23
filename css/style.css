@@ -723,6 +723,17 @@ a.tag:focus-visible {
   min-height: calc(100svh - var(--sticky-header-offset, 5.5rem));
 }
 
+/* Portrait tablets (iPad-class): viewport-fill leaves a large empty band under
+   the CTAs because the column is wide enough that copy stays short. Revert to
+   content height. Phones (<641), tablet landscape, and desktops keep fill.
+   Cap at 1100px (not 1024): Chromium often treats exact 1024 CSS px as outside
+   max-width: 1024px, which would miss iPad Pro 12.9 portrait. */
+@media (min-width: 641px) and (max-width: 1100px) and (orientation: portrait) {
+  .hero {
+    min-height: 0;
+  }
+}
+
 /* Atmospheric civic layer: cities, environment, walkable public space —
    kept low-contrast under the forest wash so type stays primary. */
 .hero-atmosphere {
