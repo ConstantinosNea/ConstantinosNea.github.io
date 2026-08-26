@@ -975,6 +975,18 @@ li > .lang-stack,
   min-height: calc(100svh - var(--sticky-header-offset, 5.5rem));
 }
 
+/* Portrait tablets (iPad-class): the shared viewport min-height leaves a large
+   empty band under the hero CTAs because the column is wide and copy stays
+   short. Revert the hero only to content height. Phones (<641), tablet
+   landscape, desktops, and the other viewport panels keep the fill.
+   Cap at 1100px (not 1024): Chromium often treats exact 1024 CSS px as outside
+   max-width: 1024px, which would miss iPad Pro 12.9 portrait. */
+@media (min-width: 641px) and (max-width: 1100px) and (orientation: portrait) {
+  .hero.viewport-section {
+    min-height: 0;
+  }
+}
+
 /* Vertically center Featured / Recent / Topics when there is spare room.
    Hero keeps its existing top-aligned composition. `safe` avoids clipping
    when content outgrows the viewport. */
