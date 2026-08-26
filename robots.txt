@@ -4,4 +4,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://constantinosnea.github.io/sitemap.xml
+Sitemap: https://healthinblog.com/sitemap.xml
