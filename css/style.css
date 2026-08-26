@@ -716,22 +716,8 @@ a.tag:focus-visible {
   overflow: hidden;
   /* Prefer anchoring to content below the hero when language swap changes copy length. */
   overflow-anchor: none;
-  /* Content-sized height leaves cream page/section bg peeking under the hero
-     on taller laptop/desktop windows. Fill remaining viewport below the sticky
-     header; content padding/type stay unchanged — extra space is green only. */
-  min-height: calc(100vh - var(--sticky-header-offset, 5.5rem));
-  min-height: calc(100svh - var(--sticky-header-offset, 5.5rem));
-}
-
-/* Portrait tablets (iPad-class): viewport-fill leaves a large empty band under
-   the CTAs because the column is wide enough that copy stays short. Revert to
-   content height. Phones (<641), tablet landscape, and desktops keep fill.
-   Cap at 1100px (not 1024): Chromium often treats exact 1024 CSS px as outside
-   max-width: 1024px, which would miss iPad Pro 12.9 portrait. */
-@media (min-width: 641px) and (max-width: 1100px) and (orientation: portrait) {
-  .hero {
-    min-height: 0;
-  }
+  /* Viewport height comes from .viewport-section (shared with Featured /
+     Recent / Topics). Visual treatment below stays hero-specific. */
 }
 
 /* Atmospheric civic layer: cities, environment, walkable public space —
@@ -979,6 +965,39 @@ li > .lang-stack,
 
 .section { padding: var(--space-8) 0; }
 .section-alt { background: var(--bg-sunken); }
+
+/* Homepage full-viewport panels (Hero → Featured → Recent → Topics).
+   min-height fills the space below the sticky header; sections grow when
+   content is taller. About / Follow / footer stay natural-height. */
+.viewport-section {
+  box-sizing: border-box;
+  min-height: calc(100vh - var(--sticky-header-offset, 5.5rem));
+  min-height: calc(100svh - var(--sticky-header-offset, 5.5rem));
+}
+
+/* Vertically center Featured / Recent / Topics when there is spare room.
+   Hero keeps its existing top-aligned composition. `safe` avoids clipping
+   when content outgrows the viewport. */
+.viewport-section.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: safe center;
+}
+.viewport-section.section > .container {
+  width: 100%;
+}
+
+/* Desktop/laptop: soft snap so one panel settles under the sticky header.
+   proximity (not mandatory) keeps scrolling usable when content is long. */
+@media (min-width: 1200px) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+  .viewport-section {
+    scroll-snap-align: start;
+  }
+}
 
 .intro-block { max-width: var(--reading-width); margin-bottom: var(--space-7); }
 .intro-block p { font-size: 1.1rem; color: var(--text-secondary); }
