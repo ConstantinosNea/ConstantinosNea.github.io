@@ -102,13 +102,17 @@ If several boxes fail, describe each estimate separately instead of forcing a ra
 
 ## Handoff to create-phm-article
 
-This skill stops at analysis and evidence packs.
+This skill stops at analysis and evidence packs with **verified** claim-ready rows.
 
 create-phm-article remains responsible for:
 
 - Bilingual EN/EL prose and terminology QA
 - HTML structure, images, chart **markup**, medical disclaimer
+- Claim & Evidence Register in the writing workflow
 - ≥4 authoritative References with European + American/international mix where relevant
+- Invoking **evidence-review** before finished
 - Archive, homepage, sitemap (Path B)
 
 Do not copy those rules into outputs beyond what the evidence pack templates already ask for.
+
+Canonical public domain for URLs in packs when citing the site itself: `https://healthinblog.com`.

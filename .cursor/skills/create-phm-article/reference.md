@@ -23,7 +23,7 @@ Notes:
 - Site: `Health in Blog`
 - Contact: `mailto:contact@healthinblog.com`
 - LinkedIn: `https://www.linkedin.com/in/constantinos-nearchou/`
-- Base URL: `https://constantinosnea.github.io`
+- Base URL: `https://healthinblog.com`
 - Fonts: Literata + IBM Plex Sans (existing Google Fonts link)
 - Stylesheet: `../css/style.css`
 - Script: `../js/main.js`
@@ -50,14 +50,16 @@ Notes:
 - Every article must use **at least 4 credible sources**.
 - Sources should come **only from authoritative and reputable organisations/institutions**, including both **European and American/international sources** where relevant.
 - Prefer official public-health bodies, government health agencies, major scientific/medical institutions, and other high-quality primary sources. Avoid weak, commercial, or questionable sources.
+- **≥4 is necessary but not sufficient:** major quantitative claims need a Claim & Evidence Register, adequate context (year/place/population/measure), recency considered for “current” figures, and **evidence-review Pass** before finished (see SKILL.md § Evidence & verification; [../evidence-review/SKILL.md](../evidence-review/SKILL.md)).
+- When stating **epidemiological / population-health** measures (prevalence, incidence, mortality, burden, risk, trends, inequalities), use [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md) and only **verified** pack rows. Other major quantitative claims still need the register + source verification + evidence-review, but not necessarily epidemiology-research.
 
 Examples of acceptable families: WHO, ECDC, EEA, Eurostat, OECD, UN agencies, CDC/NIH and other national health institutes, peer-reviewed journals, official statistical offices. Prefer an `<ol>` of verified links in References.
 
 ## Charts from statistics
 
-**Permanent:** Whenever the available sources provide useful statistics, include **data-based charts or visualisations** where they genuinely improve the article.
+**Permanent:** Whenever the available **verified** sources provide useful statistics, include **data-based charts or visualisations** where they genuinely improve the article.
 
-**Choose type for the data and the story — not for novelty.** Use a wider repertoire when appropriate (columns, bars, pie/share, line, area, column+line combos, callouts, and other supported site patterns). Only chart when cited sources supply suitable real numbers, the data shape fits that form, and the figure adds understanding. **Never** invent, estimate, or reshape data to force a chart type.
+**Choose type for the data and the story — not for novelty.** Use a wider repertoire when appropriate (columns, bars, pie/share, line, area, column+line combos, callouts, and other supported site patterns). Only chart when cited sources supply suitable real numbers that appear in the Claim & Evidence Register and Pass evidence-review, the data shape fits that form, and the figure adds understanding. **Never** invent, estimate, or reshape data to force a chart type.
 
 Use site classes in `css/style.css`. Prefer static HTML/CSS or inline SVG — no Chart.js / CDN chart libraries. Add minimal new classes when a different visual form fits better.
 

@@ -2,21 +2,20 @@
 name: create-phm-article
 description: >-
   Create or publish bilingual (EN/EL) Health in Blog articles: single HTML,
-  thumb/OG images, charts from statistics when sources support them (column,
-  bar, pie/share, line, area, combo, callout, and other supported forms —
-  choose type for the data and story; real cited data only; never invent
-  stats for a chart), at least 4 authoritative sources
-  (European and American/international where relevant), topic category only
-  (no content-type taxonomy), evidence-led authored voice throughout
+  thumb/OG images, charts from verified statistics only (column, bar, pie/share,
+  line, area, combo, callout, and other supported forms — choose type for the
+  data and story; never invent stats), at least 4 authoritative sources
+  (European and American/international where relevant), Claim & Evidence
+  Register for major quantitative claims, epidemiology-research when epi
+  measures appear, independent evidence-review Pass before finished, topic
+  category only (no content-type taxonomy), evidence-led authored voice
   (evidence → interpretation → significance → implication as a flexible
-  editorial principle, not a rigid per-section formula; strong closing;
-  no labelled opinion box), archive card, counts, JSON-LD, homepage, and
-  sitemap. Always run bilingual language/terminology QA treating Greek as a
-  natural Public Health adaptation of the English meaning (not a literal
-  translation; grammatically correct but translated-sounding Greek fails),
-  before an article is finished. Use when writing a new article, translating
-  PHM content, regenerating/rewriting copy, or when the user says they
-  drag-and-dropped an article and need listings updated.
+  editorial principle; strong closing; no labelled opinion box), archive card,
+  counts, JSON-LD, homepage, and sitemap. Always run bilingual language/
+  terminology QA treating Greek as a natural Public Health adaptation of the
+  English meaning (not a literal translation). Use when writing a new article,
+  translating PHM content, regenerating/rewriting copy, or when the user says
+  they drag-and-dropped an article and need listings updated.
 ---
 
 # Create / publish Health in Blog article
@@ -62,21 +61,77 @@ Collect (ask if missing):
 | Date | ISO `YYYY-MM-DD` |
 | Read time | integer minutes |
 | Body outline | H2 sections with `id`s for TOC; ensure the outline leaves room for authorial reasoning (not sources-only bullets) — shape and emphasis should fit the topic, not a fixed per-section template |
-| Sources | **≥4** authoritative URLs (see Sources gate); else sources-pending only for demos |
+| Sources | **≥4** authoritative URLs **and** evidence sufficient for the article’s claims (see Evidence & verification) — not merely four links |
 | Related articles | up to 3 existing site articles |
-| Charts? | If sources provide useful stats — plan chart(s) only when data support a clear visualisation; choose type for the data/story (see Charts section) |
+| Charts? | Only from **verified** register figures that support a clear visualisation |
+| Claim & Evidence Register | Required whenever the article will state major quantitative claims (see below) |
 
-Copy header/footer/share/author chrome from a **live UTF-8** article under `articles/` (prefer the newest published article whose Greek chrome is intact, e.g. `ncds-premature-deaths.html`) or [template.html](template.html). Do **not** invent chrome from a temp dump.
+Copy header/footer/share/author chrome from a **live UTF-8** article under `articles/` (prefer the newest published article whose Greek chrome is intact) or [template.html](template.html). Do **not** invent chrome from a temp dump.
 
-### Epidemiology research support (optional — separate skill)
+### Skills that support Path A (clear ownership)
 
-When the topic needs burden, rates, trends, inequities, surveillance, or careful comparison of estimates, read and follow [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md) **before or while** outlining sources/charts. Use its **Article evidence pack** output as input to this skill — then write the article with the **authorial arc** in § Writing voice (evidence remains central; interpretation and implications are still required in the prose).
+| Skill | When | Owns |
+|-------|------|------|
+| [epidemiology-research](../epidemiology-research/SKILL.md) | **Required** only for **epidemiological / population-health** quantitative claims (prevalence, incidence, mortality, burden, risk estimates, trends, inequalities, or similar epi measures); **not** required for other major quantitative claims | Evidence pack + verified claim-ready rows |
+| [evidence-review](../evidence-review/SKILL.md) | **Required** after draft (create/regenerate/substantial rewrite) before finished / Path B | Independent Pass/Revise/Fail on majors vs sources |
+| This skill | Always for articles | HTML, prose, bilingual QA, charts markup, ≥4 sources, Path B |
 
-- **epidemiology-research** owns epi framing, appraisal, and interpretation only
-- **This skill** still owns HTML, bilingual QA, chart markup, ≥4 sources gate, and Path B
-- Do not let epidemiology-research edit the site or publish; do not re-implement Path A/B there
+Do not re-implement epi appraisal or independent fact-check inside ad-hoc notes while skipping those skills when they are required.
 
-If epi data are not necessary for the topic, skip that skill and continue here.
+**Distinction (permanent):** Every **major quantitative claim** needs source verification, a Claim & Evidence Register row, and **evidence-review**. Only **epidemiological / population-health** claims (list above) additionally require **epidemiology-research**. Other important numbers (e.g. budgets, facility counts, coverage targets without epi framing) still go through the register + open-source check + evidence-review — without forcing epi appraisal.
+
+### Epidemiology research support
+
+When the article will state **epidemiological / population-health** measures — prevalence, incidence, mortality, burden, risk estimates, trends, inequalities, surveillance rates, or similar — or when the topic needs careful comparison of such estimates — read and follow [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md) **before or while** outlining sources/charts. Use its **Article evidence pack** (verified rows only) as input — then write with the **authorial arc** in § Writing voice. An evidence pack is **not** finished or publishable by itself: this skill still drafts the article, and **evidence-review Pass** is still required before finished / Path B.
+
+- **epidemiology-research** owns epi framing, source opening/verification, appraisal, and the evidence pack
+- **evidence-review** owns the independent second-pass before finished
+- **This skill** owns HTML, bilingual QA, chart markup, ≥4 sources gate, Claim Register maintenance, and Path B
+- Do not let epidemiology-research or evidence-review edit the site or publish
+
+If the article will have **no** epidemiological / population-health quantitative claims, skip epidemiology-research. Non-epi major quantitative claims (if any) still need register rows, open-source verification, and evidence-review. If there are **no** major quantitative claims at all, evidence-review still runs lightly (confirm no sneaked-in unverified numbers).
+
+### Evidence & verification (permanent — Path A)
+
+#### Claim & Evidence Register
+
+Before or while drafting, maintain a **Claim & Evidence Register** for every **major quantitative claim** (definition: [../evidence-review/reference.md](../evidence-review/reference.md)). Use the field set there (`id`, `claim_en`, `figure`, `measure`, `population`, `place`, `time`, `definition_notes`, `source_org`, `source_url`, `source_locator`, `chart_ids`, `status`).
+
+Rules:
+
+- No major number in the article (or chart) without a register row
+- Prefer rows imported from a verified epidemiology-research pack when epi applies
+- `status` stays `pending` until **evidence-review** sets pass/revise/fail
+- Drop or rewrite any claim that cannot be sourced
+
+#### Research sufficiency (beyond ≥4 sources)
+
+The ≥4 authoritative sources gate remains **necessary but not sufficient**. Research is enough only when:
+
+1. Every major quantitative claim has a register row with a primary/authoritative URL
+2. Year, geography, population, and measure are known for those claims (definition/method when material)
+3. A recency check was considered for “current” indicators (newer edition sought)
+4. Material conflicts were noted and resolved or explained
+5. The evidence actually supports the article’s scope and conclusions (not a thin link list)
+
+#### Charts
+
+While drafting, plot only figures that already have a register row and were source-verified (epidemiology-research `Verified? = yes`, or equivalent open-source check for non-epi majors). Before the article is **finished**, every plotted value must reach register **pass** via **evidence-review**. Never invent or reshape numbers for a chart type.
+
+#### Independent evidence-review gate (never skip on create/rewrite)
+
+After the EN draft exists (EL may follow or be drafted together) and the register is complete:
+
+1. Read and follow [../evidence-review/SKILL.md](../evidence-review/SKILL.md)
+2. Require verdict **Pass**
+3. On **Revise** / **Fail**: fix claims, sources, charts, or wording; re-run until Pass
+4. Do **not** treat the article as finished, and do **not** run Path B after create/rewrite, until Pass
+
+Path B–only listing updates (no body rewrite) do not require a new evidence-review.
+
+#### Evidence vs interpretation
+
+Keep sourced findings attributed; signal inference in prose (unchanged authorial standards). evidence-review may flag blurred attribution; fix before finished.
 
 ### Encoding rules (critical — prevents Greek mojibake)
 
@@ -178,8 +233,8 @@ When creating, regenerating, or publishing an article, verify the byline still i
 
 URLs:
 
-- Canonical/OG: `https://constantinosnea.github.io/articles/{slug}.html`
-- OG image: `https://constantinosnea.github.io/images/cover-{image-key}-og.png`
+- Canonical/OG: `https://healthinblog.com/articles/{slug}.html`
+- OG image: `https://healthinblog.com/images/cover-{image-key}-og.png`
 - Hero: `../images/thumb-{image-key}.webp` (800×500)
 
 ### Images
@@ -298,8 +353,9 @@ Whenever the available sources provide useful statistics, include **data-based c
 **Only create a chart when all of the following are true:**
 
 1. Cited sources provide suitable **real** statistics (rates, counts, shares, time series, or clear comparisons)
-2. That data **genuinely supports** the chosen visualisation (right shape for the claim)
-3. The chart **adds understanding** the prose alone would not convey as clearly
+2. Each plotted value appears in the **Claim & Evidence Register** and will **Pass** evidence-review (same verification standard as prose)
+3. That data **genuinely supports** the chosen visualisation (right shape for the claim)
+4. The chart **adds understanding** the prose alone would not convey as clearly
 
 **Never** invent, estimate, interpolate, or reshape numbers just to make a preferred chart type possible. If the sources do not support a chart, skip it.
 
@@ -339,12 +395,14 @@ Rules:
 
 ### After creating
 
-1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant).
-2. Complete the **Charts** check (include data-based visuals only when sources support them; choose type for the data/story; real cited data only — never invent stats for a chart).
-3. Complete the **authorial voice** check (reasoning present through the piece **and** a strong closing; flexible structure by topic — not a repeated four-beat formula; not a neutral agency summary with late opinion; no separate **Author’s perspective:** label; evidence standards intact).
-4. Complete the **Bilingual language & terminology QA** gate above (EN + EL). Do not publish with known calques, false friends, or meaning drift.
-5. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
-6. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
+1. Complete the **Sources** gate (≥4 authoritative sources; European + American/international where relevant) **and** research-sufficiency checks (register complete for majors; context; recency considered; conflicts handled).
+2. If the article states **epidemiological / population-health** measures (prevalence, incidence, mortality, burden, risk, trends, inequalities, or similar), confirm **epidemiology-research** pack was used for those claims (verified rows only). Other major quantitative claims need register + source verification only — not necessarily epi-research.
+3. Complete the **Charts** check (only verified register figures; type for data/story; never invent stats).
+4. Complete the **authorial voice** check (reasoning present through the piece **and** a strong closing; flexible structure by topic — not a repeated four-beat formula; evidence distinguishable from inference).
+5. Complete the **Bilingual language & terminology QA** gate above (EN + EL).
+6. Run **evidence-review** and obtain **Pass** ([../evidence-review/SKILL.md](../evidence-review/SKILL.md)). On Revise/Fail, fix and re-run — do not proceed.
+7. Immediately run **Path B** for the new slug (unless the user only wanted a draft file and said not to list it yet).
+8. If titles/excerpts/alts changed during QA, sync the same Greek strings on archive/homepage/related cards in Path B.
 
 ---
 
@@ -402,8 +460,10 @@ Unless user opts out:
 - [ ] File is UTF-8; no `╬` / `ΓÇö` mojibake in header, footer, share, or author card
 - [ ] ΕΛ nav labels are real Greek (`Αρχική`, `Άρθρα`, …), not symbols
 - [ ] Byline has `data-reader-count` + `data-article-slug="{slug}"` + `data-reader-hit` (engaged reader counting; 25s visible dwell in `js/main.js`)
-- [ ] **If the article body was created or rewritten:** ≥4 credible sources from authoritative organisations; European and American/international sources included where relevant; no weak/commercial/questionable citations
-- [ ] **If the article body was created or rewritten:** charts/visualisations added only when cited sources provide suitable real statistics **and** the chart improves understanding; chart type chosen for the data/story (column, bar, pie/share, line, area, combo, callout, or other supported form — not novelty); figures use real cited data only — never invent or reshape numbers for a chart type
+- [ ] **If the article body was created or rewritten:** ≥4 credible sources from authoritative organisations; European and American/international sources included where relevant; research sufficient for the claims (not merely four links); Claim & Evidence Register complete for major quantitative claims
+- [ ] **If the article body was created or rewritten and includes epidemiological / population-health measures:** epidemiology-research evidence pack used; recommended figures were source-verified
+- [ ] **If the article body was created or rewritten:** **evidence-review** verdict = **Pass** (required after create/rewrite even when epidemiology-research was skipped)
+- [ ] **If the article body was created or rewritten:** charts/visualisations use only verified register figures; chart type chosen for the data/story; never invent or reshape numbers for a chart type
 - [ ] **If the article body/titles were created or rewritten:** bilingual language & terminology QA passed for EN and EL (natural Greek, correct PH terms, meaning equivalence); listing cards use the same corrected titles/excerpts/alts
 - [ ] **If the article body was created or rewritten:** authored voice present throughout as an editorial principle (evidence, interpretation, significance, implication) without forcing the same section-by-section formula; closing deepens rather than debuts that voice; evidence claims remain attributed and distinguishable from inference; the piece feels distinct for its topic
 
@@ -419,5 +479,7 @@ Rewriting related sidebars on older posts; git commit --trailer "Co-authored-by:
 
 - Topics, counts, charts, sources, path table: [reference.md](reference.md)
 - Skeleton: [template.html](template.html)
-- Live examples: `articles/*.html` (prefer `heatwaves-climate-mortality.html`)
-- Epidemiology research (evidence packs only; no publishing): [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md)
+- Live examples: `articles/*.html`
+- Epidemiology research (verified evidence packs; no publishing): [../epidemiology-research/SKILL.md](../epidemiology-research/SKILL.md)
+- Independent evidence-review (Pass required before finished): [../evidence-review/SKILL.md](../evidence-review/SKILL.md)
+- Canonical public site: `https://healthinblog.com`

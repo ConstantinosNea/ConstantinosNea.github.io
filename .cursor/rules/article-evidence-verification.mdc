@@ -1,0 +1,21 @@
+---
+description: Permanent evidence verification and independent evidence-review gate for Health in Blog articles
+globs: articles/**/*.html, _templates/**/*.html, .cursor/skills/create-phm-article/**, .cursor/skills/epidemiology-research/**, .cursor/skills/evidence-review/**
+alwaysApply: false
+---
+
+# Evidence verification (permanent)
+
+When **creating, regenerating, or substantially rewriting** an article:
+
+1. Maintain a **Claim & Evidence Register** for every major quantitative claim (see `.cursor/skills/evidence-review/reference.md`). All majors need open-source verification and **evidence-review**; that does not by itself require epidemiology-research.
+2. If the article states **epidemiological / population-health** measures (prevalence, incidence, mortality, burden, risk, trends, inequalities, or similar), use **epidemiology-research** and only **source-verified** pack figures. Non-epi quantitative claims still use the register + evidence-review without mandatory epi appraisal.
+3. Do **not** treat “≥4 sources collected” as sufficient by itself — evidence must support the article’s actual claims, with year/place/population/measure context where material.
+4. Check for **newer** authoritative editions before relying on older “current” indicators.
+5. Assess **conflicts** and non-comparability; do not silently pick the easiest number.
+6. Charts may only use figures that meet the same verification standard as prose.
+7. Before the article is **finished** or Path B runs after create/rewrite, run **evidence-review** and obtain **Pass** (`.cursor/skills/evidence-review/SKILL.md`). Revise/Fail blocks finished status.
+8. Keep evidence attributed and distinct from author interpretation in the prose.
+9. Canonical public domain: `https://healthinblog.com`.
+
+Full workflow ownership: `.cursor/skills/create-phm-article/SKILL.md`.
