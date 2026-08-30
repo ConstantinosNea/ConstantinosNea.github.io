@@ -23,6 +23,7 @@ Notes:
 - Site: `Health in Blog`
 - Contact: `mailto:contact@healthinblog.com`
 - LinkedIn: `https://www.linkedin.com/in/constantinos-nearchou/`
+- Instagram: `https://www.instagram.com/healthinblog/`
 - Base URL: `https://healthinblog.com`
 - Fonts: Literata + IBM Plex Sans (existing Google Fonts link)
 - Stylesheet: `../css/style.css`
