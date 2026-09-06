@@ -156,19 +156,21 @@ EL: `Ανεξάρτητος συγγραφέας του Health in Blog — κε�
 
 Health in Blog is **authored** Public Health writing grounded in evidence. Guide readers with the editorial principle **evidence → interpretation → significance → implication** across the piece — not only at the end. This is a compass, **not** a rigid per-section template: structure, emphasis, and narrative shape should vary with the topic so articles feel distinct. Closing remains a required culmination. Do **not** use a separate labelled opinion module.
 
+**Restrained Health in Blog lens:** calm, evidence-led judgement; attention to public-health significance; alert to oversimplification; proportional reasoning. Systems, inequalities, structural conditions, and equity are **available** interpretive lenses when they materially fit the topic and evidence — **not** mandatory themes for every article. No loud opinion, ideology, catchphrases, heavy first person, or commentary forced into every section. Identity should be recognisable across topics through judgment and framing, not through a stylised brand voice or a fixed thematic checklist.
+
 | Requirement | Detail |
 |-------------|--------|
 | Principle | Across the article, help the reader see what the evidence means, why it matters, and what public-health implications follow |
 | Flexibility | Do not force every section through the same four-beat sequence or cadence; let argument and evidence dictate the shape |
-| Body | Must not read as stacked agency/study summaries; interpretation belongs where the reasoning needs it |
+| Body | Must not read as stacked agency/study summaries; interpretation belongs where the reasoning needs it — occasionally and lightly |
 | Closing | Required deepening of priorities/tests/implications — not the first appearance of authorial reasoning |
-| **Avoid** | Bold **Author’s perspective:** / **Οπτική του συγγραφέα:**, *Opinion:* / *Γνώμη:*, callout boxes; repetitive “I think” / “in my opinion” / «νομίζω» as the main voice signal; predictable identical section rhythms across articles |
+| **Avoid** | Bold **Author’s perspective:** / **Οπτική του συγγραφέα:**, *Opinion:* / *Γνώμη:*, callout boxes; repetitive “I think” / “in my opinion” / «νομίζω» as the main voice signal; predictable identical section rhythms; catchphrases; personal-essay or ideological tone |
 | Distinguish | Via writing craft (attribute evidence; signal inference), not via a formal label |
 | Preserve | Accuracy, sourcing, methodological caution, ≥4-sources gate, charts rules, bilingual QA |
 | Tone | Serious, accessible, professional — neither institutional report nor unsupported hot take |
 | Greek | Same authored guidance in natural idiomatic Greek; keep PH terminology; avoid translated institutional register |
 
-See SKILL.md § Writing voice. An article that only summarises institutions — or saves almost all interpretation for the closing — is **not** finished. Equally, an article that marches every section through an identical four-step formula is **not** the intended outcome.
+See SKILL.md § Writing voice. An article that only summarises institutions — or saves almost all interpretation for the closing — is **not** finished. Equally, an article that marches every section through an identical four-step formula, or that turns every paragraph into commentary, is **not** the intended outcome.
 
 ## Bilingual language & terminology QA
 
