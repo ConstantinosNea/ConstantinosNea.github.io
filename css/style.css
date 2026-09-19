@@ -1297,7 +1297,37 @@ li > .lang-stack,
 }
 
 @media (max-width: 560px) {
-  .author-block { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+  .author-block {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+    /* Long EL CTAs must not inflate the centered grid item past the card. */
+    overflow-x: clip;
+  }
+  .author-block > div:not(.author-photo) {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .author-block .btn,
+  .featured-body .btn {
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    height: auto;
+    min-height: 44px;
+    padding-block: 0.75rem;
+  }
+  .author-block .btn .lang-stack,
+  .featured-body .btn .lang-stack,
+  .author-block .btn > [data-lang],
+  .featured-body .btn > [data-lang] {
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
 }
 
 @media (max-width: 480px) {
