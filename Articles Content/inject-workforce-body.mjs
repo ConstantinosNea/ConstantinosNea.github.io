@@ -1,0 +1,10 @@
+import fs from 'fs';
+const p = 'articles/europe-preparedness-health-workforce.html';
+const body = fs.readFileSync('Articles Content/_workforce-revision-body.html', 'utf8');
+let html = fs.readFileSync(p, 'utf8');
+const start = html.indexOf('<div class="article-body">');
+const end = html.indexOf('<section class="references-section">');
+if (start === -1 || end === -1) throw new Error('markers not found');
+html = html.slice(0, start) + '<div class="article-body">' + body + '\n        <section class="references-section">' + html.slice(end + '<section class="references-section">'.length);
+fs.writeFileSync(p, html, 'utf8');
+console.log('ok', html.length);
