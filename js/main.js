@@ -406,18 +406,129 @@ function applyHomepageCardLanguage(root, lang) {
 }
 
 const ABACUS_NAMESPACE = "constantinosnea.github.io";
-const ABACUS_API = "https://abacus.jasoncameron.dev";
+/** Primary + fallback bases (same API; jasoncameron.dev has had intermittent outages). */
+const ABACUS_API_BASES = [
+  "https://abacus.jasoncameron.dev",
+  "https://abacus.jsn.cam",
+];
+const ABACUS_REQUEST_TIMEOUT_MS = 12_000;
+const ABACUS_MAX_CONCURRENT = 5;
+const ABACUS_READER_CACHE_KEY = "phm-reader-counts-v1";
+
+let abacusInflight = 0;
+const abacusWaitQueue = [];
+
+function abacusReleaseSlot() {
+  abacusInflight = Math.max(0, abacusInflight - 1);
+  const next = abacusWaitQueue.shift();
+  if (next) next();
+}
+
+function abacusAcquireSlot() {
+  return new Promise((resolve) => {
+    const grant = () => {
+      abacusInflight += 1;
+      resolve(abacusReleaseSlot);
+    };
+    if (abacusInflight < ABACUS_MAX_CONCURRENT) grant();
+    else abacusWaitQueue.push(grant);
+  });
+}
+
+function readReaderCountCache(slug) {
+  if (!slug) return null;
+  try {
+    const all = JSON.parse(localStorage.getItem(ABACUS_READER_CACHE_KEY) || "{}");
+    const entry = all[slug];
+    if (!entry || typeof entry.value !== "number" || entry.value < 0) return null;
+    return entry.value;
+  } catch (_) {
+    return null;
+  }
+}
+
+function writeReaderCountCache(slug, value) {
+  if (!slug || !Number.isFinite(value) || value < 0) return;
+  try {
+    const all = JSON.parse(localStorage.getItem(ABACUS_READER_CACHE_KEY) || "{}");
+    all[slug] = { value, at: Date.now() };
+    localStorage.setItem(ABACUS_READER_CACHE_KEY, JSON.stringify(all));
+  } catch (_) {
+    /* quota or private mode — ignore */
+  }
+}
+
+async function abacusFetchOnce(url, hit, signal) {
+  const res = await fetch(url, { signal, cache: "no-store" });
+  if (!hit && res.status === 404) return { value: 0 };
+  if (res.status === 429) {
+    const resetHeader = res.headers.get("RateLimit-Reset");
+    const resetMs = resetHeader ? Math.max(0, Number(resetHeader) * 1000 - Date.now()) : 2000;
+    await new Promise((r) => window.setTimeout(r, Math.min(resetMs, 5000)));
+    const retry = await fetch(url, { cache: "no-store" });
+    if (!hit && retry.status === 404) return { value: 0 };
+    if (!retry.ok) throw new Error(`HTTP ${retry.status}`);
+    return retry.json();
+  }
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+async function abacusRequest(path, hit) {
+  const errors = [];
+  for (const base of ABACUS_API_BASES) {
+    const url = `${base}${path}`;
+    const controller = new AbortController();
+    const timer = window.setTimeout(
+      () => controller.abort(),
+      ABACUS_REQUEST_TIMEOUT_MS,
+    );
+    try {
+      const data = await abacusFetchOnce(url, hit, controller.signal);
+      window.clearTimeout(timer);
+      return data;
+    } catch (err) {
+      window.clearTimeout(timer);
+      errors.push(`${base}: ${err && err.message ? err.message : err}`);
+    }
+  }
+  const err = new Error(errors.join(" | ") || "Abacus unavailable");
+  err.abacusDegraded = true;
+  throw err;
+}
 
 async function fetchAbacusCount(slug, hit = false) {
   if (!slug) return 0;
   const path = hit
-    ? `${ABACUS_API}/hit/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`
-    : `${ABACUS_API}/get/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`;
-  const res = await fetch(path);
-  if (!hit && res.status === 404) return 0;
-  if (!res.ok) throw new Error("counter failed");
-  const data = await res.json();
-  return Number(data.value ?? data.count ?? 0);
+    ? `/hit/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`
+    : `/get/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`;
+
+  const release = await abacusAcquireSlot();
+  try {
+    const data = await abacusRequest(path, hit);
+    const count = Number(data.value ?? data.count ?? 0);
+    if (!Number.isFinite(count) || count < 0) {
+      if (hit) throw new Error("invalid counter value");
+      return readReaderCountCache(slug) ?? 0;
+    }
+    if (!hit) writeReaderCountCache(slug, count);
+    return count;
+  } catch (err) {
+    if (!hit) {
+      const cached = readReaderCountCache(slug);
+      if (cached !== null) {
+        if (err.abacusDegraded) {
+          try {
+            sessionStorage.setItem("phm-reader-api-degraded", "1");
+          } catch (_) {}
+        }
+        return cached;
+      }
+    }
+    throw err;
+  } finally {
+    release();
+  }
 }
 
 async function fetchHomepageArchiveItems() {
@@ -1400,7 +1511,7 @@ function initShareLinks() {
    Permanent blog rule: article pages increment once per browser session only
    after the reader stays on the page for more than 25 seconds of visible time.
    Opening and leaving sooner must not count. Listing cards only display counts. */
-function initReaderCounts() {
+async function initReaderCounts() {
   const HIT_DELAY_MS = 25000;
 
   function slugFromHref(href) {
@@ -1523,20 +1634,39 @@ function initReaderCounts() {
   );
   if (!targets.length) return;
 
-  targets.forEach(async (el) => {
+  const slugs = [
+    ...new Set(
+      targets
+        .map((el) => el.getAttribute("data-article-slug"))
+        .filter(Boolean),
+    ),
+  ];
+
+  const countsBySlug = new Map();
+  await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        countsBySlug.set(slug, await fetchCount(slug, false));
+      } catch (_) {
+        countsBySlug.set(slug, null);
+      }
+    }),
+  );
+
+  targets.forEach((el) => {
     const slug = el.getAttribute("data-article-slug");
     if (!slug) return;
     const shouldHit = el.hasAttribute("data-reader-hit");
     const sessionKey = `phm-read-${slug}`;
     const alreadyHit = sessionStorage.getItem(sessionKey) === "1";
 
-    try {
-      const count = await fetchCount(slug, false);
+    const count = countsBySlug.get(slug);
+    if (count !== null && count !== undefined) {
       setCount(el, count);
-    } catch (_) {
+    } else {
       el.hidden = true;
       el.textContent = "";
-      /* Still schedule an engaged hit below — a transient get failure must not
+      /* Still schedule engaged hit — a transient get failure must not
          permanently prevent counting after the 25s dwell. */
     }
 

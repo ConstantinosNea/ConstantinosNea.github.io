@@ -14,7 +14,7 @@ Every published article **must** include in `.article-byline`:
 
 - `{slug}` = filename without `.html`
 - `data-reader-hit` only on article pages (never on archive/homepage cards)
-- Counting is implemented in `js/main.js` via Abacus
+- Counting is implemented in `js/main.js` via Abacus (`abacus.jsn.cam` with fallback to `abacus.jasoncameron.dev`; last-known-good cache when both fail)
 - A reader is counted only after **more than 25 seconds** of **visible** dwell time; leaving sooner must not count
 - Do not remove this markup when regenerating or replacing articles
 - Do not change the 25-second threshold unless the user explicitly asks
