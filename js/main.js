@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initArticleFilters();
   initCurrentYear();
   initShareLinks();
-  // Homepage featured (most viewed) + recent cards sync before reader counts attach.
+  // Homepage may replace recent cards — reader counts run after that DOM is final.
   initHomepageFeaturedAndRecent().finally(() => {
-    initReaderCounts();
+    void initReaderCounts();
   });
 });
 
@@ -377,7 +377,6 @@ function rewriteCardForHomepage(card) {
       a.setAttribute("href", `articles/${file}`);
     }
   });
-  removeCardMetaReaderCounts(card);
 }
 
 /** Drop reader-count chips and the separator that precedes them. */
@@ -411,9 +410,11 @@ const ABACUS_API_BASES = [
   "https://abacus.jasoncameron.dev",
   "https://abacus.jsn.cam",
 ];
-const ABACUS_REQUEST_TIMEOUT_MS = 12_000;
+const ABACUS_REQUEST_TIMEOUT_MS = 7_000;
 const ABACUS_MAX_CONCURRENT = 5;
 const ABACUS_READER_CACHE_KEY = "phm-reader-counts-v1";
+/** In-session counts from successful GETs — avoids duplicate API bursts (homepage + cards). */
+const abacusSessionCounts = new Map();
 
 let abacusInflight = 0;
 const abacusWaitQueue = [];
@@ -475,23 +476,36 @@ async function abacusFetchOnce(url, hit, signal) {
 }
 
 async function abacusRequest(path, hit) {
-  const errors = [];
-  for (const base of ABACUS_API_BASES) {
+  const controllers = ABACUS_API_BASES.map(() => new AbortController());
+  const timers = [];
+  const attempts = ABACUS_API_BASES.map((base, i) => {
     const url = `${base}${path}`;
-    const controller = new AbortController();
-    const timer = window.setTimeout(
-      () => controller.abort(),
+    const signal = controllers[i].signal;
+    timers[i] = window.setTimeout(
+      () => controllers[i].abort(),
       ABACUS_REQUEST_TIMEOUT_MS,
     );
-    try {
-      const data = await abacusFetchOnce(url, hit, controller.signal);
-      window.clearTimeout(timer);
-      return data;
-    } catch (err) {
-      window.clearTimeout(timer);
-      errors.push(`${base}: ${err && err.message ? err.message : err}`);
-    }
-  }
+    return abacusFetchOnce(url, hit, signal)
+      .then((data) => {
+        controllers.forEach((c, j) => {
+          if (j !== i) c.abort();
+        });
+        return data;
+      })
+      .catch((err) => {
+        const msg = err && err.message ? err.message : String(err);
+        throw new Error(`${base}: ${msg}`);
+      })
+      .finally(() => window.clearTimeout(timers[i]));
+  });
+
+  const outcomes = await Promise.allSettled(attempts);
+  const ok = outcomes.find((o) => o.status === "fulfilled");
+  if (ok) return ok.value;
+
+  const errors = outcomes
+    .filter((o) => o.status === "rejected")
+    .map((o) => o.reason?.message || String(o.reason));
   const err = new Error(errors.join(" | ") || "Abacus unavailable");
   err.abacusDegraded = true;
   throw err;
@@ -499,6 +513,9 @@ async function abacusRequest(path, hit) {
 
 async function fetchAbacusCount(slug, hit = false) {
   if (!slug) return 0;
+  if (!hit && abacusSessionCounts.has(slug)) {
+    return abacusSessionCounts.get(slug);
+  }
   const path = hit
     ? `/hit/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`
     : `/get/${encodeURIComponent(ABACUS_NAMESPACE)}/${encodeURIComponent(slug)}`;
@@ -511,7 +528,10 @@ async function fetchAbacusCount(slug, hit = false) {
       if (hit) throw new Error("invalid counter value");
       return readReaderCountCache(slug) ?? 0;
     }
-    if (!hit) writeReaderCountCache(slug, count);
+    if (!hit) {
+      writeReaderCountCache(slug, count);
+      abacusSessionCounts.set(slug, count);
+    }
     return count;
   } catch (err) {
     if (!hit) {
@@ -522,6 +542,7 @@ async function fetchAbacusCount(slug, hit = false) {
             sessionStorage.setItem("phm-reader-api-degraded", "1");
           } catch (_) {}
         }
+        abacusSessionCounts.set(slug, cached);
         return cached;
       }
     }
@@ -607,11 +628,19 @@ async function initHomepageFeaturedAndRecent() {
 
     const withViews = await Promise.all(
       items.map(async (item) => {
-        let views = 0;
-        try {
-          views = await fetchAbacusCount(item.slug, false);
-        } catch (_) {
-          views = 0;
+        let views =
+          abacusSessionCounts.get(item.slug) ??
+          readReaderCountCache(item.slug) ??
+          null;
+        if (views === null) {
+          try {
+            views = await fetchAbacusCount(item.slug, false);
+          } catch (_) {
+            views = readReaderCountCache(item.slug) ?? 0;
+          }
+        } else {
+          abacusSessionCounts.set(item.slug, views);
+          void fetchAbacusCount(item.slug, false).catch(() => {});
         }
         return { ...item, views: Number.isFinite(views) ? views : 0 };
       }),
@@ -1621,11 +1650,12 @@ async function initReaderCounts() {
     }
   });
 
-  // Normalize any legacy markup that still nests value/label spans.
+  // Normalize obsolete markup (nested [data-reader-value] only — not live lang stacks).
   document.querySelectorAll("[data-reader-count]").forEach((el) => {
-    if (el.querySelector("[data-reader-value], [data-lang]")) {
+    if (el.querySelector("[data-reader-value]")) {
       el.textContent = "";
       el.hidden = true;
+      el.removeAttribute("data-reader-value-num");
     }
   });
 
@@ -1643,15 +1673,37 @@ async function initReaderCounts() {
   ];
 
   const countsBySlug = new Map();
-  await Promise.all(
-    slugs.map(async (slug) => {
-      try {
-        countsBySlug.set(slug, await fetchCount(slug, false));
-      } catch (_) {
-        countsBySlug.set(slug, null);
-      }
-    }),
-  );
+
+  slugs.forEach((slug) => {
+    const warmed =
+      abacusSessionCounts.get(slug) ?? readReaderCountCache(slug);
+    if (warmed !== null && warmed !== undefined) {
+      countsBySlug.set(slug, warmed);
+      abacusSessionCounts.set(slug, warmed);
+      targets
+        .filter((el) => el.getAttribute("data-article-slug") === slug)
+        .forEach((el) => setCount(el, warmed));
+    }
+  });
+
+  async function loadSlugCounts(slugList) {
+    await Promise.all(
+      slugList.map(async (slug) => {
+        try {
+          countsBySlug.set(slug, await fetchCount(slug, false));
+        } catch (_) {
+          if (!countsBySlug.has(slug)) countsBySlug.set(slug, null);
+        }
+      }),
+    );
+  }
+
+  await loadSlugCounts(slugs);
+  const missing = slugs.filter((slug) => countsBySlug.get(slug) === null);
+  if (missing.length) {
+    await new Promise((r) => window.setTimeout(r, 3000));
+    await loadSlugCounts(missing);
+  }
 
   targets.forEach((el) => {
     const slug = el.getAttribute("data-article-slug");
